@@ -23,6 +23,7 @@
     flex-direction: column;
     margin-top: 100px;
     position: relative;
+    /* height: fit-content; */
 }
 .department-creation-wrapper h3{
     font-size: 32px;

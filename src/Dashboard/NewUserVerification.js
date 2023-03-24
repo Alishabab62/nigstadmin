@@ -33,11 +33,11 @@ export default function NewUserVerification() {
         <table>
             <tr>
                 <th>S.Id</th>
-                <th>Student Name</th>
-                <th>Student Email</th>
-                <th>Student Phone</th>
-                <th>Student Organization</th>
-                <th>Student Gender</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Organization</th>
+                <th>Gender</th>
                 <th>Mobile Verification</th>
                 <th>Email Verification</th>
                 <th>NIGST Verification</th>

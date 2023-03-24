@@ -8,6 +8,7 @@ import CourseCategoryCreation from "./CourseCategoryCreation";
 import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
+import Logo from '../images/logo.png'
 
 export default function NIGSTAdmin() {
   const [departmentCreation, setDepartmentCreation] = useState(false);
@@ -83,24 +84,36 @@ export default function NIGSTAdmin() {
         </div>
         <div>
           <ul className=" text-white cursor-pointer ">
-            <li className="p-3 " onClick={departmentFun}>
+            {departmentCreation ?  <li className="p-3 bg-[#ffcb00] my-px" onClick={departmentFun}>
               Department/Organization Creation
-            </li>
-            <li className="p-3 " onClick={facultyPositionFun}>
+            </li> :  <li className="p-3 " onClick={departmentFun}>
+              Department/Organization Creation
+            </li>}
+           {facultyPositionCreation ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
-            </li>
-            <li className="p-3 " onClick={courseCategoryFun}>
+            </li> : <li className="p-3 " onClick={facultyPositionFun}>
+              Creation of Faculty Positions{" "}
+            </li>} 
+            {courseCategory ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={courseCategoryFun}>
               Course Category Creation
-            </li>
-            <li className="p-3 " onClick={courseAssignmentFun}>
+            </li> :  <li className="p-3 " onClick={courseCategoryFun}>
+              Course Category Creation
+            </li>}
+           {courseAssignment ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={courseAssignmentFun}>
               Department/Organization-Course Assignment
-            </li>
-            <li className="p-3 " onClick={usersFun}>
+            </li> : <li className="p-3 " onClick={courseAssignmentFun}>
+              Department/Organization-Course Assignment
+            </li>}
+            {users ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={usersFun}>
               New User verifications
-            </li>
-            <li className="p-3 " onClick={handleTenderFun}>
+            </li> : <li className="p-3 " onClick={usersFun}>
+              New User verifications
+            </li>}
+            {tender ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={handleTenderFun}>
               Tender{" "}
-            </li>
+            </li> : <li className="p-3 " onClick={handleTenderFun}>
+              Tender{" "}
+            </li>}
             <li className="p-3 ">Content Updation </li>
           </ul>
         </div>
@@ -116,13 +129,13 @@ export default function NIGSTAdmin() {
             />
           </div>
           <div>
-            {/* <img src={Logo} alt="logo" className='header-logo-admin-panel'></img> */}
+            <img src={Logo} alt="logo" className='header-logo-admin-panel'></img> 
           </div>
           <div>
             <Button value={"Login"} />{" "}
           </div>
         </header>
-        <div className="min-h-max flex justify-center border-t-2">
+        <div className="min-h-max flex justify-center border-t-2 min-h-[80%]">
           {departmentCreation ? <DepartmentCreation /> : ""}
           {facultyPositionCreation ? <CreationFacultyPosition /> : ""}
           {courseCategory ? <CourseCategoryCreation /> : ""}

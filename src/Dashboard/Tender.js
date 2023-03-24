@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
+import Button from '../components/Button';
 import "../CSS/Tender.css"
 
 function Tender() {
@@ -7,9 +8,10 @@ function Tender() {
   const [showCorrigendum, setShowCorrigendum] = useState(false);
   const [tender , setDropdown] = useState([])
   const [tenderValue , setTenderValue ] = useState();
+  const [formSelect , setFormSelect] = useState(true);
   const startDate = useRef();
   const endDate = useRef();
-  const file = useRef()
+  const file = useRef();
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -17,8 +19,14 @@ function Tender() {
     corrigendum:""
   });
 
-  const toggleTenders = () => setShowTenders(!showTenders);
-  const toggleCorrigendum = () => setShowCorrigendum(!showCorrigendum);
+  const toggleTenders = () => {
+    setShowTenders(!showTenders)
+    setFormSelect(!formSelect)
+  };
+  const toggleCorrigendum = () => {
+    setShowCorrigendum(!showCorrigendum);
+    setFormSelect(!formSelect)
+  };
 
   // const handleDropdownChange = () => {
   //   const refDropdown = document.getElementById('ref-dropdown');
@@ -77,11 +85,14 @@ function handleSubmit(e) {
 
 
   return (
-    <div className='tenderCreation '>
-      <div className='creation'>
+    <div className='tenderCreation flex items-center'>
+      {
+      formSelect ?   <div className='creation'>
         <button className='openform' onClick={toggleTenders}>Tenders</button>
         <button className='openform' onClick={toggleCorrigendum}>Corregendom</button>
-      </div>
+      </div> : ""
+      }
+      
       {showTenders && (
         <div id='div1'>
           <button className='close-btn' onClick={toggleTenders}>&times;</button>
@@ -92,7 +103,7 @@ function handleSubmit(e) {
             <input type="date" id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
             <input type="date" id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
             <input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required ref={file}/>
-            <input type="submit" value="Submit" onClick={handleSubmit} />
+            <Button fun={handleSubmit} value={"Submit"} className='submitButton'/>
           </form>
         </div>
       )}
@@ -114,7 +125,7 @@ function handleSubmit(e) {
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
             <input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input>
-            <input type="submit" value="Submit" />
+            <Button value={"Submit"} className='submitButton'/>
           </form>
         </div>
       )}

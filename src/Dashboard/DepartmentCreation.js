@@ -410,7 +410,7 @@ useEffect(()=>{
       ) : (
         ""
       )}
-      <h3>Department Creation</h3>
+      <h3>Organization Creation</h3>
       <Inputs
         type={"text"}
         placeholder={"Organization Name"}

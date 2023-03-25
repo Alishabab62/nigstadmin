@@ -51,7 +51,7 @@ export default function NIGSTAdmin() {
     setTender(false);
   }
   function usersFun() {
-    setUsers(true);
+    setUsers(true); 
     setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);

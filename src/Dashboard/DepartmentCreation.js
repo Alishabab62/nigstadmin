@@ -217,6 +217,7 @@ export default function DepartmentCreation() {
   const [state, setState] = useState(false);
   const [stateValue , setStateValue] = useState();
   let [otherDropdown , setOtherDropdown] = useState();
+  const [filter , setFilter] = useState(false);
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -238,8 +239,7 @@ let countryCodeRef =useRef();
 
   useEffect(() => {
     const myCountryCodesObject = countryCodes.customList(
-      "countryCode",
-      "+{countryCallingCode}"
+      "countryCode",'{countryNameEn}: +{countryCallingCode}'
     );
     let objectKeys = Object.keys(myCountryCodesObject);
     setCountryCode(objectKeys);
@@ -387,8 +387,64 @@ useEffect(()=>{
   }
 },[OrganisationType , categoryOfOrganisation , ministryDepartmentValue , department , stateValue , otherOrganizationValue])
 
+
+function handleFilter(){
+  setFilter(true)
+}
+function handleCreationForm(){
+  setFilter(false)
+}
   return (
-    <div className="department-creation-wrapper">
+    <>
+    {filter ?  <div className='filter-wrapper-department'>
+       <select >
+        <option>Select Organization Name</option>
+        <option value={"all"}>All Student</option>
+        <option value={"verified"}>All verified Student</option>
+        <option value={"non-verified"}>All non-verified Student</option>
+       </select>
+       <select >
+        <option>Select Organization Type</option>
+        <option value={"all"}>All Student</option>
+        <option value={"verified"}>All verified Student</option>
+        <option value={"non-verified"}>All non-verified Student</option>
+       </select>
+       <select >
+        <option>Category of Organization</option>
+        <option value={"all"}>All Student</option>
+        <option value={"verified"}>All verified Student</option>
+        <option value={"non-verified"}>All non-verified Student</option>
+       </select>
+       <Button value={"Apply"} />
+      </div> : ""}
+    {filter ? <div className='user-details-wrapper'>
+        <table>
+            <tr>
+                <th>S.Id</th>
+                <th>Organization Name</th>
+                <th>Organization Type</th>
+                <th>Category of Organization</th>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+            <tr>
+                <td>102</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+        </table>
+        </div> : "" }
+      
+    <div style={{textAlign:"center" , marginTop:"50px"}} className="department-view-btn-wrapper">
+      <Button value={"View"} fun={handleFilter}/>
+      <Button value={"Create"} fun={handleCreationForm}/>
+      </div>
+    {!filter ? <div className="department-creation-wrapper">
       {responseCircular ? (
         <div
           style={{
@@ -555,8 +611,8 @@ useEffect(()=>{
         fun={handleInputs}
       />
 
-      <div style={{ display: "flex" }}>
-        <select style={{ marginRight: "5px" }} ref={countryCodeRef}>
+      <div style={{ display: "flex" }} >
+        <select style={{ marginRight: "5px" , width:"135px"}} ref={countryCodeRef}>
           {countryCode.map((data, index) => {
             return <option key={index}>{countryCodeObject[data]}</option>;
           })}
@@ -569,6 +625,7 @@ useEffect(()=>{
         />
       </div>
       <Button value={"Submit"} fun={handleDepartmentCreation} />
-    </div>
+    </div> : ""}
+    </>
   );
 }

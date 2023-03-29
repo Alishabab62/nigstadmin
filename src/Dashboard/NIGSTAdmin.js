@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import React, { useState } from "react";
-import "../CSS/app.css";
+// import "../CSS/app.css";
 import DepartmentCreation from "./DepartmentCreation";
 import CreationFacultyPosition from "./CreationFacultyPosition";
 import Button from "../components/Button";
@@ -75,7 +75,7 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
   }
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between main-page-header">
       <div className="side-bar border-r-2 side-bar-wrapper">
         <div className=" text-center pt-14 pb-14  border-b-2 mb-8">
           <h3 className="text-lg   text-white font-bold ">
@@ -84,32 +84,32 @@ export default function NIGSTAdmin() {
         </div>
         <div>
           <ul className=" text-white cursor-pointer ">
-            {departmentCreation ?  <li className="p-3 bg-[#ffcb00] my-px" onClick={departmentFun}>
+            {departmentCreation ?  <li style={{background:"#ffcb00"}} onClick={departmentFun}>
               Department/Organization Creation
-            </li> :  <li className="p-3 " onClick={departmentFun}>
+            </li> :  <li  onClick={departmentFun}>
               Department/Organization Creation
             </li>}
-           {facultyPositionCreation ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={facultyPositionFun}>
+           {facultyPositionCreation ? <li style={{background:"#ffcb00"}} onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
             </li> : <li className="p-3 " onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
             </li>} 
-            {courseCategory ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={courseCategoryFun}>
+            {courseCategory ? <li style={{background:"#ffcb00"}} onClick={courseCategoryFun}>
               Course Category Creation
             </li> :  <li className="p-3 " onClick={courseCategoryFun}>
               Course Category Creation
             </li>}
-           {courseAssignment ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={courseAssignmentFun}>
+           {courseAssignment ? <li style={{background:"#ffcb00"}} onClick={courseAssignmentFun}>
               Department/Organization-Course Assignment
             </li> : <li className="p-3 " onClick={courseAssignmentFun}>
               Department/Organization-Course Assignment
             </li>}
-            {users ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={usersFun}>
+            {users ? <li style={{background:"#ffcb00"}} onClick={usersFun}>
               New User verifications
             </li> : <li className="p-3 " onClick={usersFun}>
               New User verifications
             </li>}
-            {tender ? <li className="p-3 bg-[#ffcb00]  my-px" onClick={handleTenderFun}>
+            {tender ? <li style={{background:"#ffcb00"}} onClick={handleTenderFun}>
               Tender{" "}
             </li> : <li className="p-3 " onClick={handleTenderFun}>
               Tender{" "}

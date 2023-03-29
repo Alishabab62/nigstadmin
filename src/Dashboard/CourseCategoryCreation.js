@@ -3,10 +3,11 @@ import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
-
+import "../CSS/app.css"
 export default function CourseCategoryCreation() {
  
   const [responseCircular, setCircularResponse] = useState(false);
+  const [filter , setFilter] = useState(false);
   const [inputs, setInputs] = useState({
     courseCategory: "",
     description: "",
@@ -44,8 +45,41 @@ export default function CourseCategoryCreation() {
         console.log(error);
       });
   }
+  function handleFilter(){
+    setFilter(true)
+  }
+  function handleCreationForm(){
+    setFilter(false)
+  }
   return (
-    <div className="department-creation-wrapper">
+    <>
+    {filter ? <div className='user-details-wrapper'>
+        <table>
+            <tr>
+                <th>S.Id</th>
+                <th>Organization Name</th>
+                <th>Organization Type</th>
+                <th>Category of Organization</th>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+            <tr>
+                <td>102</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+        </table>
+        </div> : "" }
+    <div style={{textAlign:"center" , marginTop:"50px"}} className="department-view-btn-wrapper">
+      <Button value={"View"} fun={handleFilter}/>
+      <Button value={"Create"} fun={handleCreationForm}/>
+      </div>
+    {!filter ? <div className="department-creation-wrapper">
       {responseCircular ? (
         <div
           style={{
@@ -81,6 +115,7 @@ export default function CourseCategoryCreation() {
         fun={handleInputs}
       />
       <Button value={"Submit"} fun={handleFacultyCreation} />
-    </div>
+    </div> : ""}
+    </>
   );
 }

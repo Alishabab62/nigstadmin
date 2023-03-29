@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
+// import "../CSS/app.css"
+
 export default function NewUserVerification() {
     let [verificationFilterValue , setVerificationFilterValue] = useState();
     function handleFilter(){
@@ -33,6 +35,7 @@ export default function NewUserVerification() {
         <table>
             <tr>
                 <th>S.Id</th>
+                <th>Created At</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -44,6 +47,7 @@ export default function NewUserVerification() {
             </tr>
             <tr>
                 <td>101</td>
+                <td>10 March 2023</td>
                 <td>Shabab</td>
                 <td>alishabab62@gmail.com</td>
                 <td>6396042652</td>
@@ -55,11 +59,12 @@ export default function NewUserVerification() {
             </tr>
             <tr>
                 <td>102</td>
-                <td>Shivani</td>
-                <td>shakyashivani81@gmail.com</td>
+                <td>10 March 2023</td>
+                <td>Keshav</td>
+                <td>keshav861@gmail.com</td>
                 <td>6396042652</td>
                 <td>Survey Of India</td>
-                <td>Female</td>
+                <td>Male</td>
                 <td>Yes</td>
                 <td>Yes</td>
                 <td>No</td>

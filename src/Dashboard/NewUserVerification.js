@@ -1,33 +1,76 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
-// import "../CSS/app.css"
+import axios from 'axios';
+
 
 export default function NewUserVerification() {
     let [verificationFilterValue , setVerificationFilterValue] = useState();
+    const startDateRef = useRef();
+    const endDateRef = useRef();
+    const [data,setData] = useState(undefined);
+    const [inputs ,setInputs] = useState({
+      name:"",
+      orgName:""
+    })
+
     function handleFilter(){
-        console.log(verificationFilterValue)
+      filter()
     }
+
+    function handleInputs(e) {
+      const { name, value } = e.target;
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        [name]: value,
+      }));
+    }
+
+function filter(){
+  console.log(startDateRef.current)
+  console.log(verificationFilterValue)
+  const url = "https://nigst.onrender.com/secure/filter";
+  const data = {
+    name:`${inputs.name}`,
+    org_name:`${inputs.orgName}`,
+    adminVef:`${verificationFilterValue}`,
+    start_date:`${startDateRef.current.value}`,
+    end_date:`${endDateRef.current.value}`
+  }
+  axios.get(url,data).then((res)=>{
+    console.log(res.data)
+    setData(res.data);
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
+
+// useEffect(()=>{
+//   if(data!== undefined){
+//     filter()
+//   }
+// },[data])
+
   return (
     <div className='user-verification w-full'>
       <div className='filter-wrapper'>
         <div>
-       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Name"}/>
+       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Name"} fun={handleInputs} name={"name"}/>
         </div>
         <div>
-       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Organization"}/>
+       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Organization"} fun={handleInputs} name={"orgName"}/>
         </div>
        <select onChange={(e)=>setVerificationFilterValue(e.target.value)}>
         <option>Select by Verification Status</option>
-        <option value={"all"}>All Student</option>
-        <option value={"verified"}>All verified Student</option>
-        <option value={"non-verified"}>All non-verified Student</option>
+        <option >All Student</option>
+        <option value={true}>All verified Student</option>
+        <option value={false}>All non-verified Student</option>
        </select>
        <div>
-       <span>From Date</span> <Inputs type={"date"}/>
+       <span>From Date</span> <Inputs type={"date"} ref1={startDateRef}/>
        </div>
        <div>
-       <span>To Date</span> <Inputs type={"date"}/>
+       <span>To Date</span> <Inputs type={"date"} ref1={endDateRef}/>
        </div>
        <Button value={"Apply"} fun={handleFilter}/>
       </div>   
@@ -45,7 +88,26 @@ export default function NewUserVerification() {
                 <th>Email Verification</th>
                 <th>NIGST Verification</th>
             </tr>
-            <tr>
+
+              {/* {data.map((user)=>{
+                return(
+                  <tr>
+                  <td>{user.student_id}</td>
+                  <td>{user.created_at}</td>
+                  <td>{user.first_name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.organization}</td>
+                  <td>{user.gender}</td>
+                  <td>{user.mobile_verified}</td>
+                  <td>{user.email_verified}</td>
+                  <td>{user.admin_verified}</td>
+                 </tr>
+                )
+              })} */}
+
+              
+            {/* <tr>
                 <td>101</td>
                 <td>10 March 2023</td>
                 <td>Shabab</td>
@@ -68,7 +130,7 @@ export default function NewUserVerification() {
                 <td>Yes</td>
                 <td>Yes</td>
                 <td>No</td>
-            </tr>
+            </tr> */}
         </table>
         </div>   
     </div>

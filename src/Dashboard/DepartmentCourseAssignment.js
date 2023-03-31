@@ -5,9 +5,46 @@ import { CircularProgress } from '@mui/material';
 
 export default function DepartmentCourseAssignment() {
   const [responseCircular, setCircularResponse] = useState(false);
+  const [filter, setFilter] = useState(false);
 
+  function handleFilter() {
+    setFilter(true)
+  }
+  function handleCreationForm() {
+    setFilter(false)
+  }
   return (
-    <div className='department-creation-wrapper'>
+    <>
+    {filter ? <div className='filter-wrapper-department'>
+       <Inputs placeholder={"Search Organization"}/>
+       <Inputs placeholder={"Search Course Schedule Id"}/>
+        <Button value={"Apply"} />
+        <Button value={"Create Organization"} fun={handleCreationForm} />
+      </div> : ""}
+      <div className="filter-btn">{!filter ? <Button value={"View Organization"} fun={handleFilter} /> : ""}</div>
+      {filter ? <div className='user-details-wrapper'>
+        <table>
+          <tr>
+            <th>Course Schedule Id</th>
+            <th>Organization Name</th>
+            <th>Course Assigning Id</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td>101</td>
+            <td>Survey of India</td>
+            <td>Departmental</td>
+            <td>Department</td>
+          </tr>
+          <tr>
+            <td>102</td>
+            <td>Survey of India</td>
+            <td>Departmental</td>
+            <td>Department</td>
+          </tr>
+        </table>
+      </div> : ""}
+    {!filter ? <div className='department-creation-wrapper'>
          {responseCircular ? (
         <div
           style={{
@@ -46,6 +83,7 @@ export default function DepartmentCourseAssignment() {
       </select>
       <Inputs type={"text"} placeholder={"Description"}/> 
       <Button value={"Submit"}/>
-    </div>
+    </div> : ""}
+    </>
   )
 }

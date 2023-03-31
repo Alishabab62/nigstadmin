@@ -165,7 +165,21 @@ button{
     padding-bottom: 32px;
     border-bottom: 1px solid rgb(229, 231, 235);
 }
-
+.filter-wrapper-department input{
+    padding: 0px 5px;
+}
+.filter-wrapper-department button{
+    padding: 10px 15px;
+}
 .faculty-position-table{
     margin: 20px auto;
+}
+.filter-btn{
+    text-align: right;
+    width: 100%;
+    margin-top: 30px;
+}
+.filter-btn button{
+    margin-right: 30px;
+    padding: 10px 15px;
 }

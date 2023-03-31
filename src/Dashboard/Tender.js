@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
 import Button from '../components/Button';
+import Inputs from '../components/Inputs';
 import "../CSS/Tender.css"
 
 function Tender() {
-  const [showTenders, setShowTenders] = useState(true);
+  const [showTenders, setShowTenders] = useState(false);
   const [showCorrigendum, setShowCorrigendum] = useState(false);
   const [tender , setDropdown] = useState([])
   const [tenderValue , setTenderValue ] = useState();
@@ -12,6 +13,7 @@ function Tender() {
   const startDate = useRef();
   const endDate = useRef();
   const file = useRef();
+  const [filter , setFilter] = useState(true)
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -22,10 +24,12 @@ function Tender() {
   const toggleTenders = () => {
     setShowTenders(!showTenders)
     setFormSelect(!formSelect)
+    setFilter(!filter)
   };
   const toggleCorrigendum = () => {
     setShowCorrigendum(!showCorrigendum);
     setFormSelect(!formSelect)
+    setFilter(!filter)
   };
 
   // const handleDropdownChange = () => {
@@ -85,24 +89,54 @@ function handleSubmit(e) {
 
 
   return (
-    <div className='tenderCreation flex items-center'>
+    <>
       {
       formSelect ?   <div className='creation'>
-        <button className='openform' onClick={toggleTenders}>Tenders</button>
-        <button className='openform' onClick={toggleCorrigendum}>Corregendom</button>
+        <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
+        <button className='openform' onClick={toggleCorrigendum}>Create New Corregendom</button>
       </div> : ""
       }
+      {filter ? <div className='user-details-wrapper'>
+        <table>
+            <tr>
+                <th>Tender No</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Corregendom</th>
+                <th>File</th>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>This is Tender</td>
+                <td>10/12/2002</td>
+                <td>10/12/2003</td>
+                <td>corrigendum</td>
+                <td>file</td>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>This is Tender</td>
+                <td>10/12/2002</td>
+                <td>10/12/2003</td>
+                <td>corrigendum</td>
+                <td>file</td>
+            </tr>
+        </table>
+        </div> : "" }
+    <div className='tenderCreation flex items-center'>
+      
       
       {showTenders && (
         <div id='div1'>
           <button className='close-btn' onClick={toggleTenders}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
-            <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Enter Tender"/>
-            <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Title Ref. No.:"}/>
-            <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Description:"}></textarea>
+            <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
+            <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"}/>
+            <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"}></textarea>
             <input type="date" id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
             <input type="date" id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
-            <input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required ref={file}/>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
             <Button fun={handleSubmit} value={"Submit"} className='submitButton'/>
           </form>
         </div>
@@ -124,12 +158,13 @@ function handleSubmit(e) {
             <label for="corrigendum">Corrigendum:</label>
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
-            <input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
             <Button value={"Submit"} className='submitButton'/>
           </form>
         </div>
       )}
     </div>
+    </>
   );
 }
 

@@ -85,9 +85,9 @@ export default function NIGSTAdmin() {
         <div>
           <ul className=" text-white cursor-pointer ">
             {departmentCreation ?  <li style={{background:"#ffcb00"}} onClick={departmentFun}>
-              Department/Organization Creation
+              Organization Creation
             </li> :  <li  onClick={departmentFun}>
-              Department/Organization Creation
+              Organization Creation
             </li>}
            {facultyPositionCreation ? <li style={{background:"#ffcb00"}} onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
@@ -100,9 +100,9 @@ export default function NIGSTAdmin() {
               Course Category Creation
             </li>}
            {courseAssignment ? <li style={{background:"#ffcb00"}} onClick={courseAssignmentFun}>
-              Department/Organization-Course Assignment
+              Organization-Course Assignment
             </li> : <li className="p-3 " onClick={courseAssignmentFun}>
-              Department/Organization-Course Assignment
+                Organization-Course Assignment
             </li>}
             {users ? <li style={{background:"#ffcb00"}} onClick={usersFun}>
               New User verifications

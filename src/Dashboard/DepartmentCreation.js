@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 const countryCodes = require("country-codes-list");
 
 export default function DepartmentCreation() {
@@ -206,23 +206,25 @@ export default function DepartmentCreation() {
   const [countryCode, setCountryCode] = useState([]);
   const [countryCodeObject, setCountryCodeObject] = useState({});
   const [ministryDisplay, setMinistryDisplay] = useState(false);
-  const [displayCategoryStateCenter, setDisplayCategoryDisplayCenter] =
-    useState(false);
+  const [displayCategoryStateCenter, setDisplayCategoryDisplayCenter] = useState(false);
   const [displayCategoryPrivate, setDisplayCategoryPrivate] = useState(false);
-  const [displayCategoryInternational, setDisplayCategoryInternational] =
-    useState(false);
+  const [displayCategoryInternational, setDisplayCategoryInternational] = useState(false);
   const [displayCategoryOther, setDisplayCategoryOther] = useState(false);
   const [displayInputOther, setDisplayInputOther] = useState(false);
   const [otherOrganizationValue, setOtherOrganizationValue] = useState();
   const [state, setState] = useState(false);
   const [stateValue , setStateValue] = useState();
-  let [otherDropdown , setOtherDropdown] = useState();
+  const [otherDropdown , setOtherDropdown] = useState();
   const [filter , setFilter] = useState(false);
+  const [successAlert , setSuccessAlert] = useState(false);
+  const [failAlert , setFailAlert] = useState(false);
+  const [emptyFieldAlert , setEmptyFieldAlert] = useState(false)
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
     contact: "",
     category: "",
+    filterOrganization:""
   });
 let typeRef = useRef();
 let catRef = useRef();
@@ -247,7 +249,9 @@ let countryCodeRef =useRef();
     const url = "https://nigst.onrender.com/dep/othercategory";
     axios.get(url).then((res)=>{
       setOtherDropdown(res.data.organizations)
+      
     }).catch((error)=>{
+      
       console.log(error)
     })
   }, []);
@@ -258,34 +262,48 @@ let countryCodeRef =useRef();
       ...prevInputs,
       [name]: value,
     }));
-    // console.log(inputs)
+    console.log(inputs)
   }
 
   function handleDepartmentCreation() {
-    setCircularResponse(true);
-    const data = {
-      organization: `${inputs.organization}`,
-      email: `${inputs.email}`,
-      phone: `${inputs.contact}`,
-      ministry: OrganisationType === "Other" ? "" :  OrganisationType === "State Government Organization" ? `${stateValue}` : OrganisationType ===  "PSU – State Government" ? `${stateValue}` : OrganisationType === "PSU – Central Government"  ? `${ministryDepartmentValue}` : OrganisationType === "Central Government Organization" ? `${ministryDepartmentValue}` : "",
-      type:  `${OrganisationType}`,
-      department: OrganisationType === "PSU – Central Government" || OrganisationType === "Central Government Organization" ? department !== "" ? `${department}` : "" : "",
-      category: OrganisationType === "Other" ? `${otherOrganizationValue}` ? otherOrganizationValue === "Add new"  ? inputs.category : `${otherOrganizationValue}` : "" : `${OrganisationType}`,
-    };
-    console.log(
-      data
-    );
-    const url = "https://nigst.onrender.com/dep/d";
-    axios
-      .post(url, data)
-      .then((res) => {
-        setCircularResponse(false);
-        console.log(res);
-      })
-      .catch((error) => {
-        setCircularResponse(false);
-        console.log(error);
-      });
+    if(inputs.organization !== "" && inputs.category !== "" && inputs.contact !== "" && inputs.email !== ""){
+      setCircularResponse(true);
+      const data = {
+        organization: `${inputs.organization}`,
+        email: `${inputs.email}`,
+        phone: `${inputs.contact}`,
+        ministry: OrganisationType === "Other" ? "" :  OrganisationType === "State Government Organization" ? `${stateValue}` : OrganisationType ===  "PSU – State Government" ? `${stateValue}` : OrganisationType === "PSU – Central Government"  ? `${ministryDepartmentValue}` : OrganisationType === "Central Government Organization" ? `${ministryDepartmentValue}` : "",
+        type:  `${OrganisationType}`,
+        department: OrganisationType === "PSU – Central Government" || OrganisationType === "Central Government Organization" ? department !== "" ? `${department}` : "" : "",
+        category: OrganisationType === "Other" ? `${otherOrganizationValue}` ? otherOrganizationValue === "Add new"  ? inputs.category : `${otherOrganizationValue}` : "" : `${OrganisationType}`,
+      };
+      console.log(
+        data
+      );
+      const url = "https://nigst.onrender.com/dep/d";
+      axios
+        .post(url, data)
+        .then((res) => {
+          setCircularResponse(false);
+          setSuccessAlert(true)
+        setTimeout(() => {
+          setSuccessAlert(false)
+        }, 5000);
+          console.log(res);
+        })
+        .catch((error) => {
+          setCircularResponse(false);
+          setFailAlert(true)
+        setTimeout(() => {
+          setFailAlert(false)
+        }, 5000);
+          console.log(error);
+        });
+    }
+    setEmptyFieldAlert(true)
+    setTimeout(() => {
+      setEmptyFieldAlert(false)
+    }, 3000);
   }
 
   useEffect(() => {
@@ -394,15 +412,13 @@ function handleFilter(){
 function handleCreationForm(){
   setFilter(false)
 }
+if(!responseCircular){
+  // confirm("shs")
+}
   return (
     <>
     {filter ?  <div className='filter-wrapper-department'>
-       <select >
-        <option>Select Organization Name</option>
-        <option value={"all"}>All Student</option>
-        <option value={"verified"}>All verified Student</option>
-        <option value={"non-verified"}>All non-verified Student</option>
-       </select>
+       <Inputs type={"text"} placeholder={"Select Organization"} name={"filterOrganization"} fun={handleInputs}/>
        <select >
         <option>Select Organization Type</option>
         <option value={"all"}>All Student</option>
@@ -444,7 +460,11 @@ function handleCreationForm(){
       <Button value={"View"} fun={handleFilter}/>
       <Button value={"Create"} fun={handleCreationForm}/>
       </div>
+      {/* {!responseCircular ? alert("Do You want to leave") : ""} */}
     {!filter ? <div className="department-creation-wrapper">
+      {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
+      {failAlert ? <Alert severity="error">Something Went Wrong</Alert> : ""}
+      {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
       {responseCircular ? (
         <div
           style={{

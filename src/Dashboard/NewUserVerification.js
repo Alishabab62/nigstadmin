@@ -55,10 +55,10 @@ function filter(){
     <div className='user-verification w-full'>
       <div className='filter-wrapper'>
         <div>
-       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Name"} fun={handleInputs} name={"name"}/>
+       <span>By Email</span> <Inputs type={"text"} placeholder={"Search by Email"} fun={handleInputs} name={"name"}/>
         </div>
         <div>
-       <span>By Name</span> <Inputs type={"text"} placeholder={"Search by Organization"} fun={handleInputs} name={"orgName"}/>
+       <span>By Organization</span> <Inputs type={"text"} placeholder={"Search by Organization"} fun={handleInputs} name={"orgName"}/>
         </div>
        <select onChange={(e)=>setVerificationFilterValue(e.target.value)}>
         <option>Select by Verification Status</option>

@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import "../CSS/Tender.css"
 
 function Tender() {
-  const [showTenders, setShowTenders] = useState(false);
+  const [showTenders, setShowTenders] = useState(true);
   const [showCorrigendum, setShowCorrigendum] = useState(false);
   const [tender , setDropdown] = useState([])
   const [tenderValue , setTenderValue ] = useState();

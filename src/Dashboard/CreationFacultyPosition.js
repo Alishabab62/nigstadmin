@@ -44,6 +44,7 @@ export default function CreationFacultyPosition() {
       });
   }
   return (
+    <>
     <div className="department-creation-wrapper">
       {responseCircular ? (
         <div
@@ -66,7 +67,7 @@ export default function CreationFacultyPosition() {
       ) : (
         ""
       )}
-      <h3>Faculty Positions Creation</h3>
+      <h3>Create New Faculty Position</h3>
       <Inputs
         type={"text"}
         placeholder={"Faculty Position"}
@@ -81,5 +82,24 @@ export default function CreationFacultyPosition() {
       />
       <Button value={"Submit"} fun={handleFacultyCreation} />
     </div>
+    <h3 style={{textAlign:"center" , width:"100%" , marginTop:"30px"}}>View</h3>
+    <table className="faculty-position-table">
+      <tr>
+        <th>Faculty Id.</th>
+        <th>Position</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td>HOD</td>
+        <td>Head Of Department</td>
+      </tr>
+      <tr>
+        <td>101</td>
+        <td>HOD</td>
+        <td>Head Of Department</td>
+      </tr>
+    </table>
+    </>
   );
 }

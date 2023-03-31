@@ -101,7 +101,7 @@ export default function CourseCategoryCreation() {
       ) : (
         ""
       )}
-      <h3>Course Category Creation</h3>
+      <h3>Create new Course Category</h3>
       <Inputs
         type={"text"}
         placeholder={"Course Category"}

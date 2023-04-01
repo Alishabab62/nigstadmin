@@ -30,15 +30,14 @@ export default function CourseCategoryCreation() {
     if(inputs.courseCategory !== "" && inputs.description !== ""){
       setCircularResponse(true);
     const data = {
-      courseCategory: `${inputs.courseCategory}`,
+      course_category_name: `${inputs.courseCategory}`,
       description: `${inputs.description}`,
     };
     console.log(
       inputs.courseCategory,
       inputs.description,
     );
-    const url = "https://nigst.onrender.com/dep/d";
-    // const url = "https://64280a71f8883379b263d1d0--sparkly-cupcake-24375d.netlify.app/dep/d"
+    const url = "https://nigst.onrender.com/category/create";
     axios
       .post(url, data)
       .then((res) => {

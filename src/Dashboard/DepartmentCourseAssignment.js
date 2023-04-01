@@ -22,9 +22,9 @@ export default function DepartmentCourseAssignment() {
        <Inputs placeholder={"Search Organization"}/>
        <Inputs placeholder={"Search Course Schedule Id"}/>
         <Button value={"Apply"} />
-        <Button value={"Create Organization"} fun={handleCreationForm} />
+        <Button value={"Organization Course Assigned"} fun={handleCreationForm} />
       </div> : ""}
-      <div className="filter-btn">{!filter ? <Button value={"View Organization"} fun={handleFilter} /> : ""}</div>
+      <div className="filter-btn">{!filter ? <Button value={"View Assigned Course"} fun={handleFilter} /> : ""}</div>
       {filter ? <div className='user-details-wrapper'>
         <table>
           <tr>

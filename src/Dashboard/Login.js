@@ -2,6 +2,10 @@ import React from 'react'
 import Inputs from '../components/Inputs';
 import Button from '../components/Button';
 
+function handleLogin(){
+  window.location.href = "/admin"
+}
+
 export default function Login() {
   return (
     <div className="login-wrapper ">  
@@ -14,7 +18,7 @@ export default function Login() {
         <option>Faculty Admin</option>
         <option>Faculty Member</option>
       </select>
-      <Button value={"Submit"}/>
+      <Button value={"Submit"} fun={handleLogin}/>
     </div>
   )
 }

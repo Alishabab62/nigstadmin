@@ -7,7 +7,7 @@ import "../CSS/Tender.css"
 function Tender() {
   const [showTenders, setShowTenders] = useState(false);
   const [showCorrigendum, setShowCorrigendum] = useState(false);
-  const [tender , setDropdown] = useState([])
+  // const [tender , setDropdown] = useState([]);
   const [tenderValue , setTenderValue ] = useState();
   const [formSelect , setFormSelect] = useState(true);
   const startDate = useRef();
@@ -148,11 +148,11 @@ function handleSubmit(e) {
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>
-              {
+              {/* {
                 tender.map((data,index)=>{
                   return <option value={data} key={index}>{data.tender_ref_no}</option>
                 })
-              }
+              } */}
             </select>
             <h2>Details for Title Ref. No. <span id="ref-details"></span></h2>
             <label for="corrigendum">Corrigendum:</label>

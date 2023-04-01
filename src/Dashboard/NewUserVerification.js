@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from 'axios';
@@ -89,7 +89,7 @@ function filter(){
                 <th>NIGST Verification</th>
             </tr>
 
-              {/* {data.map((user)=>{
+              {data.map((user)=>{
                 return(
                   <tr>
                   <td>{user.student_id}</td>
@@ -104,7 +104,7 @@ function filter(){
                   <td>{user.admin_verified}</td>
                  </tr>
                 )
-              })} */}
+              })}
 
               
             {/* <tr>

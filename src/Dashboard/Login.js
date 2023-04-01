@@ -27,7 +27,7 @@ function handleLogin(){
         <option>Faculty Admin</option>
         <option>Faculty Member</option>
       </select>
-      <Button value={"Submit"} fun={handleLogin}/>
+      <Button value={"Login"} fun={handleLogin}/>
     </div>
   )
 }

@@ -218,7 +218,7 @@ export default function DepartmentCreation() {
   const [filter, setFilter] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
-  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false)
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",

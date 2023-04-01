@@ -13,6 +13,9 @@ export default function DepartmentCourseAssignment() {
   function handleCreationForm() {
     setFilter(false)
   }
+  function handleCreation(){
+    setCircularResponse(true)
+  }
   return (
     <>
     {filter ? <div className='filter-wrapper-department'>
@@ -82,7 +85,7 @@ export default function DepartmentCourseAssignment() {
         <option>Course Id 104</option>
       </select>
       <Inputs type={"text"} placeholder={"Description"}/> 
-      <Button value={"Submit"}/>
+      <Button value={"Submit"} fun={handleCreation}/>
     </div> : ""}
     </>
   )

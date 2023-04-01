@@ -2,12 +2,15 @@ import React, {  useState } from "react";
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import "../CSS/app.css"
 export default function CourseCategoryCreation() {
  
   const [responseCircular, setCircularResponse] = useState(false);
   const [filter , setFilter] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [failAlert, setFailAlert] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [inputs, setInputs] = useState({
     courseCategory: "",
     description: "",
@@ -24,7 +27,8 @@ export default function CourseCategoryCreation() {
   }
 
   function handleFacultyCreation() {
-    setCircularResponse(true);
+    if(inputs.courseCategory !== "" && inputs.description !== ""){
+      setCircularResponse(true);
     const data = {
       courseCategory: `${inputs.courseCategory}`,
       description: `${inputs.description}`,
@@ -38,13 +42,29 @@ export default function CourseCategoryCreation() {
       .post(url, data)
       .then((res) => {
         setCircularResponse(false);
+        setSuccessAlert(true);
+        setTimeout(() => {
+          setSuccessAlert(false)
+        }, 5000);
         console.log(res);
       })
       .catch((error) => {
         setCircularResponse(false);
+        setFailAlert(true);
+        setTimeout(() => {
+          setFailAlert(false)
+        }, 5000);
         console.log(error);
       });
+    }
+    else{
+      setEmptyFieldAlert(true);
+      setTimeout(()=>{
+      setEmptyFieldAlert(false);
+      },5000)
+    }
   }
+
   function handleFilter(){
     setFilter(true)
   }
@@ -80,6 +100,9 @@ export default function CourseCategoryCreation() {
       <Button value={"Create"} fun={handleCreationForm}/>
       </div>
     {!filter ? <div className="department-creation-wrapper">
+        {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
+        {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
+        {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
       {responseCircular ? (
         <div
           style={{

@@ -42,14 +42,14 @@ export default function NIGSTAdmin() {
     setCourseAssignment(false);
     setTender(false);
   }
-  function facultyAdminFun() {
-    setDepartmentCreation(false);
-    setFacultyPositionCreation(false);
-    setCourseCategory(false);
-    setUsers(false);
-    setCourseAssignment(false);
-    setTender(false);
-  }
+  // function facultyAdminFun() {
+  //   setDepartmentCreation(false);
+  //   setFacultyPositionCreation(false);
+  //   setCourseCategory(false);
+  //   setUsers(false);
+  //   setCourseAssignment(false);
+  //   setTender(false);
+  // }
   function usersFun() {
     setUsers(true); 
     setCourseCategory(false);
@@ -132,7 +132,7 @@ export default function NIGSTAdmin() {
             <img src={Logo} alt="logo" className='header-logo-admin-panel'></img> 
           </div>
           <div>
-            <Button value={"Login"} />{" "}
+            <Button value={"Logout"} />{" "}
           </div>
         </header>
         <div className="min-h-max flex justify-center border-t-2 min-h-[80%]">

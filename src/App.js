@@ -1,10 +1,16 @@
 import NIGSTAdmin from './Dashboard/NIGSTAdmin';
-// import './CSS/app.css'
+import { BrowserRouter , Route, Routes } from 'react-router-dom';
 import React from 'react';
+import Login from './Dashboard/Login'
 function App() {
   return (
     <div className="App">
-      <NIGSTAdmin/>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Login/>}></Route>
+          <Route path='/admin' element={<NIGSTAdmin/>}></Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

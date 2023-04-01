@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
 import Button from '../components/Button';
-import Inputs from '../components/Inputs';
+// import Inputs from '../components/Inputs';
 import "../CSS/Tender.css"
 
 function Tender() {

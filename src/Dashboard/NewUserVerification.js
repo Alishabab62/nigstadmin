@@ -8,7 +8,7 @@ export default function NewUserVerification() {
     let [verificationFilterValue , setVerificationFilterValue] = useState();
     const startDateRef = useRef();
     const endDateRef = useRef();
-    const [data,setData] = useState(undefined);
+    const [data,setData] = useState([]);
     const [inputs ,setInputs] = useState({
       name:"",
       orgName:""

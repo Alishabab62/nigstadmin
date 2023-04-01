@@ -2,11 +2,14 @@ import React, {  useState } from "react";
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 
 export default function CreationFacultyPosition() {
  
   const [responseCircular, setCircularResponse] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [failAlert, setFailAlert] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [inputs, setInputs] = useState({
     facultyPosition: "",
     description: "",
@@ -23,6 +26,13 @@ export default function CreationFacultyPosition() {
   }
 
   function handleFacultyCreation() {
+    if(inputs.facultyPosition === "" && inputs.description === ""){
+      setEmptyFieldAlert(true);
+      setTimeout(() => {
+        
+      }, 5000);
+      return;
+    }
     setCircularResponse(true);
     const data = {
       faculty_pos: `${inputs.facultyPosition}`,
@@ -36,16 +46,27 @@ export default function CreationFacultyPosition() {
       .post(url, data)
       .then((res) => {
         setCircularResponse(false);
+        setSuccessAlert(true);
+        setTimeout(() => {
+          setSuccessAlert(false)
+        }, 5000);
         console.log(res);
       })
       .catch((error) => {
         setCircularResponse(false);
+        setFailAlert(true);
+        setInterval(() => {
+          setFailAlert(false);
+        }, 5000);
         console.log(error);
       });
   }
   return (
     <>
     <div className="department-creation-wrapper">
+    {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
+        {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
+        {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
       {responseCircular ? (
         <div
           style={{

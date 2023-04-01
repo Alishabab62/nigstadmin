@@ -37,7 +37,8 @@ export default function CourseCategoryCreation() {
       inputs.courseCategory,
       inputs.description,
     );
-    const url = "https://nigst.onrender.com/dep/d";
+    // const url = "https://nigst.onrender.com/dep/d";
+    const url = "https://64280a71f8883379b263d1d0--sparkly-cupcake-24375d.netlify.app/dep/d"
     axios
       .post(url, data)
       .then((res) => {

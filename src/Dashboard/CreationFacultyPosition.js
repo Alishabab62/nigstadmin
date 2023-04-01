@@ -64,7 +64,7 @@ export default function CreationFacultyPosition() {
   return (
     <>
     <div className="department-creation-wrapper">
-    {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
+    {successAlert ? <Alert severity="success">Faculty Position Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
       {responseCircular ? (

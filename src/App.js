@@ -5,12 +5,12 @@ import Login from './Dashboard/Login'
 function App() {
   return (
     <div className="App">
-      {/* <BrowserRouter> */}
+      <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login/>}></Route>
-          <Route path='/admin' element={<NIGSTAdmin/>}></Route>
+          <Route path='admin' element={<NIGSTAdmin/>}></Route>
         </Routes>
-      {/* </BrowserRouter> */}
+      </BrowserRouter>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import Inputs from '../components/Inputs';
 import Button from '../components/Button';
 
 function handleLogin(){
-  window.location.href = "/admin"
+  window.location.href = "https://unrivaled-seahorse-94d284.netlify.app/admin"
 }
 
 export default function Login() {

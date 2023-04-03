@@ -219,6 +219,7 @@ export default function DepartmentCreation() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [duplicate , setDuplicate] = useState(false)
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -266,7 +267,7 @@ export default function DepartmentCreation() {
   }
 
   function handleDepartmentCreation() {
-    if (inputs.organization !== "" && OrganisationType !== undefined && categoryOfOrganisation !== undefined) {
+    if (inputs.organization !== "" && OrganisationType !== undefined && (categoryOfOrganisation !== undefined || otherOrganizationValue !== undefined)) {
       setCircularResponse(true);
       const data = {
         organization: `${inputs.organization}`,
@@ -293,10 +294,19 @@ export default function DepartmentCreation() {
         })
         .catch((error) => {
           setCircularResponse(false);
-          setFailAlert(true)
-          setTimeout(() => {
-            setFailAlert(false)
-          }, 5000);
+         
+          if(error.response.data.message === "Duplicate  found"){
+            setDuplicate(true);
+            setTimeout(() => {
+              setDuplicate(false)
+            }, 5000);
+          }
+          else{
+            setFailAlert(true)
+            setTimeout(() => {
+              setFailAlert(false)
+            }, 5000);
+          }
           console.log(error);
         });
     } else {
@@ -403,7 +413,7 @@ export default function DepartmentCreation() {
       stateRef.current.style.colo = "black"
     }
     if (otherOrganizationValue !== undefined) {
-      otherCatRef.current.style.color = "black"
+      otherCatRef.current.style.color = "black";
     }
   }, [OrganisationType, categoryOfOrganisation, ministryDepartmentValue, department, stateValue, otherOrganizationValue])
 
@@ -469,6 +479,7 @@ export default function DepartmentCreation() {
         {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
+        {duplicate ? <Alert severity="error">Already Exists</Alert> : ""}
         {responseCircular ? (
           <div
             style={{

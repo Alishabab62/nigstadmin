@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material'
 import React, { useState } from 'react'
-import Logo from "../assests/Website Logo NIGST Small.png";
+import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
 import CreationFacultyMember from './CreationFacultyMember';
@@ -35,17 +35,18 @@ export default function FacultyAdmin() {
         setCourseCategory(false)
     }
   return (
-    <div className='flex justify-between'>
+    <div className='flex justify-between main-page-header'>
         <div className='side-bar border-r-2 side-bar-wrapper'> 
         <div className=' text-center pt-14 pb-14  border-b-2 mb-8'>
         <h3 className='text-lg   text-white font-bold '>Welcome Faculty Admin</h3>
         </div>
         <div>
             <ul className=' text-white cursor-pointer '>
-                <li className='p-3 ' onClick={creationFacultyFun}>Creation of Faculty Members</li>
+                {creationFacultyMember ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={creationFacultyFun}>Creation of Faculty Members</li> : <li className='p-3 ' onClick={creationFacultyFun}>Creation of Faculty Members</li>}
                 <li className='p-3 ' onClick={facultyPositionFun}>Assigning Positions to Faculty Members</li>
                 <li className='p-3 ' onClick={courseCategoryFun}>Allowing and disallowing login access to Faculty </li>
                 <li className='p-3 ' onClick={facultyAdminFun}>Course Creation</li>
+                <li className='p-3 ' onClick={facultyAdminFun}>Course Scheduling</li>
             </ul>
             
         </div>

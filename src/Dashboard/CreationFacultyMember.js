@@ -10,11 +10,11 @@ export default function CreationFacultyMember() {
       <Inputs type={"text"} placeholder={"Last name"}/>
       <select>
         <option>Select Faculty</option>
-        <option>faculty 1</option>
-        <option>faculty 2</option>
-        <option>faculty 3</option>
-        <option>faculty 4</option>
-        <option>faculty 5</option>
+        <option>Faculty Of Geodesy</option>
+        <option>Faculty of TS & LIS</option>
+        <option>Faculty of Photogrammetry & RS</option>
+        <option>Faculty of GEO-ICT</option>
+        <option>Faculty of Carto , DM & GIS</option>
       </select>
       <Inputs type={"email"} placeholder={"Enter email"}/>
       <Inputs type={"tel"} placeholder={"Enter Phone"}/>

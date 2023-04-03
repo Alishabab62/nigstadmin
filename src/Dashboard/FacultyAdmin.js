@@ -11,28 +11,28 @@ import CreationFacultyMember from './CreationFacultyMember';
 
 export default function FacultyAdmin() {
     const [creationFacultyMember , setCreationFacultyMember] = useState(false)
-    const [facultyPositionCreation , setFacultyPositionCreation] = useState(false)
-    const [courseCategory , setCourseCategory] = useState(false);
+    // const [facultyPositionCreation , setFacultyPositionCreation] = useState(false)
+    // const [courseCategory , setCourseCategory] = useState(false);
 
     function creationFacultyFun(){
         setCreationFacultyMember(true)
-        setFacultyPositionCreation(false)
-        setCourseCategory(false)
+        // setFacultyPositionCreation(false)
+        // setCourseCategory(false)
     }
     function facultyPositionFun(){
-        setFacultyPositionCreation(true)
+        // setFacultyPositionCreation(true)
         setCreationFacultyMember(false)
-        setCourseCategory(false)
+        // setCourseCategory(false)
     }
     function courseCategoryFun(){
-        setCourseCategory(true)
+        // setCourseCategory(true)
         setCreationFacultyMember(false)
-        setFacultyPositionCreation(false)
+        // setFacultyPositionCreation(false)
     }
     function facultyAdminFun(){
         setCreationFacultyMember(false)
-        setFacultyPositionCreation(false)
-        setCourseCategory(false)
+        // setFacultyPositionCreation(false)
+        // setCourseCategory(false)
     }
   return (
     <div className='flex justify-between main-page-header'>

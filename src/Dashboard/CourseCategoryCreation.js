@@ -65,41 +65,15 @@ export default function CourseCategoryCreation() {
     }
   }
 
-  function handleFilter(){
-    setFilter(true)
-  }
-  function handleCreationForm(){
-    setFilter(false)
-  }
+  // function handleFilter(){
+  //   setFilter(true)
+  // }
+  // function handleCreationForm(){
+  //   setFilter(false)
+  // }
   return (
-    <>
-    {filter ? <div className='user-details-wrapper'>
-        <table>
-            <tr>
-                <th>S.Id</th>
-                <th>Organization Name</th>
-                <th>Organization Type</th>
-                <th>Category of Organization</th>
-            </tr>
-            <tr>
-                <td>101</td>
-                <td>Survey of India</td>
-                <td>Departmental</td>
-                <td>Department</td>
-            </tr>
-            <tr>
-                <td>102</td>
-                <td>Survey of India</td>
-                <td>Departmental</td>
-                <td>Department</td>
-            </tr>
-        </table>
-        </div> : "" }
-    <div style={{textAlign:"center" , marginTop:"50px"}} className="department-view-btn-wrapper">
-      <Button value={"View"} fun={handleFilter}/>
-      <Button value={"Create"} fun={handleCreationForm}/>
-      </div>
-    {!filter ? <div className="department-creation-wrapper">
+    <div style={{display:"flex", justifyContent:"space-evenly"}}>
+       <div className="department-creation-wrapper-category">
         {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
@@ -138,7 +112,34 @@ export default function CourseCategoryCreation() {
         fun={handleInputs}
       />
       <Button value={"Submit"} fun={handleFacultyCreation} />
-    </div> : ""}
-    </>
+    </div> 
+    <div className='user-details-wrapper-category'>
+        <table style={{marginTop:"80px"}}>
+            <tr>
+                <th>S.Id</th>
+                <th>Organization Name</th>
+                <th>Organization Type</th>
+                <th>Category of Organization</th>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+            <tr>
+                <td>102</td>
+                <td>Survey of India</td>
+                <td>Departmental</td>
+                <td>Department</td>
+            </tr>
+        </table>
+        </div> 
+    {/* <div style={{textAlign:"center" , marginTop:"50px"}} className="department-view-btn-wrapper">
+      <Button value={"View"} fun={handleFilter}/>
+      <Button value={"Create"} fun={handleCreationForm}/>
+      </div> */}
+   
+    </div>
   );
 }

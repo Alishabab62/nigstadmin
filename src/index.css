@@ -215,3 +215,24 @@ button{
     margin-top: 6px;
     padding: 7px;
 }
+.department-creation-wrapper-category{
+    width: 500px;
+    background-color: #f5eeee76;
+    border: 1px solid rgb(229, 231, 235);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 80px;
+}
+.department-creation-wrapper-category input{
+    border: none;
+    height: 30px;
+    color: black;
+    border-radius: 5px;   
+    margin: 5px 0px;
+}
+.department-creation-wrapper-category button{
+    margin-top: 3px;
+}

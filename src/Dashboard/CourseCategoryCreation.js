@@ -7,7 +7,7 @@ import "../CSS/app.css"
 export default function CourseCategoryCreation() {
  
   const [responseCircular, setCircularResponse] = useState(false);
-  const [filter , setFilter] = useState(false);
+  // const [filter , setFilter] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);

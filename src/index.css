@@ -138,15 +138,18 @@ button{
  table,tr,td,th{
     border: 1px solid rgb(229, 231, 235);
     border-collapse: collapse;
+    height: fit-content;
 }
  td,th ,td{
-    padding: 8px;
+    padding: 5px;
     text-align: center;
 }
  .user-details-wrapper{
     display: flex;
     justify-content: center;
     margin-top: 32px;
+    height: 423px;
+    overflow-y: scroll;
 }
 
 .department-view-btn-wrapper button{
@@ -225,6 +228,7 @@ button{
     flex-direction: column;
     position: relative;
     margin-top: 80px;
+    height: fit-content;
 }
 .department-creation-wrapper-category input{
     border: none;

@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
@@ -11,6 +11,7 @@ export default function CourseCategoryCreation() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [viewData , setViewData] = useState([]);
   const [inputs, setInputs] = useState({
     courseCategory: "",
     description: "",
@@ -65,6 +66,16 @@ export default function CourseCategoryCreation() {
     }
   }
 
+useEffect(()=>{
+  const url = "https://nigst.onrender.com/category/view"
+  axios.get(url).then((res)=>{
+    setViewData(res.data.categories)
+    console.log(res);
+  }).catch((error)=>{
+    console.log(error)
+  })
+},[])
+
   // function handleFilter(){
   //   setFilter(true)
   // }
@@ -114,25 +125,25 @@ export default function CourseCategoryCreation() {
       <Button value={"Submit"} fun={handleFacultyCreation} />
     </div> 
     <div className='user-details-wrapper-category'>
-        <table style={{marginTop:"80px"}}>
+        <table style={{marginTop:"80px", height:"450px" , overflowY:"scroll"}}>
             <tr>
-                <th>S.Id</th>
-                <th>Organization Name</th>
-                <th>Organization Type</th>
-                <th>Category of Organization</th>
+                <th>Category Id</th>
+                <th>COurse Category Name</th>
+                <th>Title</th>
+                <th>Description</th>
             </tr>
-            <tr>
-                <td>101</td>
-                <td>Survey of India</td>
-                <td>Departmental</td>
-                <td>Department</td>
-            </tr>
-            <tr>
-                <td>102</td>
-                <td>Survey of India</td>
-                <td>Departmental</td>
-                <td>Department</td>
-            </tr>
+            {
+              viewData.map((data)=>{
+                return (
+                  <tr>
+                  <td>{data.category_id}</td>
+                  <td>{data.course_category_name}</td>
+                  <td>{data.title}</td>
+                  <td>{data.description}</td>
+              </tr>
+                )
+              })
+            }
         </table>
         </div> 
     {/* <div style={{textAlign:"center" , marginTop:"50px"}} className="department-view-btn-wrapper">

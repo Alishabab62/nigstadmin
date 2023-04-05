@@ -219,7 +219,10 @@ export default function DepartmentCreation() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
-  const [duplicate , setDuplicate] = useState(false)
+  const [duplicateOrg , setDuplicateOrg] = useState(false);
+  const [duplicateEmail , setDuplicateEmail] = useState(false);
+  const [duplicatePhone , setDuplicatePhone] = useState(false);
+  const [organizationView , setOrganisationView] = useState([]);
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -254,7 +257,16 @@ export default function DepartmentCreation() {
     }).catch((error) => {
 
       console.log(error)
+    });
+
+    const urlView = "https://nigst.onrender.com/dep/view";
+    axios.get(urlView).then((res)=>{
+      console.log(res)
+      setOrganisationView(res.data);
+    }).catch((error)=>{
+      console.log(error)
     })
+
   }, []);
 
   function handleInputs(e) {
@@ -295,10 +307,22 @@ export default function DepartmentCreation() {
         .catch((error) => {
           setCircularResponse(false);
          
-          if(error.response.data.message === "Duplicate  found"){
-            setDuplicate(true);
+          if(error.response.data.message === "Duplicate organization found"){
+            setDuplicateOrg(true);
             setTimeout(() => {
-              setDuplicate(false)
+              setDuplicateOrg(false)
+            }, 5000);
+          }
+          else if(error.response.data.message === "Duplicate email found"){
+            setDuplicateEmail(true);
+            setTimeout(() => {
+              setDuplicateEmail(false)
+            }, 5000);
+          }
+          else if(error.response.data.message === "Duplicate phone found"){
+            setDuplicatePhone(true);
+            setTimeout(() => {
+              setDuplicatePhone(false)
             }, 5000);
           }
           else{
@@ -456,18 +480,18 @@ export default function DepartmentCreation() {
             <th>Organization Type</th>
             <th>Category of Organization</th>
           </tr>
-          <tr>
-            <td>101</td>
-            <td>Survey of India</td>
-            <td>Departmental</td>
-            <td>Department</td>
-          </tr>
-          <tr>
-            <td>102</td>
-            <td>Survey of India</td>
-            <td>Departmental</td>
-            <td>Department</td>
-          </tr>
+          {
+            organizationView.map((data)=>{
+              return(
+                <tr>
+                <td>{data.id}</td>
+                <td>{data.organization}</td>
+                <td>{data.type}</td>
+                <td>{data.category}</td>
+              </tr>
+              )
+            })
+          }
         </table>
       </div> : ""}
 
@@ -479,7 +503,9 @@ export default function DepartmentCreation() {
         {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
-        {duplicate ? <Alert severity="error">Already Exists</Alert> : ""}
+        {duplicateOrg ? <Alert severity="error">Organisation Already Exists</Alert> : ""}
+        {duplicateEmail ? <Alert severity="error">Email Already Exists</Alert> : ""}
+        {duplicatePhone ? <Alert severity="error">Phone Already Exists</Alert> : ""}
         {responseCircular ? (
           <div
             style={{

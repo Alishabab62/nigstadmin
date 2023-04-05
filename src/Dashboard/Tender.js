@@ -72,7 +72,7 @@ function handleInputs(e){
 
 function handleSubmit(e) {
   e.preventDefault();
-  const url = "https://nigst.onrender/tender/create";
+  const url = "https://nigst.onrender.com/tender/create";
   const formData = new FormData();
   formData.append("title", input.title);
   formData.append("tenderRefNo", input.ref);
@@ -136,7 +136,7 @@ function handleSubmit(e) {
             <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"}></textarea>
             <input type="date" id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
             <input type="date" id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={file} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
             <Button fun={handleSubmit} value={"Submit"} className='submitButton'/>
           </form>
         </div>

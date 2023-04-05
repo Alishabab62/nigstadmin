@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import { CircularProgress } from '@mui/material';
+import axios from 'axios';
 
 export default function DepartmentCourseAssignment() {
   const [responseCircular, setCircularResponse] = useState(false);
   const [filter, setFilter] = useState(false);
+  const [orgView , setOrgView] = useState([])
 
   function handleFilter() {
     setFilter(true)
@@ -16,6 +18,15 @@ export default function DepartmentCourseAssignment() {
   function handleCreation(){
     setCircularResponse(true)
   }
+
+  useEffect(()=>{
+    const url = "https://nigst.onrender.com/dep/v";
+    axios.get(url).then((res)=>{
+      setOrgView(res.data)
+    }).catch((error)=>{
+      console.log(error)
+    })
+  },[])
   return (
     <>
     {filter ? <div className='filter-wrapper-department'>
@@ -72,13 +83,12 @@ export default function DepartmentCourseAssignment() {
         <h3>Department Course Assignment</h3>
       <select>
         <option>Select Organization </option>
-        <option>Organization 1</option>
-        <option>Organization 1</option>
-        <option>Organization 1</option>
-        <option>Organization 1</option>
+        {orgView.map((data , index)=>{
+          return <option value={data.organization} key={index}>{data.organization}</option>
+        })}
       </select>
       <select>
-        <option>Select Course Id </option>
+        <option>Select Course Schedule Id </option>
         <option>Course Id 101</option>
         <option>Course Id 102</option>
         <option>Course Id 103</option>

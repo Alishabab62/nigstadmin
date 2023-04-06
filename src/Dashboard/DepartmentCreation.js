@@ -223,6 +223,7 @@ export default function DepartmentCreation() {
   const [duplicateEmail , setDuplicateEmail] = useState(false);
   const [duplicatePhone , setDuplicatePhone] = useState(false);
   const [organizationView , setOrganisationView] = useState([]);
+  let [count , setCount] = useState(1);
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -261,8 +262,7 @@ export default function DepartmentCreation() {
 
     const urlView = "https://nigst.onrender.com/dep/view";
     axios.get(urlView).then((res)=>{
-      console.log(res)
-      setOrganisationView(res.data);
+      setOrganisationView(res.data.reverse());
     }).catch((error)=>{
       console.log(error)
     })
@@ -347,7 +347,6 @@ export default function DepartmentCreation() {
       OrganisationType === "PSU – Central Government" ||
       OrganisationType === "Central Government Organization"
     ) {
-      console.log("hello");
       ministryDisplayShowFun();
     } else {
       ministryDisplayHideFun();
@@ -481,10 +480,12 @@ export default function DepartmentCreation() {
             <th>Category of Organization</th>
           </tr>
           {
+            
             organizationView.map((data)=>{
+              setCount(count+1)
               return(
                 <tr>
-                <td>{data.id}</td>
+                <td>{count}</td>
                 <td>{data.organization}</td>
                 <td>{data.type}</td>
                 <td>{data.category}</td>

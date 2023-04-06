@@ -20,8 +20,8 @@ export default function CreationFacultyMember() {
       <Inputs type={"tel"} placeholder={"Enter Phone"}/>
       <Inputs type={"password"} placeholder={"Enter Password"}/>
       <div style={{display:"flex" , alignItems:"center"}}>
-      <Inputs type={"radio"} value={"true"} name={"admin verification"}/> <label>Verified</label>
-      <Inputs type={"radio"} value={"false"} name={"admin verification"}/> <label>Not Verified</label>
+      <Inputs type={"radio"} value={"true"} name={"admin verification"}/> <label>Login Access</label>
+      <Inputs type={"radio"} value={"false"} name={"admin verification"}/> <label>No Login Access</label>
       </div>
       <Button value={"Submit"}/>
     </div>

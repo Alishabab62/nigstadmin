@@ -128,7 +128,7 @@ useEffect(()=>{
         <table style={{marginTop:"80px", height:"450px" , overflowY:"scroll"}}>
             <tr>
                 <th>Category Id</th>
-                <th>COurse Category Name</th>
+                <th>Course Category Name</th>
                 <th>Title</th>
                 <th>Description</th>
             </tr>

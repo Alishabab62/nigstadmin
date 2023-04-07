@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from "axios";
@@ -10,6 +10,7 @@ export default function CreationFacultyPosition() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [viewPosition , setViewPosition] = useState([]);
   const [inputs, setInputs] = useState({
     facultyPosition: "",
     description: "",
@@ -61,9 +62,17 @@ export default function CreationFacultyPosition() {
         console.log(error);
       });
   }
+  useEffect(()=>{
+    const url = "https://nigst.onrender.com/sauth/view";
+    axios.get(url).then((res)=>{
+      setViewPosition(res.data);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  },[]);
   return (
-    <>
-    <div className="department-creation-wrapper">
+    <div style={{display:"flex" , justifyContent:"space-evenly"}}>
+    <div className="department-creation-wrapper-position">
         {successAlert ? <Alert severity="success">Faculty Position Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
@@ -103,24 +112,28 @@ export default function CreationFacultyPosition() {
       />
       <Button value={"Submit"} fun={handleFacultyCreation} />
     </div>
-    <h3 style={{textAlign:"center" , width:"100%" , marginTop:"30px"}}>View</h3>
+    <div style={{height:"500px" , overflowY:"scroll" , marginTop:"80px"}}>
     <table className="faculty-position-table">
       <tr>
+        <th>S.No</th>
         <th>Faculty Id.</th>
         <th>Position</th>
         <th>Description</th>
       </tr>
-      <tr>
-        <td>101</td>
-        <td>HOD</td>
-        <td>Head Of Department</td>
-      </tr>
-      <tr>
-        <td>101</td>
-        <td>HOD</td>
-        <td>Head Of Department</td>
-      </tr>
+      {
+        viewPosition.map((data,index)=>{
+          return(
+            <tr>
+            <td>{index+1}</td>
+            <td>{data.position_id}</td>
+            <td>{data.faculty_pos}</td>
+            <td>{data.description}</td>
+          </tr>
+          )
+        })
+      }
     </table>
-    </>
+    </div>
+    </div>
   );
 }

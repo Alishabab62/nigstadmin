@@ -34,10 +34,6 @@ export default function CourseCategoryCreation() {
       course_category_name: `${inputs.courseCategory}`,
       description: `${inputs.description}`,
     };
-    console.log(
-      inputs.courseCategory,
-      inputs.description,
-    );
     const url = "https://nigst.onrender.com/category/create";
     axios
       .post(url, data)
@@ -127,15 +123,17 @@ useEffect(()=>{
     <div className='user-details-wrapper-category'>
         <table style={{marginTop:"80px", height:"450px" , overflowY:"scroll"}}>
             <tr>
+                <th>S.No</th>
                 <th>Category Id</th>
                 <th>Course Category Name</th>
                 <th>Title</th>
                 <th>Description</th>
             </tr>
             {
-              viewData.map((data)=>{
+              viewData.map((data,index)=>{
                 return (
                   <tr>
+                  <td>{index+1}</td>
                   <td>{data.category_id}</td>
                   <td>{data.course_category_name}</td>
                   <td>{data.title}</td>

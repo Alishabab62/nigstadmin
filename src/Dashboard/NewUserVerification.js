@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
 import axios from 'axios';
@@ -15,7 +15,7 @@ export default function NewUserVerification() {
     })
 
     function handleFilter(){
-      filter()
+      // filter()
     }
 
     function handleInputs(e) {
@@ -29,7 +29,7 @@ export default function NewUserVerification() {
 function filter(){
   console.log(startDateRef.current)
   console.log(verificationFilterValue)
-  const url = "https://nigst.onrender.com/secure/filter";
+  const url = "https://nigst.onrender.com/secure/viewu";
   const data = {
     name:`${inputs.name}`,
     org_name:`${inputs.orgName}`,
@@ -45,11 +45,14 @@ function filter(){
   })
 }
 
-// useEffect(()=>{
-//   if(data!== undefined){
-//     filter()
-//   }
-// },[data])
+useEffect(()=>{
+  const url = "https://nigst.onrender.com/secure/viewu";
+  axios.get(url).then((res)=>{
+    setData(res.data);
+  }).catch((error)=>{
+    console.log(error)
+  })
+},[])
 
   return (
     <div className='user-verification w-full'>
@@ -89,10 +92,10 @@ function filter(){
                 <th>NIGST Verification</th>
             </tr>
 
-              {data.map((user)=>{
+              {data.map((user,index)=>{
                 return(
                   <tr>
-                  <td>{user.student_id}</td>
+                  <td>{index+1}</td>
                   <td>{user.created_at}</td>
                   <td>{user.first_name}</td>
                   <td>{user.email}</td>
@@ -105,32 +108,6 @@ function filter(){
                  </tr>
                 )
               })}
-
-              
-            {/* <tr>
-                <td>101</td>
-                <td>10 March 2023</td>
-                <td>Shabab</td>
-                <td>alishabab62@gmail.com</td>
-                <td>6396042652</td>
-                <td>Survey Of India</td>
-                <td>Male</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>No</td>
-            </tr>
-            <tr>
-                <td>102</td>
-                <td>10 March 2023</td>
-                <td>Keshav</td>
-                <td>keshav861@gmail.com</td>
-                <td>6396042652</td>
-                <td>Survey Of India</td>
-                <td>Male</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>No</td>
-            </tr> */}
         </table>
         </div>   
     </div>

@@ -175,7 +175,8 @@ button{
     padding: 10px 15px;
 }
 .faculty-position-table{
-    margin: 20px auto;
+    /* height: 300px;/] */
+    /* overflow-y: scroll; */
 }
 .filter-btn{
     text-align: right;
@@ -219,7 +220,7 @@ button{
     padding: 7px;
 }
 .department-creation-wrapper-category{
-    width: 500px;
+    width: 400px;
     background-color: #f5eeee76;
     border: 1px solid rgb(229, 231, 235);
     padding: 20px;
@@ -268,4 +269,23 @@ button{
 }
 .course-creation-wrapper div select{
     width: 49.5%;
+}
+.department-creation-wrapper-position{
+    width: 500px;
+    background-color: #f5eeee76;
+    border: 1px solid grey;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 80px;
+    height: fit-content;
+}
+.department-creation-wrapper-position input,select{
+    border: none;
+    height: 30px;
+    color: black;
+    border-radius: 5px;   
+    margin: 5px 0px;
 }

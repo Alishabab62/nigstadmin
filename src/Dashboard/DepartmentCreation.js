@@ -223,7 +223,6 @@ export default function DepartmentCreation() {
   const [duplicateEmail , setDuplicateEmail] = useState(false);
   const [duplicatePhone , setDuplicatePhone] = useState(false);
   const [organizationView , setOrganisationView] = useState([]);
-  let [count , setCount] = useState(1);
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -481,11 +480,10 @@ export default function DepartmentCreation() {
           </tr>
           {
             
-            organizationView.map((data)=>{
-              setCount(count+1)
+            organizationView.map((data,index)=>{
               return(
                 <tr>
-                <td>{count}</td>
+                <td>{index+1}</td>
                 <td>{data.organization}</td>
                 <td>{data.type}</td>
                 <td>{data.category}</td>

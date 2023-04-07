@@ -3,6 +3,7 @@ import React, { useState , useRef, useEffect} from 'react';
 import Button from '../components/Button';
 // import Inputs from '../components/Inputs';
 import "../CSS/Tender.css"
+import { Alert } from '@mui/material';
 
 function Tender() {
   const [showTenders, setShowTenders] = useState(false);
@@ -13,7 +14,11 @@ function Tender() {
   const startDate = useRef();
   const endDate = useRef();
   const file = useRef();
-  const [filter , setFilter] = useState(true)
+  const [filter , setFilter] = useState(true);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [failAlert, setFailAlert] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [viewTender , setViewTender] = useState([]);
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -56,11 +61,27 @@ useEffect(()=>{
     corrigendum:`${input.corrigendum}`
   }
   axios.post(url , data).then((res)=>{
-    console.log(res)
+    setSuccessAlert(true);
+    setTimeout(() => {
+      setSuccessAlert(false)
+    }, 5000);
+  }).catch((error)=>{
+    console.log(error)
+    setFailAlert(true);
+    setTimeout(() => {
+      setFailAlert(false)
+    }, 5000);
+  })
+},[tenderValue])
+
+useEffect(()=>{
+  const url = "https://nigst.onrender.com/tender/view";
+  axios.get(url).then((res)=>{
+    setViewTender(res.data.tender);
   }).catch((error)=>{
     console.log(error)
   })
-},[tenderValue])
+})
 
 function handleInputs(e){
   const name = e.target.name;
@@ -71,20 +92,33 @@ function handleInputs(e){
 }
 
 function handleSubmit(e) {
-  e.preventDefault();
-  const url = "https://nigst.onrender.com/tender/create";
-  const formData = new FormData();
-  formData.append("title", input.title);
-  formData.append("tenderRefNo", input.ref);
-  formData.append("description", input.description);
-  formData.append("startDate", startDate.current.value);
-  formData.append("endDate", endDate.current.value);
-  formData.append("pdf", file.current.files[0]);
-  axios.post(url, formData).then((res) => {
-    console.log(res);
-  }).catch((error) => {
-    console.log(error);
-  });
+  if(file.current.files[0] !== undefined){
+    e.preventDefault();
+    const url = "https://nigst.onrender.com/tender/create";
+    const formData = new FormData();
+    formData.append("title", input.title);
+    formData.append("tenderRefNo", input.ref);
+    formData.append("description", input.description);
+    formData.append("startDate", startDate.current.value);
+    formData.append("endDate", endDate.current.value);
+    formData.append("pdf", file.current.files[0]);
+    console.log(file.current.files[0]);
+    axios.post(url, formData).then((res) => {
+      console.log(res);
+      setSuccessAlert(true);
+      setTimeout(() => {
+        setSuccessAlert(false)
+      }, 5000);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+  else{
+    setEmptyFieldAlert(true);
+    setTimeout(() => {
+      setEmptyFieldAlert(false)
+    }, 5000);
+  }
 }
 
 
@@ -99,6 +133,7 @@ function handleSubmit(e) {
       {filter ? <div className='user-details-wrapper'>
         <table>
             <tr>
+              <th>S.No</th>
                 <th>Tender No</th>
                 <th>Description</th>
                 <th>Start Date</th>
@@ -106,22 +141,22 @@ function handleSubmit(e) {
                 <th>Corregendom</th>
                 <th>File</th>
             </tr>
-            <tr>
-                <td>101</td>
-                <td>This is Tender</td>
-                <td>10/12/2002</td>
-                <td>10/12/2003</td>
-                <td>corrigendum</td>
-                <td>file</td>
-            </tr>
-            <tr>
-                <td>101</td>
-                <td>This is Tender</td>
-                <td>10/12/2002</td>
-                <td>10/12/2003</td>
-                <td>corrigendum</td>
-                <td>file</td>
-            </tr>
+            {
+              viewTender.map((data,index)=>{
+                return (
+                  <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{data.tender_ref_no}</td>
+                  <td>{data.description}</td>
+                  <td>{data.start_date}</td>
+                  <td>{data.end_date}</td>
+                  <td>corrigendum</td>
+                  <td><a href={`https://nigst.onrender.com/${data.attachment}`} target='blank' style={{textDecoration:"none" , color:"black"}}>PDF</a></td>
+              </tr>
+                )
+              })
+            }
+           
         </table>
         </div> : "" }
     <div className='tenderCreation flex items-center'>
@@ -129,13 +164,16 @@ function handleSubmit(e) {
       
       {showTenders && (
         <div id='div1'>
+          {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
+          {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
+          {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           <button className='close-btn' onClick={toggleTenders}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"}/>
             <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"}></textarea>
-            <input type="date" id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
-            <input type="date" id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
+            <input type="text" onClick={(e)=> {e.target.type="date"}} id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
+            <input type="text" onClick={(e)=> {e.target.type="date"}} id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={file} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
             <Button fun={handleSubmit} value={"Submit"} className='submitButton'/>
           </form>
@@ -144,6 +182,9 @@ function handleSubmit(e) {
 
       {showCorrigendum && (
         <div id='div2'>
+          {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Corregendom Create successfully</Alert> : ""}
+          {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
+          {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           <button className="close-btn" onClick={toggleCorrigendum}>&times;</button>
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>

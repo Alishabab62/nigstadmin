@@ -258,15 +258,17 @@ export default function DepartmentCreation() {
 
       console.log(error)
     });
+    viewOrganization();
+  }, []);
 
+  function viewOrganization(){
     const urlView = "https://nigst.onrender.com/dep/view";
     axios.get(urlView).then((res)=>{
       setOrganisationView(res.data.reverse());
     }).catch((error)=>{
       console.log(error)
     })
-
-  }, []);
+  }
 
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -442,6 +444,7 @@ export default function DepartmentCreation() {
 
   function handleFilter() {
     setFilter(true)
+    viewOrganization();
   }
   function handleCreationForm() {
     setFilter(false)
@@ -473,7 +476,7 @@ export default function DepartmentCreation() {
       {filter ? <div className='user-details-wrapper'>
         <table>
           <tr>
-            <th>S.Id</th>
+            <th>S.No</th>
             <th>Organization Name</th>
             <th>Organization Type</th>
             <th>Category of Organization</th>

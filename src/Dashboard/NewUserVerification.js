@@ -48,7 +48,7 @@ function filter(){
 useEffect(()=>{
   const url = "https://nigst.onrender.com/secure/viewu";
   axios.get(url).then((res)=>{
-    setData(res.data);
+    setData(res.data.reverse());
   }).catch((error)=>{
     console.log(error)
   })
@@ -80,7 +80,7 @@ useEffect(()=>{
       <div className='user-details-wrapper'>
         <table>
             <tr>
-                <th>S.Id</th>
+                <th>S.No</th>
                 <th>Created At</th>
                 <th>Name</th>
                 <th>Email</th>

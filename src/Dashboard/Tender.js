@@ -77,7 +77,7 @@ useEffect(()=>{
 useEffect(()=>{
   const url = "https://nigst.onrender.com/tender/view";
   axios.get(url).then((res)=>{
-    setViewTender(res.data.tender);
+    setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
     console.log(error)
   })

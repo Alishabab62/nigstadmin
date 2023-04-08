@@ -65,7 +65,7 @@ export default function CreationFacultyPosition() {
   useEffect(()=>{
     const url = "https://nigst.onrender.com/sauth/view";
     axios.get(url).then((res)=>{
-      setViewPosition(res.data);
+      setViewPosition(res.data.reverse());
     }).catch((error)=>{
       console.log(error);
     })
@@ -116,7 +116,7 @@ export default function CreationFacultyPosition() {
     <table className="faculty-position-table">
       <tr>
         <th>S.No</th>
-        <th>Faculty Id.</th>
+        <th>Position Id.</th>
         <th>Position</th>
         <th>Description</th>
       </tr>

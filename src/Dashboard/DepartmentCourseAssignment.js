@@ -75,7 +75,7 @@ export default function DepartmentCourseAssignment() {
     })
     const viewUrl = "https://nigst.onrender.com/dep/viewda";
     axios.get(viewUrl).then((res)=>{
-      setViewCourse(res.data);
+      setViewCourse(res.data.reverse());
     }).catch((error)=>{
       console.log(error);
     })
@@ -92,7 +92,7 @@ export default function DepartmentCourseAssignment() {
       {filter ? <div className='user-details-wrapper'>
         <table>
           <tr >
-            <th>Course Schedule Id</th>
+            <th>S.No</th>
             <th>Organization Name</th>
             <th>Course Assigning Id</th>
             <th>Description</th>
@@ -100,7 +100,7 @@ export default function DepartmentCourseAssignment() {
           {
             viewCourse.map((data,index)=>{
               return(
-                <tr key={index}>
+            <tr key={index}>
             <td>{index+1}</td>
             <td>{data.organization_name}</td>
             <td>{data.course_id}</td>

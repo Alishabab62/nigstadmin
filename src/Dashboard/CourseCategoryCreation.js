@@ -65,7 +65,7 @@ export default function CourseCategoryCreation() {
 useEffect(()=>{
   const url = "https://nigst.onrender.com/category/view"
   axios.get(url).then((res)=>{
-    setViewData(res.data.categories)
+    setViewData(res.data.categories.reverse())
     console.log(res);
   }).catch((error)=>{
     console.log(error)

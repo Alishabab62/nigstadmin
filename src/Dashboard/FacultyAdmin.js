@@ -48,7 +48,7 @@ export default function FacultyAdmin() {
             <div className='side-bar border-r-2 side-bar-wrapper'>
                 <div className=' text-center pt-14 pb-14  border-b-2 mb-8'>
                     <h3 className='text-lg   text-white font-bold '>Welcome Faculty Admin</h3>
-                </div>
+                </div> 
                 <div>
                     <ul className=' text-white cursor-pointer '>
                         {creationFacultyMember ? <li className='p-3 ' style={{ background: "#ffcb00" }} onClick={creationFacultyFun}>Faculty Members</li> : <li className='p-3 ' onClick={creationFacultyFun}>Faculty Members</li>}

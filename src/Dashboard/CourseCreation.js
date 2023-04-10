@@ -57,15 +57,17 @@ export default function CourseCreation() {
         //   console.log(error)
         // })
 
-      courseCode.filter((data)=>{
+     courseCode.filter((data)=>{
       if(data.category === category){
-      return  setCourseCode(data.codes)
+      setCourseCode(data.codes)
       }
+      return 0
     })
     courseNumber.filter((data)=>{
       if(data.category === category){
       return  setCourseNumber(data.number)
       }
+      return 0;
     })
     
       },[category])

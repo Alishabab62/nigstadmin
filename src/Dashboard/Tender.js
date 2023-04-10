@@ -75,14 +75,16 @@ useEffect(()=>{
 },[tenderValue])
 
 useEffect(()=>{
+  tenderViewFun()
+})
+function tenderViewFun(){
   const url = "https://nigst.onrender.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
     console.log(error)
   })
-})
-
+}
 function handleInputs(e){
   const name = e.target.name;
   const value = e.target.value;
@@ -104,7 +106,7 @@ function handleSubmit(e) {
     formData.append("pdf", file.current.files[0]);
     console.log(file.current.files[0]);
     axios.post(url, formData).then((res) => {
-      console.log(res);
+     tenderViewFun()
       setSuccessAlert(true);
       setTimeout(() => {
         setSuccessAlert(false)
@@ -189,11 +191,12 @@ function handleSubmit(e) {
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>
-              {/* {
-                tender.map((data,index)=>{
+              <option>Select Tender Ref</option>
+              {
+                viewTender.map((data,index)=>{
                   return <option value={data} key={index}>{data.tender_ref_no}</option>
                 })
-              } */}
+              }
             </select>
             <h2>Details for Title Ref. No. <span id="ref-details"></span></h2>
             <label for="corrigendum">Corrigendum:</label>

@@ -48,6 +48,7 @@ export default function CreationFacultyPosition() {
       .then((res) => {
         setCircularResponse(false);
         setSuccessAlert(true);
+        facultyPositionViewFun()
         setTimeout(() => {
           setSuccessAlert(false)
         }, 5000);
@@ -63,13 +64,16 @@ export default function CreationFacultyPosition() {
       });
   }
   useEffect(()=>{
+   facultyPositionViewFun()
+  },[]);
+  function facultyPositionViewFun(){
     const url = "https://nigst.onrender.com/sauth/view";
     axios.get(url).then((res)=>{
       setViewPosition(res.data.reverse());
     }).catch((error)=>{
       console.log(error);
     })
-  },[]);
+  }
   return (
     <div style={{display:"flex" , justifyContent:"space-evenly"}}>
     <div className="department-creation-wrapper-position">

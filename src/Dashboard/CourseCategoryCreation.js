@@ -40,6 +40,7 @@ export default function CourseCategoryCreation() {
       .then((res) => {
         setCircularResponse(false);
         setSuccessAlert(true);
+        courseCategoryFun()
         setTimeout(() => {
           setSuccessAlert(false)
         }, 5000);
@@ -63,6 +64,10 @@ export default function CourseCategoryCreation() {
   }
 
 useEffect(()=>{
+  courseCategoryFun()
+},[]);
+
+function courseCategoryFun(){
   const url = "https://nigst.onrender.com/category/view"
   axios.get(url).then((res)=>{
     setViewData(res.data.categories.reverse())
@@ -70,7 +75,7 @@ useEffect(()=>{
   }).catch((error)=>{
     console.log(error)
   })
-},[])
+}
 
   // function handleFilter(){
   //   setFilter(true)
@@ -121,7 +126,7 @@ useEffect(()=>{
       <Button value={"Submit"} fun={handleFacultyCreation} />
     </div> 
     <div className='user-details-wrapper-category'>
-        <table style={{marginTop:"80px", height:"450px" , overflowY:"scroll"}}>
+        <table style={{marginTop:"80px", maxHeight:"450px" , overflowY:"scroll"}}>
             <tr>
                 <th>S.No</th>
                 <th>Category Id</th>

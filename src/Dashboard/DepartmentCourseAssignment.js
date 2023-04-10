@@ -37,6 +37,7 @@ export default function DepartmentCourseAssignment() {
       axios.post(url , data).then((res)=>{
         setCircularResponse(false);
         setSuccessAlert(true);
+        departmentView()
         setTimeout(() => {
           setSuccessAlert(false)
         }, 5000);
@@ -73,13 +74,17 @@ export default function DepartmentCourseAssignment() {
     }).catch((error)=>{
       console.log(error)
     })
+  departmentView()
+  },[])
+
+  function departmentView(){
     const viewUrl = "https://nigst.onrender.com/dep/viewda";
     axios.get(viewUrl).then((res)=>{
       setViewCourse(res.data.reverse());
     }).catch((error)=>{
       console.log(error);
     })
-  },[])
+  }
   return (
     <>
     {filter ? <div className='filter-wrapper-department'>

@@ -96,7 +96,7 @@ useEffect(()=>{
                 return(
                   <tr>
                   <td>{index+1}</td>
-                  <td>{user.created_at}</td>
+                  <td>{user.created_date}</td>
                   <td>{user.first_name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>

@@ -65,7 +65,7 @@ useEffect(()=>{
         </div>
         {/* onChange={(e)=>setVerificationFilterValue(e.target.value)} */}
        <select > 
-        <option>Select by Verification Status</option>
+        <option>Select by Verification Status</option> 
         <option >All Student</option>
         <option value={true}>All verified Student</option>
         <option value={false}>All non-verified Student</option>

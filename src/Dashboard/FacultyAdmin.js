@@ -42,7 +42,7 @@ export default function FacultyAdmin() {
         setCreationFacultyMember(false);
         setAssigningPosition(false);
     }
-
+ 
     return (
         <div className='flex justify-between main-page-header'>
             <div className='side-bar border-r-2 side-bar-wrapper'>

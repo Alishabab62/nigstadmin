@@ -5,70 +5,52 @@ import axios from 'axios';
 
 
 export default function NewUserVerification() {
-    // let [verificationFilterValue , setVerificationFilterValue] = useState();
+    let [verificationFilterValue , setVerificationFilterValue] = useState("");
     const startDateRef = useRef();
     const endDateRef = useRef();
     const [data,setData] = useState([]);
-    // const [inputs ,setInputs] = useState({
-    //   name:"",
-    //   orgName:""
-    // })
+    const [inputs ,setInputs] = useState({
+      email:"",
+      orgName:""
+    })
 
-    function handleFilter(){
-      // filter()
+    function handleInputs(e) {
+      const { name, value } = e.target;
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        [name]: value,
+      }));
     }
 
-    // function handleInputs(e) {
-    //   const { name, value } = e.target;
-    //   setInputs((prevInputs) => ({
-    //     ...prevInputs,
-    //     [name]: value,
-    //   }));
-    // }
-
-// function filter(){
-//   console.log(startDateRef.current)
-//   console.log(verificationFilterValue)
-//   const url = "https://nigst.onrender.com/secure/viewu";
-//   const data = {
-//     name:`${inputs.name}`,
-//     org_name:`${inputs.orgName}`,
-//     adminVef:`${verificationFilterValue}`,
-//     start_date:`${startDateRef.current.value}`,
-//     end_date:`${endDateRef.current.value}`
-//   }
-//   axios.get(url,data).then((res)=>{
-//     console.log(res.data)
-//     setData(res.data);
-//   }).catch((error)=>{
-//     console.log(error)
-//   })
-// }
-
-useEffect(()=>{
-  const url = "https://nigst.onrender.com/secure/viewu";
+function filter(){
+  const url = `https://nigst.onrender.com/secure/filter?status=${verificationFilterValue}&email=${inputs.email}&organization=${inputs.orgName}&startDate=${startDateRef.current.value}&endDate=${endDateRef.current.value}`;
   axios.get(url).then((res)=>{
     setData(res.data.reverse());
   }).catch((error)=>{
-    console.log(error)
+    if(error.response.data.message === "No matching records found."){
+      setData([])
+    }
   })
+}
+
+useEffect(()=>{
+  filter()
 },[])
 
   return (
     <div className='user-verification w-full'>
       <div className='filter-wrapper'>
         <div>
-       <span>By Email</span> <Inputs type={"text"} placeholder={"Search by Email"}  name={"name"}/>
+       <span>By Email</span> <Inputs type={"text"} placeholder={"Search by Email"}  name={"email"} fun={handleInputs}/>
         </div>
         <div>
-       <span>By Organization</span> <Inputs type={"text"} placeholder={"Search by Organization"} name={"orgName"}/>
+       <span>By Organization</span> <Inputs type={"text"} placeholder={"Search by Organization"} name={"orgName"} fun={handleInputs}/>
         </div>
-        {/* onChange={(e)=>setVerificationFilterValue(e.target.value)} */}
-       <select > 
+       <select onChange={(e)=>setVerificationFilterValue(e.target.value)}> 
         <option>Select by Verification Status</option> 
-        <option >All Student</option>
-        <option value={true}>All verified Student</option>
-        <option value={false}>All non-verified Student</option>
+        <option value={""}>All Student</option>
+        <option value={"true"}>All verified Student</option>
+        <option value={"false"}>All non-verified Student</option>
        </select>
        <div>
        <span>From Date</span> <Inputs type={"date"} ref1={startDateRef}/>
@@ -76,10 +58,11 @@ useEffect(()=>{
        <div>
        <span>To Date</span> <Inputs type={"date"} ref1={endDateRef}/>
        </div>
-       <Button value={"Apply"} fun={handleFilter}/>
+       <Button value={"Apply"} fun={filter}/>
       </div>   
       <div className='user-details-wrapper'>
         <table>
+          <tbody>
             <tr>
                 <th>S.No</th>
                 <th>Created At</th>
@@ -92,12 +75,11 @@ useEffect(()=>{
                 <th>Email Verification</th>
                 <th>NIGST Verification</th>
             </tr>
-
               {data.map((user,index)=>{
                 return(
-                  <tr>
+                  <tr key={index}>
                   <td>{index+1}</td>
-                  <td>{user.created_date}</td>
+                  <td>{user.created_at}</td>
                   <td>{user.first_name}</td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
@@ -109,6 +91,7 @@ useEffect(()=>{
                  </tr>
                 )
               })}
+              </tbody>
         </table>
         </div>   
     </div>

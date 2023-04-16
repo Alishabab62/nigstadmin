@@ -85,9 +85,9 @@ useEffect(()=>{
                   <td>{user.phone}</td>
                   <td>{user.organization}</td>
                   <td>{user.gender}</td>
-                  <td>{user.mobile_verified}</td>
-                  <td>{user.email_verified}</td>
-                  <td>{user.admin_verified}</td>
+                  {user.mobile_verified ? <td>True</td> : <td>False</td> }
+                  {user.email_verified ? <td>True</td> : <td>False</td>}
+                  {user.admin_verified ? <td>True</td> : <td>False</td>}
                  </tr>
                 )
               })}

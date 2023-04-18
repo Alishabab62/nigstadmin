@@ -223,6 +223,8 @@ export default function DepartmentCreation() {
   const [duplicateEmail , setDuplicateEmail] = useState(false);
   const [duplicatePhone , setDuplicatePhone] = useState(false);
   const [organizationView , setOrganisationView] = useState([]);
+  const [typeFilter , setTypeFilter] = useState("");
+  const [categoryFilter,setCategoryFilter] = useState("")
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -262,7 +264,7 @@ export default function DepartmentCreation() {
   }, []);
 
   function viewOrganization(){
-    const urlView = "https://nigst.onrender.com/dep/view";
+    const urlView = `https://nigst.onrender.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
     axios.get(urlView).then((res)=>{
       setOrganisationView(res.data.reverse());
     }).catch((error)=>{
@@ -456,19 +458,30 @@ export default function DepartmentCreation() {
     <>
       {filter ? <div className='filter-wrapper-department'>
         <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs} />
-        <select >
+        <select onChange={(e)=>setTypeFilter(e.target.value)}>
           <option>Select Organization</option>
-          <option value={"all"}>All Student</option>
-          <option value={"verified"}>All verified Student</option>
-          <option value={"non-verified"}>All non-verified Student</option>
+          <option value={"PSU – Central Government"}>
+            PSU – Central Government
+          </option>
+          <option value={"Central Government Organization"}>
+            Central Government Organization{" "}
+          </option>
+          <option value={"PSU – State Government"}>PSU – State Government</option>
+          <option value={"State Government Organization"}>
+            State Government Organization{" "}
+          </option>
+          <option value={"International"}>International</option>
+          <option value={"Private"}>Private</option>
+          <option value={"Other"}>Other</option>
         </select>
-        <select >
+        <select onChange={(e)=>setCategoryFilter(e.target.value)}>
           <option>Select Category</option>
-          <option value={"all"}>All Student</option>
-          <option value={"verified"}>All verified Student</option>
-          <option value={"non-verified"}>All non-verified Student</option>
+          <option value={"Departmental"}>Departmental</option>
+          <option value={"Extra-Departmental"}>Extra-Departmental</option>
+          <option value={"Private Organization"}>Private Organization</option>
+          <option value={"International Organization"}>International Organization</option>
         </select>
-        <Button value={"Apply"} />
+        <Button value={"Apply"} fun={viewOrganization}/>
         <Button value={"Create Organization"} fun={handleCreationForm} />
       </div> : ""}
       <div className="filter-btn">{!filter ? <Button value={"View Organization"} fun={handleFilter} /> : ""}</div>

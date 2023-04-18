@@ -14,10 +14,8 @@ export default function Login() {
       ...prevInputs,
       [name]: value,
     }));
-    console.log(inputs)
   }
   function handleLogin() {
-    // const navigate = useNavigate();
     const url = "https://nigst.onrender.com/sadmin/login";
     const data = {
       email: `${inputs.email}`,
@@ -25,11 +23,17 @@ export default function Login() {
     }
     console.log(data)
     axios.post(url, data).then((res) => {
-      console.log(res)
+      console.log(res.data.type)
+      if(res.data.type === "NIGST Admin"){
+        window.location.href = "/admin";
+      }
+      else if(res.data.type === "Faculty Admin"){
+        window.location.href = "/facultyadmin";
+      }
     }).catch((error) => {
       console.log(error)
     })
-    // navigate('/admin') 
+    
   }
   return (
     <div className="login-wrapper ">

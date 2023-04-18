@@ -1,4 +1,3 @@
-import { TextField } from '@mui/material'
 import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
@@ -61,7 +60,7 @@ export default function FacultyAdmin() {
             </div>
             <div className='content-wrapper-admin-panel w-full'>
                 <header className='h-240  w-full flex justify-evenly items-center'>
-                    <div><TextField id="outlined-basic" variant="outlined" placeholder='Search here' className='w-80' /></div>
+                    
                     <div>
                         <img src={Logo} alt="logo" className='header-logo-admin-panel'></img>
                     </div>

@@ -54,6 +54,26 @@ function Tender() {
 //   })
 // },[])
  
+function viewPDF(e) {
+  const tenderId = e.target.getAttribute("data");
+  const url = `https://nigst.onrender.com/tender/vpdf/${tenderId}`;
+  axios.get(url, { responseType: "blob" }).then((res) => {
+    const objectUrl = URL.createObjectURL(res.data);
+    const newWindow = window.open();
+    if (!newWindow) {
+      alert('Pop-up blocked. Please allow pop-ups for this website.');
+    } else {
+      newWindow.document.body.innerHTML = "<embed width='100%' height='100%' src='" + objectUrl + "' type='application/pdf'></embed>";
+    }
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
+
+
+
+
 useEffect(()=>{
   const url = `https://nigst.onrender.com/tender/corrigendum`;
   const data ={
@@ -67,7 +87,7 @@ useEffect(()=>{
     }, 5000);
   }).catch((error)=>{
     console.log(error)
-    setFailAlert(true);
+    // setFailAlert(true);
     setTimeout(() => {
       setFailAlert(false)
     }, 5000);
@@ -76,7 +96,8 @@ useEffect(()=>{
 
 useEffect(()=>{
   tenderViewFun()
-})
+},[])
+
 function tenderViewFun(){
   const url = "https://nigst.onrender.com/tender/view";
   axios.get(url).then((res)=>{
@@ -104,7 +125,6 @@ function handleSubmit(e) {
     formData.append("startDate", startDate.current.value);
     formData.append("endDate", endDate.current.value);
     formData.append("pdf", file.current.files[0]);
-    console.log(file.current.files[0]);
     axios.post(url, formData).then((res) => {
      tenderViewFun()
       setSuccessAlert(true);
@@ -153,7 +173,7 @@ function handleSubmit(e) {
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>corrigendum</td>
-                  <td><a href={`https://nigst.onrender.com/${data.attachment}`} target='blank' style={{textDecoration:"none" , color:"black"}}>PDF</a></td>
+                  <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}>View PDF</td>
               </tr>
                 )
               })

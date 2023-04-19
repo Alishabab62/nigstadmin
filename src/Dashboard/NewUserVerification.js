@@ -37,6 +37,21 @@ useEffect(()=>{
   filter()
 },[])
 
+function handleAdminVer(e){
+  const url = "https://nigst.onrender.com/secure/verify";
+  const data={
+    email: `${e.target.getAttribute("data")}`
+  }
+  e.target.style.backgroundColor = "#FFCCCB"
+  // console.log(e.target.s)
+  axios.patch(url,data).then((res)=>{
+    console.log(res)
+  }).catch((error)=>{
+    console.log(error)
+  }) 
+}
+
+
   return (
     <div className='user-verification w-full'>
       <div className='filter-wrapper'>
@@ -87,7 +102,7 @@ useEffect(()=>{
                   <td>{user.gender}</td>
                   {user.mobile_verified ? <td>True</td> : <td>False</td> }
                   {user.email_verified ? <td>True</td> : <td>False</td>}
-                  {user.admin_verified ? <td>True</td> : <td>False</td>}
+                  {user.admin_verified ? <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"green"}} onClick={handleAdminVer}>Verify</button></td> : <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"red"}}onClick={handleAdminVer}>Not Verify</button></td>}
                  </tr>
                 )
               })}

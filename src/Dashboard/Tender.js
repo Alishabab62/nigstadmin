@@ -8,12 +8,12 @@ import { Alert } from '@mui/material';
 function Tender() {
   const [showTenders, setShowTenders] = useState(false);
   const [showCorrigendum, setShowCorrigendum] = useState(false);
-  // const [tender , setDropdown] = useState([]);
   const [tenderValue , setTenderValue ] = useState();
   const [formSelect , setFormSelect] = useState(true);
   const startDate = useRef();
   const endDate = useRef();
   const file = useRef();
+  const corrigendumPdf = useRef();
   const [filter , setFilter] = useState(true);
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
@@ -37,22 +37,6 @@ function Tender() {
     setFilter(!filter)
   };
 
-  // const handleDropdownChange = () => {
-  //   const refDropdown = document.getElementById('ref-dropdown');
-  //   const refDetails = document.getElementById('ref-details');
-  // };
-
-
-// useEffect(()=>{
-//   const url = "https://nigst.onrender.com/tender/refNo"
-//   axios.get(url).then((res)=>{
-//     setDropdown(res.data.tender)
-//     console.log(res.data.tender) 
-//     console.log(tender)
-//   }).catch((err)=>{
-//     console.log(err)
-//   })
-// },[])
  
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
@@ -74,25 +58,7 @@ function viewPDF(e) {
 
 
 
-useEffect(()=>{
-  const url = `https://nigst.onrender.com/tender/corrigendum`;
-  const data ={
-    tender_ref_no: `${tenderValue}`,
-    corrigendum:`${input.corrigendum}`
-  }
-  axios.post(url , data).then((res)=>{
-    setSuccessAlert(true);
-    setTimeout(() => {
-      setSuccessAlert(false)
-    }, 5000);
-  }).catch((error)=>{
-    console.log(error)
-    // setFailAlert(true);
-    setTimeout(() => {
-      setFailAlert(false)
-    }, 5000);
-  })
-},[tenderValue])
+
 
 useEffect(()=>{
   tenderViewFun()
@@ -143,6 +109,25 @@ function handleSubmit(e) {
   }
 }
 
+function handleCorrigendum(e){
+  e.preventDefault()
+  const formData = new FormData();
+  formData.append("corrigendum", input.corrigendum);
+  formData.append("tender_number", tenderValue);
+  formData.append("pdf", corrigendumPdf.current.files[0]);
+  const url = "https://nigst.onrender.com/tender/corrigendum"
+  axios.post(url,formData).then((res)=>{
+    setSuccessAlert(true);
+    setTimeout(() => {
+      setSuccessAlert(false)
+    }, 5000);
+  }).catch((error)=>{
+    setFailAlert(true)
+    setTimeout(() => {
+      setFailAlert(false)
+    }, 5000);
+  })
+}
 
   return (
     <>
@@ -155,7 +140,7 @@ function handleSubmit(e) {
       {filter ? <div className='user-details-wrapper'>
         <table>
             <tr>
-              <th>S.No</th>
+                <th>S.No</th>
                 <th>Tender No</th>
                 <th>Description</th>
                 <th>Start Date</th>
@@ -222,8 +207,8 @@ function handleSubmit(e) {
             <label for="corrigendum">Corrigendum:</label>
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <Button value={"Submit"} className='submitButton'/>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <Button value={"Submit"} className='submitButton' fun={handleCorrigendum}/>
           </form>
         </div>
       )}

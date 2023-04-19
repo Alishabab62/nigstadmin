@@ -111,6 +111,7 @@ function handleSubmit(e) {
 
 function handleCorrigendum(e){
   e.preventDefault()
+  console.log(tenderValue)
   const formData = new FormData();
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
@@ -157,7 +158,7 @@ function handleCorrigendum(e){
                   <td>{data.description}</td>
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
-                  <td>corrigendum</td>
+                  <td>{data.corrigenda[0].corrigendum}</td>
                   <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}>View PDF</td>
               </tr>
                 )
@@ -199,7 +200,7 @@ function handleCorrigendum(e){
               <option>Select Tender Ref</option>
               {
                 viewTender.map((data,index)=>{
-                  return <option value={data} key={index}>{data.tender_ref_no}</option>
+                  return <option value={data.tender_ref_no} key={index}>{data.tender_ref_no}</option>
                 })
               }
             </select>

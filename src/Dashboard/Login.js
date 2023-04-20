@@ -25,10 +25,10 @@ export default function Login() {
     axios.post(url, data).then((res) => {
       console.log(res.data.type)
       if(res.data.type === "NIGST Admin"){
-        window.location.href = "/admin";
+        window.location.hash = "/admin";
       }
       else if(res.data.type === "Faculty Admin"){
-        window.location.href = "/facultyadmin";
+        window.location.hash = "/facultyadmin";
       }
     }).catch((error) => {
       console.log(error)

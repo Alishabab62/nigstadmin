@@ -102,7 +102,7 @@ function handleAdminVer(e){
                   <td>{user.gender}</td>
                   {user.mobile_verified ? <td>True</td> : <td>False</td> }
                   {user.email_verified ? <td>True</td> : <td>False</td>}
-                  {user.admin_verified ? <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"green"}} onClick={handleAdminVer}>Verify</button></td> : <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"red"}}onClick={handleAdminVer}>Not Verify</button></td>}
+                  {user.admin_verified ? <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"green"}} onClick={handleAdminVer}></button></td> : <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"red"}}onClick={handleAdminVer}></button></td>}
                  </tr>
                 )
               })}

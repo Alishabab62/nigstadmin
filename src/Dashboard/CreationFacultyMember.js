@@ -14,7 +14,7 @@ export default function CreationFacultyMember() {
         <option>Faculty of TS & LIS</option>
         <option>Faculty of Photogrammetry & RS</option>
         <option>Faculty of GEO-ICT</option>
-        <option>Faculty of Carto , DM & GIS</option>
+        <option>Faculty of Carto , D+++++++M & GIS</option>
       </select>
       <Inputs type={"email"} placeholder={"Enter email"}/>
       <Inputs type={"tel"} placeholder={"Enter Phone"}/>

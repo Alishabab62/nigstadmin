@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
+import axios from 'axios';
 export default function CreationFacultyMember() {
+  const [faculty , setFaculty] = useState([]);
+
+  useEffect(()=>{
+    const url = "https://nigst.onrender.com/admin/faculty_show";
+    axios.get(url).then((res)=>{
+      setFaculty(res.data)
+    }).catch((error)=>{
+      console.log(error)
+    })
+  },[])
   return (
     <div className="department-creation-wrapper">  
       <h3>Creation Faculty Member</h3>
@@ -10,11 +21,11 @@ export default function CreationFacultyMember() {
       <Inputs type={"text"} placeholder={"Last name"}/>
       <select>
         <option>Select Faculty</option>
-        <option>Faculty Of Geodesy</option>
-        <option>Faculty of TS & LIS</option>
-        <option>Faculty of Photogrammetry & RS</option>
-        <option>Faculty of GEO-ICT</option>
-        <option>Faculty of Carto , D+++++++M & GIS</option>
+        {
+          faculty.map((data)=>{
+            return <option key={data.id} value={data.name}>{data.name}</option>
+          })
+        }
       </select>
       <Inputs type={"email"} placeholder={"Enter email"}/>
       <Inputs type={"tel"} placeholder={"Enter Phone"}/>

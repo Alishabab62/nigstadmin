@@ -1,19 +1,36 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
 import axios from 'axios';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
 
 export default function NewUserVerification() {
-    let [verificationFilterValue , setVerificationFilterValue] = useState("");
+  let [verificationFilterValue , setVerificationFilterValue] = useState("");
+  const [open, setOpen] = React.useState(false);
     const startDateRef = useRef();
     const endDateRef = useRef();
     const [data,setData] = useState([]);
+    const [userEmail , setUserEmail] = useState("")
     const [inputs ,setInputs] = useState({
       email:"",
       orgName:""
     })
 
+
+  const handleClickOpen = (e) => {
+    setOpen(true);
+    setUserEmail(e.target.getAttribute("data"));
+    e.target.style.backgroundColor = "#FFCCCB"
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
     function handleInputs(e) {
       const { name, value } = e.target;
       setInputs((prevInputs) => ({
@@ -37,15 +54,15 @@ useEffect(()=>{
   filter()
 },[])
 
-function handleAdminVer(e){
+function handleAdminVer(){
+  setOpen(false);
   const url = "https://nigst.onrender.com/secure/verify";
   const data={
-    email: `${e.target.getAttribute("data")}`
+    email: `${userEmail}`
   }
-  e.target.style.backgroundColor = "#FFCCCB"
-  // console.log(e.target.s)
   axios.patch(url,data).then((res)=>{
     console.log(res)
+    filter()
   }).catch((error)=>{
     console.log(error)
   }) 
@@ -73,7 +90,7 @@ function handleAdminVer(e){
        <div>
        <span>To Date</span> <Inputs type={"date"} ref1={endDateRef}/>
        </div>
-       <Button value={"Apply"} fun={filter}/>
+       <button onClick={filter}>Apply</button>
       </div>   
       <div className='user-details-wrapper'>
         <table>
@@ -101,14 +118,32 @@ function handleAdminVer(e){
                   <td>{user.organization}</td>
                   <td>{user.gender}</td>
                   {user.mobile_verified ? <td>True</td> : <td>False</td> }
-                  {user.email_verified ? <td>True</td> : <td>False</td>}
-                  {user.admin_verified ? <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"green"}} onClick={handleAdminVer}></button></td> : <td><button data={user.email} style={{height:"100%",width:"100%" , backgroundColor:"red"}}onClick={handleAdminVer}></button></td>}
+                  {user.email_verified ? <td><button style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button></td> : <td><button style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}></button></td>}
+                  {user.admin_verified ? <td><button data={user.email} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td> : <td><button data={user.email} style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}onClick={handleClickOpen}></button></td>}
                  </tr>
                 )
               })}
               </tbody>
         </table>
-        </div>   
+        </div>  
+        <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do You want to change the status of user
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleAdminVer} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog> 
     </div>
   )
 }

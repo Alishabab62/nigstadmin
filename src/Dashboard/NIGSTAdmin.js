@@ -8,6 +8,7 @@ import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
 import Logo from '../images/logo.png'
+import CreationFacultysAdmin from "./CreationFacultysAdmin";
 
 export default function NIGSTAdmin() {
   const [departmentCreation, setDepartmentCreation] = useState(false);
@@ -16,6 +17,7 @@ export default function NIGSTAdmin() {
   const [users, setUsers] = useState(false);
   const [courseAssignment, setCourseAssignment] = useState(false); 
   const [tender, setTender] = useState(false);
+  const [facultyAdmin , setFacultyAdmin] = useState(false);
 
   function departmentFun() {
     setDepartmentCreation(true);
@@ -24,6 +26,7 @@ export default function NIGSTAdmin() {
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
+    setFacultyAdmin(false)
   }
   function facultyPositionFun() {
     setFacultyPositionCreation(true);
@@ -32,6 +35,7 @@ export default function NIGSTAdmin() {
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
+    setFacultyAdmin(false)
   }
   function courseCategoryFun() {
     setCourseCategory(true);
@@ -40,15 +44,17 @@ export default function NIGSTAdmin() {
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
+    setFacultyAdmin(false)
   }
-  // function facultyAdminFun() {
-  //   setDepartmentCreation(false);
-  //   setFacultyPositionCreation(false);
-  //   setCourseCategory(false);
-  //   setUsers(false);
-  //   setCourseAssignment(false);
-  //   setTender(false);
-  // }
+  function facultyAdminCreationFun() {
+    setFacultyAdmin(true)
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+    setCourseCategory(false);
+    setUsers(false);
+    setCourseAssignment(false);
+    setTender(false);
+  }
   function usersFun() {
     setUsers(true); 
     setCourseCategory(false);
@@ -56,6 +62,7 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     setCourseAssignment(false);
     setTender(false);
+    setFacultyAdmin(false)
   }
   function courseAssignmentFun() {
     setCourseAssignment(true);
@@ -64,6 +71,7 @@ export default function NIGSTAdmin() {
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
     setTender(false);
+    setFacultyAdmin(false)
   }
   function handleTenderFun() {
     setTender(true);
@@ -72,6 +80,7 @@ export default function NIGSTAdmin() {
     setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
+    setFacultyAdmin(false)
   }
   return (
     <div className="flex justify-between main-page-header">
@@ -109,10 +118,16 @@ export default function NIGSTAdmin() {
               New User verifications
             </li>}
             {tender ? <li style={{background:"#ffcb00"}} onClick={handleTenderFun}>
-              Tender{" "}
+              Tender
             </li> : <li className="p-3 " onClick={handleTenderFun}>
-              Tender{" "}
+              Tender
             </li>}
+            {
+              facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
+              Faculty Admin </li> : <li className="p-3 " onClick={facultyAdminCreationFun}>
+              Faculty Admin
+              </li>
+            }
             <li className="p-3 ">Content Updation </li>
           </ul>
         </div>
@@ -133,6 +148,7 @@ export default function NIGSTAdmin() {
           {users ? <NewUserVerification /> : ""}
           {courseAssignment ? <DepartmentCourseAssignment /> : ""}
           {tender ? <Tender /> : ""}
+          {facultyAdmin ? <CreationFacultysAdmin/> : ""}
         </div>
       </div>
     </div>

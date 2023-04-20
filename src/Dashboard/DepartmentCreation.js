@@ -267,8 +267,12 @@ export default function DepartmentCreation() {
     const urlView = `https://nigst.onrender.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
     axios.get(urlView).then((res)=>{
       setOrganisationView(res.data.reverse());
+
     }).catch((error)=>{
       console.log(error)
+      if(error.response.data.message === "No matching records found."){
+        setOrganisationView([])
+      }
     })
   }
 
@@ -278,7 +282,6 @@ export default function DepartmentCreation() {
       ...prevInputs,
       [name]: value,
     }));
-    console.log(inputs)
   }
 
   function handleDepartmentCreation() {

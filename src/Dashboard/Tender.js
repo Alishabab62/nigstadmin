@@ -1,9 +1,13 @@
 import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
-import Button from '../components/Button';
-// import Inputs from '../components/Inputs';
+import { AiFillFilePdf } from 'react-icons/ai';
 import "../CSS/Tender.css"
 import { Alert } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
 function Tender() {
   const [showTenders, setShowTenders] = useState(false);
@@ -19,6 +23,8 @@ function Tender() {
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [viewTender , setViewTender] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [tenderNo , setTenderNo] = useState("")
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -53,12 +59,6 @@ function viewPDF(e) {
     console.log(error);
   });
 }
-
-
-
-
-
-
 
 useEffect(()=>{
   tenderViewFun()
@@ -130,12 +130,35 @@ function handleCorrigendum(e){
   })
 }
 
+function handleArchive(e){
+  setOpen(false);
+  const url = "https://nigst.onrender.com/tender/archive";
+  const data = {
+    tender_number:`${tenderNo}`
+  }
+  axios.patch(url,data).then((res)=>{
+    console.log(res)
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
+
+
+const handleClickOpen = (e) => {
+  setOpen(true);
+  setTenderNo(e.target.getAttribute("data"))
+};
+
+const handleClose = () => {
+  setOpen(false);
+};
   return (
     <>
       {
       formSelect ?   <div className='creation'>
         <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
         <button className='openform' onClick={toggleCorrigendum}>Create New Corregendom</button>
+        <button className='openform'>View Archive Tender</button>
       </div> : ""
       }
       {filter ? <div className='user-details-wrapper'>
@@ -148,6 +171,7 @@ function handleCorrigendum(e){
                 <th>End Date</th>
                 <th>Corregendom</th>
                 <th>File</th>
+                <th>Move to Archive</th>
             </tr>
             {
               viewTender.map((data,index)=>{
@@ -159,7 +183,8 @@ function handleCorrigendum(e){
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>{data.corrigenda[0].corrigendum}</td>
-                  <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}>View PDF</td>
+                  <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}><AiFillFilePdf style={{color:"red"}}/></td>
+                  <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )
               })
@@ -183,7 +208,7 @@ function handleCorrigendum(e){
             <input type="text" onClick={(e)=> {e.target.type="date"}} id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
             <input type="text" onClick={(e)=> {e.target.type="date"}} id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={file} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <Button fun={handleSubmit} value={"Submit"} className='submitButton'/>
+            <button onClick={handleSubmit} value={"Submit"} className='submitButton'>Submit</button>
           </form>
         </div>
       )}
@@ -209,10 +234,28 @@ function handleCorrigendum(e){
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <Button value={"Submit"} className='submitButton' fun={handleCorrigendum}/>
+            <button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</button>
           </form>
         </div>
       )}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do You want to change the status of user
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleArchive} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog> 
     </div>
     </>
   );

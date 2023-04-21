@@ -3,6 +3,7 @@ import Inputs from '../components/Inputs';
 import Button from '../components/Button';
 // import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// import { json } from 'react-router-dom';
 
 
 
@@ -23,7 +24,8 @@ export default function Login() {
     }
     console.log(data)
     axios.post(url, data).then((res) => {
-      console.log(res.data.type)
+      console.log(res.data)
+      localStorage.setItem("user" , JSON.stringify(res.data))
       if(res.data.type === "NIGST Admin"){
         window.location.hash = "/admin";
       }

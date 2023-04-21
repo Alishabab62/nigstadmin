@@ -82,6 +82,10 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     setFacultyAdmin(false)
   }
+  function logout(){
+    window.location.hash = "/";
+    localStorage.clear("user");
+  }
   return (
     <div className="flex justify-between main-page-header">
       <div className="side-bar border-r-2 side-bar-wrapper">
@@ -138,7 +142,7 @@ export default function NIGSTAdmin() {
             <img src={Logo} alt="logo" className='header-logo-admin-panel'></img> 
           </div>
           <div>
-            <Button value={"Logout"} />{" "}
+            <Button value={"Logout"} fun={logout}/>
           </div>
         </header>
         <div className="min-h-max flex justify-center border-t-2 min-h-[80%]">

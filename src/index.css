@@ -177,10 +177,7 @@ button{
 .filter-wrapper-department select{
     border: 1px solid black;
 }
-.faculty-position-table{
-    /* height: 300px;/] */
-    /* overflow-y: scroll; */
-}
+
 .filter-btn{
     text-align: right;
     width: 100%;
@@ -299,4 +296,23 @@ button{
     border-radius: 5px;
     padding: 3px;
     font-size: 14px;
+}
+.faculty-member-creation-wrapper{
+    width: 400px;
+    background-color: #f5eeee76;
+    border: 1px solid grey;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin:  auto;
+    margin-top: 50px;
+}
+.faculty-member-creation-wrapper input,select{
+    border: none;
+    height: 30px;
+    color: black;
+    border-radius: 5px;   
+    margin: 3px 0px;
 }

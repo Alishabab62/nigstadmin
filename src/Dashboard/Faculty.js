@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
+import ForgotPassword from './ForgotPassword';
 
 
 export default function Faculty() {
- 
+ const [courseReport , setCourseReport] = useState(false);
+ const [forgotPassword , setForgotPassword] = useState(false);
+
+ function courseReportFun(){
+    setCourseReport(!courseReport);
+ }
+ function forgotPasswordFun(){
+    setForgotPassword(!forgotPassword);
+ }
   return (
     <div className='flex justify-between main-page-header'>
         <div className='side-bar border-r-2 side-bar-wrapper'> 
@@ -14,7 +23,8 @@ export default function Faculty() {
         </div>
         <div>
             <ul className=' text-white cursor-pointer '>
-                {false ? <li className='p-3 ' style={{background:"#ffcb00"}} >Creation of Faculty Members</li> : <li className='p-3 '>Course Report Submission</li>}
+                {courseReport ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={courseReportFun}>Course Report Submission</li> : <li className='p-3 ' onClick={courseReportFun}>Course Report Submission</li>}
+                {forgotPassword ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={forgotPasswordFun}>Forgot Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Forgot Password</li> }
             </ul>
             
         </div>
@@ -27,6 +37,7 @@ export default function Faculty() {
                 <div><Button value={"Login"}  /> </div>
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
+                {forgotPassword ? <ForgotPassword/> : ""}
             </div>
         </div>
     </div>

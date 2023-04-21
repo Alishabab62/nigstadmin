@@ -9,6 +9,7 @@ import axios from 'axios';
 
 export default function Login() {
   const [inputs, setInputs] = useState({email:"" , password:""})
+  const [loginType , setLoginType] = useState("");
   function handleInputs(e) {
     const { name, value } = e.target;
     setInputs((prevInputs) => ({  
@@ -16,13 +17,14 @@ export default function Login() {
       [name]: value,
     }));
   }
-  function handleLogin() {
+
+  function handleLoginAdmin() {
+    console.log("hello admin")
     const url = "https://nigst.onrender.com/sadmin/login";
     const data = {
       username: `${inputs.email}`,
       password: `${inputs.password}`
     }
-    console.log(data)
     axios.post(url, data).then((res) => {
       console.log(res.data)
       localStorage.setItem("user" , JSON.stringify(res.data))
@@ -34,19 +36,44 @@ export default function Login() {
       }
     }).catch((error) => {
       console.log(error)
-    })
-    
+    }) 
   }
+
+
+  function handleLoginFaculty() {
+    console.log("hello faculty")
+    const url = "https://nigst.onrender.com/sauth/login";
+    const data = {
+      email: `${inputs.email}`,
+      password: `${inputs.password}`
+    }
+    axios.post(url, data).then((res) => {
+      console.log(res.data)
+      localStorage.setItem("user" , JSON.stringify(res.data))
+    window.location.hash = "/faculty";
+    }).catch((error) => {
+      console.log(error)
+    }) 
+  }
+
+  function handleLogin(){
+    if(loginType === "admin"){
+      handleLoginAdmin()
+    }
+    else{
+      handleLoginFaculty()
+    }
+  }
+
   return (
     <div className="login-wrapper ">
       <h3>Login</h3>
       <Inputs type={"email"} placeholder={"Enter email"} name={"email"} fun={handleInputs} />
       <Inputs type={"password"} placeholder={"Enter Password"} name={"password"} fun={handleInputs} />
-      <select>
+      <select onChange={(e)=>setLoginType(e.target.value)}>
         <option>Select</option>
-        <option>NIGST Admin</option>
-        <option>Faculty Admin</option>
-        <option>Faculty Member</option>
+        <option value={"admin"}>Admin</option>
+        <option value={"faculty"}>Faculty</option>
       </select>
       <Button value={"Login"} fun={handleLogin} />
     </div>

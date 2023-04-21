@@ -108,7 +108,7 @@ function viewData(){
             <th>Faculty</th>
             <th>Designation</th>
             <th>Gender</th>
-            <th>Education</th>
+            <th>Edu.</th>
             <th>Admin Verification</th>
         </tr>
         {

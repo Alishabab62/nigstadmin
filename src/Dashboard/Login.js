@@ -3,6 +3,8 @@ import Inputs from '../components/Inputs';
 import Button from '../components/Button';
 // import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 // import { json } from 'react-router-dom';
 
 
@@ -73,8 +75,11 @@ export default function Login() {
       <select onChange={(e)=>setLoginType(e.target.value)}>
         <option>Select</option>
         <option value={"admin"}>Admin</option>
-        <option value={"faculty"}>Faculty</option>
+        <option value={"faculty"}>Faculty Member</option>
       </select>
+      <div style={{width:"100%" , display:"flex" , justifyContent:"space-between"}}>
+      <Link to='/forgot' style={{textDecoration:"none"}}>Forgot Password</Link><label>(Only for Faculty Members)</label>
+      </div>
       <Button value={"Login"} fun={handleLogin} />
     </div>
   )

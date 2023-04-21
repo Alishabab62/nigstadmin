@@ -6,6 +6,7 @@ import FacultyAdmin from './Dashboard/FacultyAdmin'
 import Faculty from './Dashboard/Faculty';
 import Private from './Dashboard/Private';
 import ChangePassword from './Dashboard/ChangePassword';
+import ForgotPassword from './Dashboard/ForgotPassword';
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
             <Private><Faculty/></Private>
           }></Route>
           <Route path='/password' element={<ChangePassword/>}></Route>
+          <Route path='/forgot' element={<ForgotPassword/>}></Route>
         </Routes>
       </HashRouter>
     </div>

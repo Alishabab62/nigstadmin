@@ -26,7 +26,6 @@ export default function Faculty() {
                 {courseReport ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={courseReportFun}>Course Report Submission</li> : <li className='p-3 ' onClick={courseReportFun}>Course Report Submission</li>}
                 {forgotPassword ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={forgotPasswordFun}>Forgot Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Forgot Password</li> }
             </ul>
-            
         </div>
         </div>
         <div className='content-wrapper-admin-panel w-full'>
@@ -34,7 +33,7 @@ export default function Faculty() {
                 <div>
                     <img src={Logo} alt="logo" className='header-logo-admin-panel'></img>
                 </div>
-                <div><Button value={"Login"}  /> </div>
+                <div><Button value={"Logout"}  /> </div>
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
                 {forgotPassword ? <ForgotPassword/> : ""}

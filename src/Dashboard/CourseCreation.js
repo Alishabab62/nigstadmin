@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from '../components/Inputs'
 import Button from '../components/Button';
+import axios from 'axios';
 // import axios from 'axios';
 
 export default function CourseCreation() {
@@ -46,6 +47,7 @@ export default function CourseCreation() {
     const [category , setCategory] = useState("");
     const [courseCodeView , setCourseCode] = useState([])
     const [courseNumberView , setCourseNumber] = useState([])
+    const [faculty , setFaculty] = useState([]);
     
 
     useEffect(()=>{
@@ -71,6 +73,17 @@ export default function CourseCreation() {
     })
     
       },[category])
+
+
+useEffect(()=>{
+  const urlFaculty = "https://nigst.onrender.com/sauth/faculty_view";
+    axios.get(urlFaculty).then((res)=>{
+      setFaculty(res.data.data)
+      console.log(res.data)
+    }).catch((error)=>{
+      console.log(error)
+    })
+},[])
 
     function handleCourseCreation(){
         console.log("Function Called")
@@ -128,9 +141,11 @@ export default function CourseCreation() {
       </div>
       <select>
         <option>Select Course Officer</option>
-        <option>Officer 1</option>
-        <option>Officer 2</option>
-        <option>Officer 3</option>
+        {
+          faculty.map((data,index)=>{
+            return <option key={index} value={data.first_name}>{data.first_name}</option>
+          })
+        }
       </select>
       <div style={{display:"flex" , alignItems:"center" , background:"white" , borderRadius:"5px"}}>
         <input type='radio' value={"free"} style={{marginRight:"5px"}}></input><span style={{marginRight:"10px"}}>Free</span>

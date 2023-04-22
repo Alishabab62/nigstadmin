@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
-import ForgotPassword from './ForgotPassword';
+import ResetPassword from './ResetPassword';
 
 
 export default function Faculty() {
@@ -24,7 +24,7 @@ export default function Faculty() {
         <div>
             <ul className=' text-white cursor-pointer '>
                 {courseReport ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={courseReportFun}>Course Report Submission</li> : <li className='p-3 ' onClick={courseReportFun}>Course Report Submission</li>}
-                {forgotPassword ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={forgotPasswordFun}>Forgot Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Forgot Password</li> }
+                {forgotPassword ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={forgotPasswordFun}>Reset Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Reset Password</li> }
             </ul>
         </div>
         </div>
@@ -36,7 +36,7 @@ export default function Faculty() {
                 <div><Button value={"Logout"}  /> </div>
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
-                {forgotPassword ? <ForgotPassword/> : ""}
+                {forgotPassword ? <ResetPassword/> : ""}
             </div>
         </div>
     </div>

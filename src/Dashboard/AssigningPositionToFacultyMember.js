@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default function AssigningPositionToFacultyMember() {
   const [viewPosition , setViewPosition] = useState([]);
-
+  const [faculty , setFaculty] = useState([]);
     function handlePositionAssigning(){
         console.log("function Called");
     }
@@ -15,7 +15,14 @@ export default function AssigningPositionToFacultyMember() {
         setViewPosition(res.data.reverse());
       }).catch((error)=>{
         console.log(error);
-      })
+      });
+      const urlFaculty = "https://nigst.onrender.com/sauth/faculty_view";
+    axios.get(urlFaculty).then((res)=>{
+      setFaculty(res.data.data)
+      console.log(res.data)
+    }).catch((error)=>{
+      console.log(error)
+    })
     },[]);
 
   return (
@@ -23,8 +30,11 @@ export default function AssigningPositionToFacultyMember() {
     <h3>Assigning Positions to Faculty Members</h3>
   <select>
     <option>Select Faculty Member</option>
-    <option>Faculty 1</option>
-    <option>Faculty 2</option>
+    {
+      faculty.map((data,index)=>{
+        return <option key={index} value={data.first_name}>{data.first_name}</option>
+      })
+    }
   </select>
   <select>
     <option>Select Faculty Position</option>

@@ -1,14 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
+
 import axios from 'axios';
 import { Alert } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 export default function CreationFacultyMember() {
   const [faculty , setFaculty] = useState([]);
   const [viewFrame , setViewFrame] = useState(false);
   const [facultyView , setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [userEmail , setUserEmail] = useState("");
+  const [userStatus , setUserStatus] = useState("");
+
   // const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [input, setInput] = useState({
     f_name:"",
@@ -85,6 +94,47 @@ function viewData(){
   setViewFrame(!viewFrame);
 }
 
+function setFalseLoginAccess(e){
+  const url = "https://nigst.onrender.com/admin/access";
+  const data = {
+      email:`${userEmail}`,
+      access:"false"
+  }
+  axios.patch(url,data).then((res)=>{
+    facultyViewFun();
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
+
+function setTrueLoginAccess(e){
+  const url = "https://nigst.onrender.com/admin/access";
+  const data = {
+      email:`${userEmail}`,
+      access:"true"
+  }
+  axios.patch(url,data).then((res)=>{
+    facultyViewFun();
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
+
+function statusChange(){
+  setOpen(false)
+  userStatus === "green" ? setFalseLoginAccess() : setTrueLoginAccess() 
+}
+  const handleClickOpen = (e) => {
+    setOpen(true);
+    setUserEmail(e.target.getAttribute("data"));
+    setUserStatus(e.target.style.color);
+    // e.target.style.backgroundColor = "#FFCCCB"
+  };
+
+function closeModal(){
+  setOpen(false)
+}
+
   return (
     <>
     <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
@@ -127,7 +177,7 @@ function viewData(){
                 <td>{data.designation}</td>
                 <td>{data.gender}</td>
                 <td>{data.education}</td>
-                <td>{data.status}</td>
+                <td>{data.admin_verified ? <button data={data.email} onClick={handleClickOpen} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> : <button  data={data.email} onClick={handleClickOpen} style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}></button>}</td>
               </tr>
             )
           })
@@ -169,9 +219,27 @@ function viewData(){
       <input type="radio" value="true" name="admin verification" onChange={(e)=>(setLogin(e.target.value))}/> <label>Login Access</label>
       <input type="radio" value="false" name="admin verification" onChange={(e)=>(setLogin(e.target.value))}/> <label>No Login Access</label>
       </div>
-      <Button value={"Submit"} fun={handleCreationMembers}/>
+      <button  onClick={handleCreationMembers}>Submit</button>
     </div> : ""
     }
+    <Dialog
+        open={open}
+        onClose={closeModal}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do You want to change the login status of faculty
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeModal}>Disagree</Button>
+          <Button onClick={statusChange}  autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog> 
     </>
   )
 }

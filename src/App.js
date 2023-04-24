@@ -23,7 +23,7 @@ function App() {
           <Route path='/faculty' element={
             <Private><Faculty/></Private>
           }></Route>
-          <Route path='/password' element={<ChangePassword/>}></Route>
+          <Route path='/password/:token' element={<ChangePassword/>}></Route>
           <Route path='/forgot' element={<ForgotPassword/>}></Route>
         </Routes>
       </HashRouter>

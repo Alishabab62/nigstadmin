@@ -14,7 +14,7 @@ export default function NewUserVerification() {
     const startDateRef = useRef();
     const endDateRef = useRef();
     const [data,setData] = useState([]);
-    const [userEmail , setUserEmail] = useState("")
+    const [userEmail , setUserEmail] = useState("");
     const [inputs ,setInputs] = useState({
       email:"",
       orgName:""

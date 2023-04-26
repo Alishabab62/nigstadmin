@@ -22,7 +22,7 @@ export default function ChangePassword() {
       password:`${input.password}`,
       resetToken:`${token}`
     }
-    axios.post(url,data).then((res)=>{
+    axios.patch(url,data).then((res)=>{
       console.log(res)
     }).catch((error)=>{
       console.log(error);

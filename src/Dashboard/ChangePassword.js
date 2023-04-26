@@ -7,14 +7,14 @@ export default function ChangePassword() {
     CPassword:""
   })
   function handleInputs(e){
-    const {name,value} = e.target;
+    const {name , value} = e.target;
     setInput((prevInput)=>({
       ...prevInput , [name]:value
-    }))
+    }));
+    console.log(input)
   }
 
   function changePassword(){
-    console.log(window.location.href);
     let token = window.location.href.split("/")[5];
     console.log(token)
     const url = "https://nigst.onrender.com/sauth/reset";

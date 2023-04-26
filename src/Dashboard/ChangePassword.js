@@ -15,7 +15,7 @@ export default function ChangePassword() {
 
   function changePassword(){
     console.log(window.location.href);
-    let token = window.location.href.split("/")[3];
+    let token = window.location.href.split("/")[5];
     console.log(token)
     const url = "https://nigst.onrender.com/sauth/reset";
     const data ={

@@ -3,6 +3,7 @@ import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
 import ResetPassword from './ResetPassword';
+import FacultyReportSubmission from './FacultyReportSubmission';
 
 
 export default function Faculty() {
@@ -10,10 +11,12 @@ export default function Faculty() {
  const [forgotPassword , setForgotPassword] = useState(false);
 
  function courseReportFun(){
-    setCourseReport(!courseReport);
+    setCourseReport(true);
+    setForgotPassword(false)
  }
  function forgotPasswordFun(){
-    setForgotPassword(!forgotPassword);
+    setForgotPassword(true);
+    setCourseReport(false)
  }
   return (
     <div className='flex justify-between main-page-header'>
@@ -37,6 +40,7 @@ export default function Faculty() {
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
                 {forgotPassword ? <ResetPassword/> : ""}
+                {courseReport ? <FacultyReportSubmission/> : ""}
             </div>
         </div>
     </div>

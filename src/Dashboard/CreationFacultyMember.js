@@ -31,6 +31,7 @@ export default function CreationFacultyMember() {
   const [gender , setGender] = useState("");
   const [facultyInput , setFacultyInput] = useState("");
   const [login , setLogin] = useState("");
+  const [user,setUser] = useState("");
   const dobRef = useRef();
 
   function handleInputs(e){
@@ -41,17 +42,19 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(()=>{
-    const url = "https://nigst.onrender.com/admin/faculty_show";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/faculty_show";
     axios.get(url).then((res)=>{
       setFaculty(res.data)
     }).catch((error)=>{
       console.log(error)
     })
-   facultyViewFun()
+   facultyViewFun();
+   let user = JSON.parse(localStorage.getItem("user"));
+   setUser(user)
   },[])
 
   function facultyViewFun(){
-    const urlView = "https://nigst.onrender.com/sauth/faculty_view"
+    const urlView = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/faculty_view"
     axios.get(urlView).then((res)=>{
       console.log(res)
       setFacultyView(res.data.data.reverse())
@@ -61,7 +64,7 @@ export default function CreationFacultyMember() {
   }
 
   function handleCreationMembers(){
-    const url = "https://nigst.onrender.com/sauth/create";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/create";
     const data = {
       first_name:`${input.f_name}`,
       middle_name:`${input.m_name}`,
@@ -95,7 +98,7 @@ function viewData(){
 }
 
 function setFalseLoginAccess(e){
-  const url = "https://nigst.onrender.com/admin/access";
+  const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/access";
   const data = {
       email:`${userEmail}`,
       access:"false"
@@ -108,7 +111,7 @@ function setFalseLoginAccess(e){
 }
 
 function setTrueLoginAccess(e){
-  const url = "https://nigst.onrender.com/admin/access";
+  const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/access";
   const data = {
       email:`${userEmail}`,
       access:"true"
@@ -128,7 +131,6 @@ function statusChange(){
     setOpen(true);
     setUserEmail(e.target.getAttribute("data"));
     setUserStatus(e.target.style.color);
-    // e.target.style.backgroundColor = "#FFCCCB"
   };
 
 function closeModal(){
@@ -163,7 +165,8 @@ function closeModal(){
         </tr>
         {
           facultyView.map((data,index)=>{
-            return (
+            return data.faculty===user.faculty ? 
+             (
               <tr>
                 <td>{index+1}</td>
                 <td>{data.faculty_id}</td>
@@ -179,7 +182,7 @@ function closeModal(){
                 <td>{data.education}</td>
                 <td>{data.admin_verified ? <button data={data.email} onClick={handleClickOpen} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> : <button  data={data.email} onClick={handleClickOpen} style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}></button>}</td>
               </tr>
-            )
+            ) : ""
           })
         }
           </tbody>

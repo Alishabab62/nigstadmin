@@ -11,7 +11,6 @@ export default function ChangePassword() {
     setInput((prevInput)=>({
       ...prevInput , [name]:value
     }));
-    console.log(input)
   }
 
   function changePassword(){

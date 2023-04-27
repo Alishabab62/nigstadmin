@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Inputs from '../components/Inputs'
 import Button from '../components/Button';
 import axios from 'axios';
-// import axios from 'axios';
+
 
 export default function CourseCreation() {
     let weeks = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52];
@@ -48,17 +48,23 @@ export default function CourseCreation() {
     const [courseCodeView , setCourseCode] = useState([])
     const [courseNumberView , setCourseNumber] = useState([])
     const [faculty , setFaculty] = useState([]);
+    const [code, setCode] = useState("");
+    const [number,setNumber] = useState("");
+    const [userData,setUserData] = useState("");
+    const [facultyId,setFacultyId] = useState("");
+    const [courseDurDays , setCourseDurDays] = useState(""); 
+    const [courseDurWeeks , setCourseDurWeeks] = useState(""); 
+    const [courseFee , setCourseFee] = useState("");
+    const [courseMode , setCourseMode] = useState("");
+    const [viewData , setViewData] = useState([]);
+    const [viewFrame , setViewFrame] = useState(false);
     
+    const [input,setInput] = useState({
+      title:"",
+      des:""
+    })
 
     useEffect(()=>{
-        // const url = "https://nigst.onrender.com/category/view"
-        // axios.get(url).then((res)=>{
-        //   setCategory(res.data.categories)
-        //   console.log(res);
-        // }).catch((error)=>{
-        //   console.log(error)
-        // })
-
      courseCode.filter((data)=>{
       if(data.category === category){
       setCourseCode(data.codes)
@@ -71,93 +77,187 @@ export default function CourseCreation() {
       }
       return 0;
     })
-    
-      },[category])
+  },[category]);
 
+  function handleInputs(e){
+    const {name , value} = e.target;
+    setInput((prevInput)=>({
+      ...prevInput , [name]:value
+    }));
+  }
 
 useEffect(()=>{
-  const urlFaculty = "https://nigst.onrender.com/sauth/faculty_view";
+  let data = JSON.parse(localStorage.getItem("user"));
+  setUserData(data)
+  const urlFaculty = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/faculty_member_faculty/${data.faculty}`;
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
-      console.log(res.data)
     }).catch((error)=>{
       console.log(error)
     })
+    
+const url = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/course_faculty/${data.faculty}`;
+axios.get(url).then((res)=>{
+  console.log(res.data.courses)
+  setViewData(res.data.courses);
+}).catch((error)=>{
+  console.log(error)
+})
+
 },[])
 
     function handleCourseCreation(){
-        console.log("Function Called")
-    }
-  return (
-    <div className='course-creation-wrapper'>
-        <h3>Course Creation</h3>
-      <select onChange={(e)=>setCategory(e.target.value)}>
-        <option value={"select"}>Select Course Category</option>
-        <option value={"basic"}>Basic Course</option>
-        <option value={"advance"}>Advance Course</option>
-        <option value={"short"}>Short Term Course</option>
-        <option value={"refresher"}>Refresher Course</option>
-      </select>
-      {
-        category === "" ?  "" : <select>
-        <option>Course Code</option>
-        {
-          courseCodeView.map((data)=>{
-            return <option value={data} key={data}>{data}</option>
-          })
+        const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/course/creation";
+        const data={
+          courseCategory:`${category}`,
+          title:`${input.title}`,
+          courseCode:`${code}`,
+          courseNo:`${number}`,
+          eligibility:"",
+          courseDirector:`${userData.faculty}`,
+          courseOfficer:`${facultyId}`,
+          courseDurationInDays:`${courseDurDays}`,
+          courseDurationInWeeks:`${courseDurWeeks}`,
+          faculty:`${userData.type}`,
+          type:`${courseFee}`,
+          mode:`${courseMode}`,
+          description:`${input.des}`
         }
-      </select> 
-      }
-     {
-      category === "" ? "" : <select>
-      <option>Course Number</option>
-      {
-        courseNumberView.map((data)=>{
-          return <option key={data} value={data}>{data}</option>
+        axios.post(url,data).then((res)=>{
+          console.log(res)
+        }).catch((error)=>{
+          console.log(error)
         })
+    }
+
+    function changeView(){
+      setViewFrame(!viewFrame);
+    }
+
+  return (
+    <>
+    <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
+      {
+        viewFrame ? <button onClick={changeView}>Create Course</button> : <button onClick={changeView}>View Created Course</button>
       }
-    </select> 
-     }
-      
-       <Inputs type={"text"} placeholder={"Enter course title"}/>
-      <Inputs type={"text"} placeholder={"Course Description"}/>
-      <div>
-        <select>
-            <option>Select Weeks</option>
-            {
-                weeks.map((data)=>{
-                    return <option key={data}>{data}</option>
-                })
-            }
-        </select>
-        <select style={{marginLeft:"5px"}}>
-            <option>Select Days</option>
-            {
-                days.map((data)=>{
-                    return <option key={data}>{data}</option>
-                })
-            }
-        </select>
-      </div>
-      <select>
-        <option>Select Course Officer</option>
+    </div>
+    {
+    viewFrame ?   <div className='user-details-wrapper'>
+    <table>
+      <tbody>
+        <tr>
+            <th>S.No</th>
+            <th>Created At</th>
+            <th>Course Category</th>
+            <th>Course Code</th>
+            <th>Course No</th>
+            <th>Course Title</th>
+            <th>Course Description</th>
+            <th>Course Mode</th>
+            <th>Course Duration</th>
+            <th>Course Type</th>
+            <th>Course Director</th>
+            <th>Faculty</th>
+            <th>Course Officer</th>
+        </tr>
         {
-          faculty.map((data,index)=>{
-            return <option key={index} value={data.first_name}>{data.first_name}</option>
+          viewData.map((data,index)=>{
+            return (
+              <tr key={index}>
+                <td>{index+1}</td>
+                <td>{data.created_at}</td>
+                <td>{data.course_category}</td>
+                <td>{data.course_code}</td>
+                <td>{data.course_no}</td>
+                <td>{data.title}</td>
+                <td>{data.description}</td>
+                <td>{data.course_mode}</td>
+                <td>{data.course_duration_weeks}Week {data.course_duration_days}Days</td>
+                <td>{data.course_type}</td>
+                <td>{data.course_director}</td>
+                <td>{data.faculty}</td>
+                <td>{data.courseofficer}</td>
+              </tr>
+            )
           })
         }
-      </select>
-      <div style={{display:"flex" , alignItems:"center" , background:"white" , borderRadius:"5px"}}>
-        <input type='radio' value={"free"} style={{marginRight:"5px"}}></input><span style={{marginRight:"10px"}}>Free</span>
-        <input type='radio' value={"paid"}></input><span style={{marginRight:"10px" , marginLeft:"10px"}}>Paid</span>
-      </div>
-      <select>
-        <option>Select Mode of Course</option>
-        <option>Classroom</option>
-        <option>Online</option>
-        <option>Hybrid</option>
-      </select>
-      <Button value={"Submit"} fun={handleCourseCreation}/>
-    </div>
+          </tbody>
+    </table>
+    </div>  : ""
+  }
+  {
+    !viewFrame ?  <div className='course-creation-wrapper'>
+    <h3>Course Creation</h3>
+  <select onChange={(e)=>setCategory(e.target.value)}>
+    <option value={"select"}>Select Course Category</option>
+    <option value={"basic"}>Basic Course</option>
+    <option value={"advance"}>Advance Course</option>
+    <option value={"short"}>Short Term Course</option>
+    <option value={"refresher"}>Refresher Course</option>
+  </select>
+  {
+    category === "" ?  "" : <select onChange={(e)=>setCode(e.target.value)}>
+    <option>Course Code</option>
+    {
+      courseCodeView.map((data)=>{
+        return <option value={data} key={data}>{data}</option>
+      })
+    }
+  </select> 
+  }
+ {
+  category === "" ? "" : <select onChange={(e)=>setNumber(e.target.value)}>
+  <option>Course Number</option>
+  {
+    courseNumberView.map((data)=>{
+      return <option key={data} value={data}>{data}</option>
+    })
+  }
+</select> 
+ }
+  
+   <Inputs type={"text"} placeholder={"Enter course title"} name={"title"} fun={handleInputs}/>
+    <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs}/>
+  <div>
+    <select onChange={(e)=>setCourseDurWeeks(e.target.value)}>
+        <option>Select Weeks</option>
+        {
+            weeks.map((data)=>{
+                return <option key={data}>{data}</option>
+            })
+        }
+    </select>
+    <select style={{marginLeft:"5px"}} onChange={(e)=>setCourseDurDays(e.target.value)}>
+        <option>Select Days</option>
+        {
+            days.map((data)=>{
+                return <option key={data}>{data}</option>
+            })
+        }
+    </select>
+  </div>
+  <select onChange={(e)=>setFacultyId(e.target.value)}>
+    <option>Select Course Officer</option>
+    {
+      faculty.map((data,index)=>{
+        return <option key={index} value={data.facultyid}>{data.firstname}{data.middlename}{data.lastname}</option>
+      })
+    }
+  </select>
+  <div style={{display:"flex" , alignItems:"center" , background:"white" , borderRadius:"5px"}}>
+    <input type='radio' value={"free"} style={{marginRight:"5px"}} onChange={(e)=>setCourseFee(e.target.value)}></input><span style={{marginRight:"10px"}}>Free</span>
+    <input type='radio' value={"paid"}></input><span style={{marginRight:"10px" , marginLeft:"10px"}} onChange={(e)=>setCourseFee(e.target.value)}>Paid</span>
+  </div>
+  <select onChange={(e)=>setCourseMode(e.target.value)}>
+    <option>Select Mode of Course</option>
+    <option>Classroom</option>
+    <option>Online</option>
+    <option>Hybrid</option>
+  </select>
+  <Button value={"Submit"} fun={handleCourseCreation}/>
+</div> : ""
+  }
+   
+    </>
   )
 }

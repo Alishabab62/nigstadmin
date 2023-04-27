@@ -42,7 +42,8 @@ export default function CreationFacultyPosition() {
     console.log(
      data
     );
-    const url = "https://nigst.onrender.com/sauth/position";
+    // const url = "https://nigst.onrender.com/sauth/position";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/position"
     axios
       .post(url, data)
       .then((res) => {
@@ -67,9 +68,11 @@ export default function CreationFacultyPosition() {
    facultyPositionViewFun()
   },[]);
   function facultyPositionViewFun(){
-    const url = "https://nigst.onrender.com/sauth/view";
+    // const url = "https://nigst.onrender.com/sauth/view";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/view"
     axios.get(url).then((res)=>{
-      setViewPosition(res.data.reverse());
+      setViewPosition(res.data.data.reverse());
+      console.log(res.data)
     }).catch((error)=>{
       console.log(error);
     })

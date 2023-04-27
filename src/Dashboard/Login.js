@@ -22,7 +22,7 @@ export default function Login() {
 
   function handleLoginAdmin() {
     console.log("hello admin")
-    const url = "https://nigst.onrender.com/sadmin/login";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sadmin/login";
     const data = {
       username: `${inputs.email}`,
       password: `${inputs.password}`
@@ -44,7 +44,7 @@ export default function Login() {
 
   function handleLoginFaculty() {
     console.log("hello faculty")
-    const url = "https://nigst.onrender.com/sauth/login";
+    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/login";
     const data = {
       email: `${inputs.email}`,
       password: `${inputs.password}`
@@ -70,7 +70,7 @@ export default function Login() {
   return (
     <div className="login-wrapper ">
       <h3>Login</h3>
-      <Inputs type={"email"} placeholder={"Enter email"} name={"email"} fun={handleInputs} />
+      <Inputs type={"email"} placeholder={"Enter Username"} name={"email"} fun={handleInputs} />
       <Inputs type={"password"} placeholder={"Enter Password"} name={"password"} fun={handleInputs} />
       <select onChange={(e)=>setLoginType(e.target.value)}>
         <option>Select</option>

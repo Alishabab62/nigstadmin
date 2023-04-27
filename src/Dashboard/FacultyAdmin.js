@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
@@ -11,7 +11,8 @@ export default function FacultyAdmin() {
     const [creationFacultyMember, setCreationFacultyMember] = useState(false)
     const [courseCreation, setCourseCreation] = useState(false);
     const [assigningPosition, setAssigningPosition] = useState(false);
-    const [courseScheduling, setCourseScheduling] = useState(false)
+    const [courseScheduling, setCourseScheduling] = useState(false);
+    const [user,setUser] = useState("");
 
     function creationFacultyFun() {
         setCreationFacultyMember(true);
@@ -41,11 +42,16 @@ export default function FacultyAdmin() {
         window.location.hash = "/";
         localStorage.clear("user")
       }
+      useEffect(()=>{
+        let data = JSON.parse(localStorage.getItem("user"));
+        setUser(data)
+        console.log(data)
+      },[])
     return (
         <div className='flex justify-between main-page-header'>
             <div className='side-bar border-r-2 side-bar-wrapper'>
                 <div className=' text-center pt-14 pb-14  border-b-2 mb-8'>
-                    <h3 className='text-lg   text-white font-bold '>Welcome Faculty Admin</h3>
+                    <h3 className='text-lg   text-white font-bold '>Welcome Faculty {user.faculty}</h3>
                 </div> 
                 <div>
                     <ul className=' text-white cursor-pointer '>

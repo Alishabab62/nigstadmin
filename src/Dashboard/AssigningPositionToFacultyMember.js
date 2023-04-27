@@ -6,7 +6,8 @@ export default function AssigningPositionToFacultyMember() {
   const [viewPosition , setViewPosition] = useState([]);
   const [faculty , setFaculty] = useState([]);
   const [facultyMember , setFacultyMember] = useState("");
-  const [facultyPosition , setFacultyPosition] = useState("")
+  const [facultyPosition , setFacultyPosition] = useState("");
+  const [user,setUser] = useState("")
   const [input , setInput] = useState({
     facultyId:""
   })
@@ -44,6 +45,8 @@ export default function AssigningPositionToFacultyMember() {
     }).catch((error)=>{
       console.log(error)
     })
+    let user = JSON.parse(localStorage.getItem("user")); 
+    setUser(user)
     },[]);
 
   return (
@@ -53,7 +56,7 @@ export default function AssigningPositionToFacultyMember() {
     <option>Select Faculty Member</option>
     {
       faculty.map((data,index)=>{
-        return <option key={index} value={data.first_name}>{data.first_name}</option>
+       return data.faculty === user.faculty  ?  <option key={index} value={data.first_name}>{data.first_name}</option> : ""
       })
     }
   </select>

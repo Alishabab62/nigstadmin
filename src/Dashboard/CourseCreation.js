@@ -98,8 +98,7 @@ useEffect(()=>{
     
 const url = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/course_faculty/${data.faculty}`;
 axios.get(url).then((res)=>{
-  console.log(res.data.courses)
-  setViewData(res.data.courses);
+  setViewData(res.data.course);
 }).catch((error)=>{
   console.log(error)
 })
@@ -118,7 +117,7 @@ axios.get(url).then((res)=>{
           courseOfficer:`${facultyId}`,
           courseDurationInDays:`${courseDurDays}`,
           courseDurationInWeeks:`${courseDurWeeks}`,
-          faculty:`${userData.type}`,
+          faculty:`${userData.faculty}`,
           type:`${courseFee}`,
           mode:`${courseMode}`,
           description:`${input.des}`
@@ -165,18 +164,18 @@ axios.get(url).then((res)=>{
             return (
               <tr key={index}>
                 <td>{index+1}</td>
-                <td>{data.created_at}</td>
+                <td>{data.createdat}</td>
                 <td>{data.course_category}</td>
                 <td>{data.course_code}</td>
                 <td>{data.course_no}</td>
                 <td>{data.title}</td>
                 <td>{data.description}</td>
                 <td>{data.course_mode}</td>
-                <td>{data.course_duration_weeks}Week {data.course_duration_days}Days</td>
+                <td>{data.duration}</td>
                 <td>{data.course_type}</td>
                 <td>{data.course_director}</td>
-                <td>{data.faculty}</td>
-                <td>{data.courseofficer}</td>
+                <td>{data.course_director}</td>
+                <td>{data.course_officer}</td>
               </tr>
             )
           })

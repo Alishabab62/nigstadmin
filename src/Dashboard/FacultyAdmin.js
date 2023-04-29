@@ -45,7 +45,6 @@ export default function FacultyAdmin() {
       useEffect(()=>{
         let data = JSON.parse(localStorage.getItem("user"));
         setUser(data)
-        console.log(data)
       },[])
     return (
         <div className='flex justify-between main-page-header'>

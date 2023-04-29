@@ -20,7 +20,11 @@ export default function CourseScheduling() {
   const [tempArray,setTempArray] = useState([]);
   const [viewFrame , setViewFrame] = useState(false);
   const [viewScheduledCourse , setScheduledCourse] = useState([]);
-
+  const [editData , setEditData] = useState({
+    fee:"",
+    courseCapacity:"",
+    courseTitle:""
+  })
 
   function handleInputs(e){
     const {name,value} = e.target;
@@ -79,12 +83,17 @@ export default function CourseScheduling() {
 
     function changeView(){
       setViewFrame(!viewFrame);
+   
     }
     // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
-function handleCourseEdit(){
+function handleCourseEdit(event){
+  console.log(event.target.parentNode.childNodes)
   setViewFrame(false);
-  // feeRef.current.value = "232"
-  console.log(feeRef)
+  setEditData({
+    fee:event.target.parentNode.childNodes[5].innerText,
+    courseCapacity:event.target.parentNode.childNodes[4].innerText,
+    courseTitle:event.target.parentNode.childNodes[1].innerText
+  });
   const url = "https://nigst.onrender.com/admin/updateSchedule";
   const data={
     status:`${""}`,
@@ -155,7 +164,8 @@ function handleCourseEdit(){
     <div className='course-creation-wrapper'>
         <h3>Course Scheduling</h3>
         <select onChange={(e)=>setCourseName(e.target.value)}>
-          <option>Select Course</option>
+          
+          {editData.courseTitle === "" ? <option>Select Course</option> : <option>{editData.courseTitle}</option> }
           {
             viewData.map((data,index)=>{
               return <option value={data.title} key={index}>{data.title}</option>
@@ -177,7 +187,7 @@ function handleCourseEdit(){
          {
           tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
         }
-        <div style={{display:"flex"}}>
+        <div style={{display:"flex"}}>  
           <select onChange={(e)=>setInputCurrency(e.target.value)}>
             <option>Select currency</option>
             <option value="INR">INR</option>
@@ -187,12 +197,12 @@ function handleCourseEdit(){
               })
             }
           </select>
-        <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} value="635563"></input>
+        <input type='text' placeholder={editData.fee === "" ? "Enter Fee" : editData.fee} name='fee' onChange={handleInputs} ref={feeRef} ></input>
         </div>
         <input type='date' placeholder='Date Of Commencement' ref={commencementDate}></input>
         <input type='date' placeholder='Date of Completion' ref={completionDate}></input>
         <input type='date' placeholder='Running Date' ref={runningDate}></input>
-        <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
+        <input type='text'  placeholder={editData.courseCapacity === "" ? "Enter Course Capacity": editData.courseCapacity} name='courseCapacity' onChange={handleInputs} ></input>
       <button  onClick={handleCourseScheduling}>Submit</button>
     </div> : ""
       }

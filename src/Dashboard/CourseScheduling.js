@@ -194,7 +194,7 @@ function handleCourseEdit(event){
             {
               currency.map((data,index)=>{
                 return <option key={index} value={data.currency}>{data.currency}</option>
-              })
+              }) 
             }
           </select>
         <input type='text' placeholder={editData.fee === "" ? "Enter Fee" : editData.fee} name='fee' onChange={handleInputs} ref={feeRef} ></input>

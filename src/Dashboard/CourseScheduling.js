@@ -18,13 +18,19 @@ export default function CourseScheduling() {
   const [inputCurrency , setInputCurrency] = useState("");
   const [viewData,setViewData] = useState([]);
   const [tempArray,setTempArray] = useState([]);
-  const [viewFrame , setViewFrame] = useState(false);
+  const [viewForm , setViewForm] = useState(true);
+  const [viewDataUI,setViewDataUI] = useState(false);
   const [viewScheduledCourse , setScheduledCourse] = useState([]);
+  const [editForm, setEditForm] = useState(false);
+  const [newCommencementDate , setNewCommencementDate] = useState("");
+  const [newRunningDate , setNewRunningDate] = useState("");
+  const [newCompletionDate , setNewCompletionDate] = useState("");
+  const [newStatus , setNewStatus] = useState("")
   const [editData , setEditData] = useState({
-    fee:"",
-    courseCapacity:"",
-    courseTitle:""
-  })
+    courseStatus:"",
+    courseBatch:"",
+    courseId:""
+  });
 
   function handleInputs(e){
     const {name,value} = e.target;
@@ -82,49 +88,56 @@ export default function CourseScheduling() {
     },[courseName]);
 
     function changeView(){
-      setViewFrame(!viewFrame);
-   
+      setViewForm(false);
+      setViewDataUI(true);
+      setEditForm(false)
     }
     // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
 function handleCourseEdit(event){
-  console.log(event.target.parentNode.childNodes)
-  setViewFrame(false);
-  setEditData({
-    fee:event.target.parentNode.childNodes[5].innerText,
-    courseCapacity:event.target.parentNode.childNodes[4].innerText,
-    courseTitle:event.target.parentNode.childNodes[1].innerText
-  });
-  const url = "https://nigst.onrender.com/admin/updateSchedule";
+  event.preventDefault();
+    const url = "https://nigst.onrender.com/admin/updateSchedule";
   const data={
-    status:`${""}`,
-    batch:`${""}`,
-    courseID:`${""}`,
-    newStatus:`${""}`,
-    newRunningDate:`${""}`,
-    newComencementDate:`${""}`,
-    newCompletionDate:`${""}`
+    status:`${editData.courseStatus}`,
+    batch:`${editData.courseBatch}`,
+    courseID:`${editData.courseId}`,
+    newStatus:`${newStatus}`,
+    newRunningDate:`${newRunningDate}`,
+    newComencementDate:`${newCommencementDate}`,
+    newCompletionDate:`${newCompletionDate}`
   }
+  console.log(data)
   axios.patch(url,data).then((res)=>{
     console.log(res)
   }).catch((error)=>{
     console.log(error)
   })
 }
-
+function handleCourseEditFrom(event){
+  const updatedEditData = {
+    courseStatus:event.target.parentNode.childNodes[8].innerText,
+    courseBatch:event.target.parentNode.childNodes[7].innerText,  
+    courseId:event.target.parentNode.childNodes[2].innerText  
+  };
+  setEditData(updatedEditData);
+  setEditForm(true);
+  setViewDataUI(false);
+  setViewForm(false);
+}
   return (
     <>
      <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
       {
-        viewFrame ? <button onClick={changeView}>Schedule Course</button> : <button onClick={changeView}>View Scheduled Course</button>
+        viewDataUI ? <button onClick={changeView}>Schedule Course</button> : <button onClick={changeView}>View Scheduled Course</button>
       }
     </div>
     {
-    viewFrame ?   <div className='user-details-wrapper'>
+    viewDataUI ?   <div className='user-details-wrapper'>
     <table>
       <tbody>
         <tr>
             <th>S.No</th>
             <th>Course Title</th>
+            <th>Course Id</th>
             <th>Date Commencement</th>
             <th>Date Completion</th>
             <th>Course Capacity</th>
@@ -141,6 +154,7 @@ function handleCourseEdit(event){
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>{data.title}</td>
+                <td>{data.courseid}</td>
                 <td>{data.datecomencement}</td>
                 <td>{data.datecompletion}</td>
                 <td>{data.coursecapacity}</td>
@@ -149,7 +163,7 @@ function handleCourseEdit(event){
                 <td>{data.status}</td>
                 <td>{data.runningdate}</td>
                 <td>{data.schedulingdate}</td>
-                <td onClick={handleCourseEdit} style={{cursor:"pointer"}}>Edit</td>
+                <td onClick={handleCourseEditFrom} style={{cursor:"pointer"}}>Edit</td>
               </tr>
             )
           })
@@ -159,13 +173,11 @@ function handleCourseEdit(event){
     </div>  : ""
   }
    {
-    !viewFrame ? 
-   
+    viewForm ? 
     <div className='course-creation-wrapper'>
         <h3>Course Scheduling</h3>
         <select onChange={(e)=>setCourseName(e.target.value)}>
-          
-          {editData.courseTitle === "" ? <option>Select Course</option> : <option>{editData.courseTitle}</option> }
+           <option>Select Course</option>
           {
             viewData.map((data,index)=>{
               return <option value={data.title} key={index}>{data.title}</option>
@@ -197,7 +209,7 @@ function handleCourseEdit(event){
               }) 
             }
           </select>
-        <input type='text' placeholder={editData.fee === "" ? "Enter Fee" : editData.fee} name='fee' onChange={handleInputs} ref={feeRef} ></input>
+        <input type='text' placeholder="Enter Fee"  name='fee' onChange={handleInputs} ref={feeRef} ></input>
         </div>
         <input type='date' placeholder='Date Of Commencement' ref={commencementDate}></input>
         <input type='date' placeholder='Date of Completion' ref={completionDate}></input>
@@ -206,6 +218,30 @@ function handleCourseEdit(event){
       <button  onClick={handleCourseScheduling}>Submit</button>
     </div> : ""
       }
+      {
+    editForm && 
+    <div className='department-creation-wrapper'>
+        <h3>Update Course Status</h3>
+      <form>
+        <select onChange={(e)=>setNewStatus(e.target.value)}>
+          <option>Select Status</option>
+          {editData.courseStatus === "created" ? <option value='schedule'>Schedule</option> : ""}
+          {editData.courseStatus === "created" ? <option value='running'>Running</option> : ""}
+          {editData.courseStatus === "created" ? <option value='postponed'>Postponed</option> : ""}
+          {editData.courseStatus === "created" ? <option value='canceled'>Cancelled</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='running'>Running</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='postponed'>Postponed</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
+          {editData.courseStatus === "running" ? <option value='complete'>Complete</option> : ""}
+          {editData.courseStatus === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
+        </select>
+        <input type='text' value={editData.courseId} disabled></input>
+        <input type='date' placeholder='newCommencementDate' onChange={(e)=>setNewCommencementDate(e.target.value)}></input>
+        <input type='date' placeholder='newCompletionDate' onChange={(e)=>setNewCompletionDate(e.target.value)}></input>
+        <input type='date' placeholder='newRunningDate' onChange={(e)=>setNewRunningDate(e.target.value)}></input>
+        <button onClick={handleCourseEdit}>Submit</button>
+      </form> </div>
+  }
     </>
   )
 }

@@ -89,14 +89,14 @@ export default function CourseCreation() {
 useEffect(()=>{
   let data = JSON.parse(localStorage.getItem("user"));
   setUserData(data)
-  const urlFaculty = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/faculty_member_faculty/${data.faculty}`;
+  const urlFaculty = `https://nigst.onrender.com/admin/faculty_member_faculty/${data.faculty}`;
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
     }).catch((error)=>{
       console.log(error)
     })
     
-const url = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/course_faculty/${data.faculty}`;
+const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
 axios.get(url).then((res)=>{
   setViewData(res.data.course);
 }).catch((error)=>{
@@ -106,7 +106,7 @@ axios.get(url).then((res)=>{
 },[])
 
     function handleCourseCreation(){
-        const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/course/creation";
+        const url = "https://nigst.onrender.com/course/creation";
         const data={
           courseCategory:`${category}`,
           title:`${input.title}`,

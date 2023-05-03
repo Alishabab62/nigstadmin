@@ -73,6 +73,7 @@ export default function DepartmentCourseAssignment() {
        }
        return 0
      })
+     
      courseNumber.filter((data)=>{
        if(data.category === category){
        return  setCourseNumber(data.number)
@@ -265,10 +266,10 @@ export default function DepartmentCourseAssignment() {
           return <option value={data.organization} key={index}>{data.organization}</option>
         })}
       </select>
-      <input type='text' value={secondStepData[0].schedulingid}></input>
-      <input type='text' value={secondStepData[0].batch}></input>
-      <input type='text' value={secondStepData[0].commencementdate}></input>
-      <input type='text' value={secondStepData[0].completiondate}></input>
+      <input type='text' value={secondStepData[0].schedulingid} disabled></input>
+      <input type='text' value={secondStepData[0].batch} disabled></input>
+      <input type='text' value={secondStepData[0].commencementdate} disabled></input>
+      <input type='text' value={secondStepData[0].completiondate} disabled></input>
       <Inputs type={"text"} placeholder={"Description"} name={"description"} fun={handleInputs}/> 
       <Button value={"Submit"} fun={handleFinalSubmit}/>
   </form>

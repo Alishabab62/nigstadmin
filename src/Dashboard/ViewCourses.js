@@ -6,6 +6,7 @@ export default function ViewCourses() {
 
     useEffect(()=>{
     let data = JSON.parse(localStorage.getItem("user"));
+    console.log(data.faculty);
     const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res)=>{
       setViewData(res.data.course);

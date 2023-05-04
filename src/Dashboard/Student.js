@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import ViewCourses from './ViewCourses';
+import VerificationPage from './VerificationPage';
 
 
 
 export default function Student() {
- const [viewCourse , setViewCourse] = useState(true);
+ const [viewCourse , setViewCourse] = useState(false);
 
 function viewCourseFun(){
     setViewCourse(!viewCourse);
@@ -36,6 +37,7 @@ function logout(){
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
                 { viewCourse ? <ViewCourses/> : ""}
+                <VerificationPage/>
             </div>
         </div>
     </div>

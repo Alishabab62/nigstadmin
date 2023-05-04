@@ -42,7 +42,7 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(()=>{
-    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/faculty_show";
+    const url = "https://nigst.onrender.com/admin/faculty_show";
     axios.get(url).then((res)=>{
       setFaculty(res.data)
     }).catch((error)=>{
@@ -54,7 +54,7 @@ export default function CreationFacultyMember() {
   },[])
 
   function facultyViewFun(){
-    const urlView = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/faculty_view"
+    const urlView = "https://nigst.onrender.com/sauth/faculty_view"
     axios.get(urlView).then((res)=>{
       console.log(res)
       setFacultyView(res.data.data.reverse())
@@ -64,7 +64,7 @@ export default function CreationFacultyMember() {
   }
 
   function handleCreationMembers(){
-    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/create";
+    const url = "https://nigst.onrender.com/sauth/create";
     const data = {
       first_name:`${input.f_name}`,
       middle_name:`${input.m_name}`,
@@ -98,7 +98,7 @@ function viewData(){
 }
 
 function setFalseLoginAccess(e){
-  const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/access";
+  const url = "https://nigst.onrender.com/admin/access";
   const data = {
       email:`${userEmail}`,
       access:"false"
@@ -111,7 +111,7 @@ function setFalseLoginAccess(e){
 }
 
 function setTrueLoginAccess(e){
-  const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/access";
+  const url = "https://nigst.onrender.com/admin/access";
   const data = {
       email:`${userEmail}`,
       access:"true"

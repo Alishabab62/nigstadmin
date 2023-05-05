@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 
 export default function VerificationPage(){
     const [verificationState,setVerificationState] = useState([])
-    const [input,setInput] = useState({
-        email:"",
-        phone:""
-    })
-    function handleInputs(e){
-       const {name,value} = e.target;
-       setInput((prevInput)=>({
-        ...prevInput , [name]:value
-       })) 
-    }
+    // const [input,setInput] = useState({
+    //     email:"",
+    //     phone:""
+    // })
+    // function handleInputs(e){
+    //    const {name,value} = e.target;
+    //    setInput((prevInput)=>({
+    //     ...prevInput , [name]:value
+    //    })) 
+    // }
 
     useEffect(()=>{
         const url =`https://nigst.onrender.com/secure/view_veri_status/shababali672@gmail.com`;
@@ -27,7 +27,7 @@ export default function VerificationPage(){
         e.preventDefault();
         const url = "https://nigst.onrender.com/secure/resend";
         const data={
-            email:`${input.email}`
+            email:`${"shababali672@gmail.com"}`
         }
         axios.patch(url,data).then((res)=>{
             console.log(res)
@@ -39,7 +39,7 @@ export default function VerificationPage(){
     e.preventDefault();
     const url = "https://nigst.onrender.com/sms/resend";
     const data={
-        email:`${input.phone}`
+        // email:`${input.phone}`
     }
     axios.patch(url,data).then((res)=>{
         console.log(res)
@@ -54,9 +54,9 @@ export default function VerificationPage(){
                 <span>NIGST Verification</span>
                   {verificationState.admin_verified ? <button  style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> : <button  style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}></button>}
                   <span>Email Verification</span>
-                  {verificationState.email_verified ? <button  style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> :  <> <input type="text" placeholder="Enter Email" name="email" onChange={handleInputs}></input><button onClick={handleEmailVerification}>Resend Email</button></>}
+                  {verificationState.email_verified ? <button  style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> :  <><button onClick={handleEmailVerification}>Resend Email</button></>}
                <span>Phone Verification</span>
-               {verificationState.mobile_verified ?  <button  style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> :<> <input type="text" placeholder="Enter Email" name="phone" onChange={handleInputs}></input><button onClick={handleOTPVerification}>Resend OTP</button></> }  
+               {verificationState.mobile_verified ?  <button  style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button> :<> <button onClick={handleOTPVerification}>Resend OTP</button></> }  
             </form>
         </div>
     )

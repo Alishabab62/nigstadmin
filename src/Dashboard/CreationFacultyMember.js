@@ -218,7 +218,7 @@ export default function CreationFacultyMember() {
                         <td>{data.designation}</td>
                         <td>{data.gender}</td>
                         <td>{data.education}</td>
-                        <td>{data.admin_verified ? <button data={data.email} onClick={handleClickOpen} style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "30px", width: "30px" }} ></button> : <button data={data.email} onClick={handleClickOpen} style={{ height: "40px", width: "40px", backgroundColor: "red", color: "red", borderRadius: "50%" }}></button>}</td>
+                        <td>{data.admin_verified ? <button data={data.email} onClick={handleClickOpen} style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "30px", width: "30px" }} ></button> : <button data={data.email} onClick={handleClickOpen} style={{ height: "30px", width: "30px", backgroundColor: "red", color: "red", borderRadius: "50%" }}></button>}</td>
                       </tr>
                     ) : ""
                 })
@@ -240,7 +240,7 @@ export default function CreationFacultyMember() {
             <input type="text" placeholder="Last Name" name="l_name" onChange={handleInputs} />
           </div>
           <div className="grid-container">
-            <input type='text' onFocus={() => { dobRef.current.type = 'date' }} placeholder="Date of Birth" ref={dobRef} />
+            <input type='text' onFocus={() => { dobRef.current.type = 'date' }} onBlur={() => { dobRef.current.type = 'text' }} placeholder="Date of Birth" ref={dobRef} />
 
             <select onChange={(e) => (setGender(e.target.value))}>
               <option>Select Gender</option>
@@ -272,7 +272,7 @@ export default function CreationFacultyMember() {
             <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>
             <input type="radio" value="false" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
           </div>
-          <button style={{ width: '70%', margin: '20px auto 0' }} onClick={handleCreationMembers}>Submit</button>
+          <button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers}>Submit</button>
         </div> : ""
       }
       <Dialog

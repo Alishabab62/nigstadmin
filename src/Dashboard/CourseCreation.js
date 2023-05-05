@@ -217,7 +217,7 @@ axios.get(url).then((res)=>{
   
    <Inputs type={"text"} placeholder={"Enter course title"} name={"title"} fun={handleInputs}/>
     <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs}/>
-  <div>
+  <div className='grid2-container'>
     <select onChange={(e)=>setCourseDurWeeks(e.target.value)}>
         <option>Select Weeks</option>
         {
@@ -226,7 +226,7 @@ axios.get(url).then((res)=>{
             })
         }
     </select>
-    <select style={{marginLeft:"5px"}} onChange={(e)=>setCourseDurDays(e.target.value)}>
+    <select onChange={(e)=>setCourseDurDays(e.target.value)}>
         <option>Select Days</option>
         {
             days.map((data)=>{
@@ -243,9 +243,9 @@ axios.get(url).then((res)=>{
       })
     }
   </select>
-  <div style={{display:"flex" , alignItems:"center" , background:"white" , borderRadius:"5px"}}>
+  <div style={{display:"flex", alignItems:"center" , background:"none" , borderRadius:"5px",margin:"0px auto", width:"auto"}}>
     <input type='radio' value={"free"} style={{marginRight:"5px"}} onChange={(e)=>setCourseFee(e.target.value)}></input><span style={{marginRight:"10px"}}>Free</span>
-    <input type='radio' value={"paid"}></input><span style={{marginRight:"10px" , marginLeft:"10px"}} onChange={(e)=>setCourseFee(e.target.value)}>Paid</span>
+    <input type='radio' value={"paid"}></input><span style={{marginRight:"50px" , marginLeft:"5px"}} onChange={(e)=>setCourseFee(e.target.value)}>Paid</span>
   </div>
   <select onChange={(e)=>setCourseMode(e.target.value)}>
     <option>Select Mode of Course</option>

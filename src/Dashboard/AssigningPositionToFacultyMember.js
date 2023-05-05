@@ -51,7 +51,7 @@ export default function AssigningPositionToFacultyMember() {
 
   return (
     <div className='course-creation-wrapper'>
-    <h3>Assigning Positions to Faculty Members</h3>
+    <h3  style={{margin:"20px auto"}}>Assigning Positions to Faculty Members</h3>
   <select onChange={(e)=>(setFacultyMember(e.target.value))}>
     <option>Select Faculty Member</option>
     {

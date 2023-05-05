@@ -145,6 +145,8 @@ button{
 table{
     width: 95%;
     border-color: #fff;
+    height: auto;
+    overflow-y: auto;
     border-bottom: 1px solid #1b3058;
 }
  td,th ,td{
@@ -163,8 +165,7 @@ th {
     display: flex;
     justify-content: center;
     margin-top: 32px;
-    height: 800px;
-    overflow-y: auto;
+    
 }
 
 .department-view-btn-wrapper button{
@@ -257,9 +258,9 @@ th {
     margin-top: 3px;
 }
 .course-creation-wrapper{
-    width: 400px;
+    width: 800px;
     background-color: #f5eeee76;
-    border: 1px solid rgb(229, 231, 235);
+    border-radius: 8px;
     padding: 20px;
     text-align: center;
     display: flex;
@@ -270,25 +271,20 @@ th {
 }
 .course-creation-wrapper h3{
     margin-bottom: 20px;
-    font-size: 32px;
 }
 .course-creation-wrapper input,select{
     border: none;
     height: 30px;
+    width: auto;
     color: black;
     border-radius: 5px;   
     margin: 5px 0px;
 }
-.course-creation-wrapper div{
-    width: 100%;
-}
-.course-creation-wrapper div select{
-    width: 49.5%;
-}
+
 .department-creation-wrapper-position{
     width: 400px;
     background-color: #f5eeee76;
-    border: 1px solid grey;
+    border-radius: 8px;
     padding: 20px;
     text-align: center;
     display: flex;
@@ -300,17 +296,15 @@ th {
 .department-creation-wrapper-position input,select{
     border: none;
     height: 30px;
+    width: auto;
     color: black;
     border-radius: 5px;   
     margin: 10px 0px;
 }
-.course-creation-wrapper div {
-    text-align: left;
-    background-color: white;
-    margin: 3px 0px;
-    border-radius: 5px;
-    padding: 3px;
-    font-size: 14px;
+
+.course-creation-wrapper button{
+    width: 50%;
+    margin: 20px auto 0;
 }
 .faculty-member-creation-wrapper{
     width: 800px;

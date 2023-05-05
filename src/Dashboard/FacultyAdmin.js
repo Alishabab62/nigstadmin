@@ -69,7 +69,7 @@ export default function FacultyAdmin() {
                     <div>
                         <img src={Logo} alt="logo" className='header-logo-admin-panel'></img>
                     </div>
-                    <div><Button value={"Logout"} fun={logout} /> </div>
+                    <div style={{position:'absolute',right:'20px'}}><Button value={"Logout"} fun={logout} /> </div>
                 </header>
                 <div className='min-h-max flex justify-center border-t-2'>
                     {creationFacultyMember ? <CreationFacultyMember /> : ""}

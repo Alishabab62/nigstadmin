@@ -218,7 +218,42 @@ export default function CreationFacultyMember() {
                         <td>{data.designation}</td>
                         <td>{data.gender}</td>
                         <td>{data.education}</td>
-                        <td>{data.admin_verified ? <button data={data.email} onClick={handleClickOpen} style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "30px", width: "30px" }} ></button> : <button data={data.email} onClick={handleClickOpen} style={{ height: "30px", width: "30px", backgroundColor: "red", color: "red", borderRadius: "50%" }}></button>}</td>
+                        <td>
+  {data.admin_verified ? (
+    <button
+      data={data.email}
+      onClick={handleClickOpen}
+      style={{
+        backgroundColor: "green",
+        borderRadius: "50%",
+        height: "30px",
+        width: "30px",
+        color: "white",
+        border: "none",
+        cursor: "pointer",
+      }}
+    >
+      <i className="fas fa-check" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
+    </button>
+  ) : (
+    <button
+      data={data.email}
+      onClick={handleClickOpen}
+      style={{
+        backgroundColor: "red",
+        borderRadius: "50%",
+        height: "30px",
+        width: "30px",
+        color: "white",
+        border: "none",
+        cursor: "pointer",
+      }}
+    >
+      <i className="fas fa-times" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
+    </button>
+  )}
+</td>
+
                       </tr>
                     ) : ""
                 })

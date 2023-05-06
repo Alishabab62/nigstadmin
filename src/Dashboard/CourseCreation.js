@@ -89,14 +89,18 @@ export default function CourseCreation() {
 useEffect(()=>{
   let data = JSON.parse(localStorage.getItem("user"));
   setUserData(data)
+
   const urlFaculty = `https://nigst.onrender.com/admin/faculty_member_faculty/${data.faculty}`;
+
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
     }).catch((error)=>{
       console.log(error)
     })
     
+
 const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
+
 axios.get(url).then((res)=>{
   setViewData(res.data.course);
 }).catch((error)=>{
@@ -106,7 +110,9 @@ axios.get(url).then((res)=>{
 },[])
 
     function handleCourseCreation(){
+
         const url = "https://nigst.onrender.com/course/creation";
+
         const data={
           courseCategory:`${category}`,
           title:`${input.title}`,
@@ -132,18 +138,50 @@ axios.get(url).then((res)=>{
     function changeView(){
       setViewFrame(!viewFrame);
     }
+    
+    const [searchData, setSearchData] = useState("");
+
+    const handleInputChange1 = (event) => {
+      setSearchData(event.target.value);
+      const input = event.target.value.toLowerCase();
+      const rows = document.querySelectorAll("#Courses tr");
+  
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll("td");
+        let shouldHide = true;
+  
+        cells.forEach((cell) => {
+          if (cell.textContent.toLowerCase().includes(input)) {
+            shouldHide = false;
+          }
+        });
+  
+        if (shouldHide) {
+          row.classList.add("hidden");
+        } else {
+          row.classList.remove("hidden");
+        }
+      });
+    };
 
   return (
     <>
-    <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       {
-        viewFrame ? <button onClick={changeView}>Create Course</button> : <button onClick={changeView}>View Created Course</button>
+        viewFrame ? <button className='toggle_btn' onClick={changeView}>Create Course</button> : <button className='toggle_btn' onClick={changeView}>View Created Course</button>
       }
     </div>
     {
-    viewFrame ?   <div className='user-details-wrapper'>
+    viewFrame ?
+    <div>
+       <input type="text" id="SearchInput" placeholder="Search Cousres" value={searchData} onChange={handleInputChange1} />
+    
+    <div className='user-details-wrapper'>
     <table>
-      <tbody>
+      <thead>
+        <tr>
+        <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>COURSES</th>
+        </tr>
         <tr>
             <th>S.No</th>
             <th>Created At</th>
@@ -159,6 +197,8 @@ axios.get(url).then((res)=>{
             <th>Faculty</th>
             <th>Course Officer</th>
         </tr>
+        </thead>
+        <tbody id='Courses'>
         {
           viewData.map((data,index)=>{
             return (
@@ -182,6 +222,7 @@ axios.get(url).then((res)=>{
         }
           </tbody>
     </table>
+    </div>
     </div>  : ""
   }
   {
@@ -217,7 +258,7 @@ axios.get(url).then((res)=>{
   
    <Inputs type={"text"} placeholder={"Enter course title"} name={"title"} fun={handleInputs}/>
     <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs}/>
-  <div>
+  <div className='grid2-container'>
     <select onChange={(e)=>setCourseDurWeeks(e.target.value)}>
         <option>Select Weeks</option>
         {
@@ -226,7 +267,7 @@ axios.get(url).then((res)=>{
             })
         }
     </select>
-    <select style={{marginLeft:"5px"}} onChange={(e)=>setCourseDurDays(e.target.value)}>
+    <select onChange={(e)=>setCourseDurDays(e.target.value)}>
         <option>Select Days</option>
         {
             days.map((data)=>{
@@ -243,9 +284,9 @@ axios.get(url).then((res)=>{
       })
     }
   </select>
-  <div style={{display:"flex" , alignItems:"center" , background:"white" , borderRadius:"5px"}}>
+  <div style={{display:"flex", alignItems:"center" , background:"none" , borderRadius:"5px",margin:"0px auto", width:"auto"}}>
     <input type='radio' value={"free"} style={{marginRight:"5px"}} onChange={(e)=>setCourseFee(e.target.value)}></input><span style={{marginRight:"10px"}}>Free</span>
-    <input type='radio' value={"paid"}></input><span style={{marginRight:"10px" , marginLeft:"10px"}} onChange={(e)=>setCourseFee(e.target.value)}>Paid</span>
+    <input type='radio' value={"paid"}></input><span style={{marginRight:"50px" , marginLeft:"5px"}} onChange={(e)=>setCourseFee(e.target.value)}>Paid</span>
   </div>
   <select onChange={(e)=>setCourseMode(e.target.value)}>
     <option>Select Mode of Course</option>

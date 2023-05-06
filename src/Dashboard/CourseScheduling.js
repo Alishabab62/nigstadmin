@@ -42,14 +42,14 @@ export default function CourseScheduling() {
   useEffect(()=>{
     setCurrency(getAllISOCodes());
   let data = JSON.parse(localStorage.getItem("user"));
-  const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
+  const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res)=>{
       setViewData(res.data.course)
     }).catch((error)=>{
       console.log(error)
     })
     
-    const viewDataUrl = "https://nigst.onrender.com/course/view_scheduled";
+    const viewDataUrl = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/view_scheduled";
     axios.get(viewDataUrl).then((res)=>{
       setScheduledCourse(res.data.data);
     }).catch((error)=>{
@@ -58,7 +58,7 @@ export default function CourseScheduling() {
   },[])
 
     function handleCourseScheduling(){
-        const url ="https://nigst.onrender.com/course/scheduler";
+        const url ="http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/scheduler";
         const data ={
           courseName:`${courseName}`,
           fees:`${input.fee}`,
@@ -93,9 +93,11 @@ export default function CourseScheduling() {
       setEditForm(false)
     }
     // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
+
 function handleCourseEdit(event){
   event.preventDefault();
     const url = "https://nigst.onrender.com/admin/updateSchedule";
+
   const data={
     status:`${editData.courseStatus}`,
     batch:`${editData.courseBatch}`,
@@ -112,28 +114,55 @@ function handleCourseEdit(event){
     console.log(error)
   })
 }
-function handleCourseEditFrom(event){
-  const updatedEditData = {
-    courseStatus:event.target.parentNode.childNodes[8].innerText,
-    courseBatch:event.target.parentNode.childNodes[7].innerText,  
-    courseId:event.target.parentNode.childNodes[2].innerText  
+
+
+const [searchData, setSearchData] = useState("");
+
+  const handleInputChange1 = (event) => {
+    setSearchData(event.target.value);
+    const input = event.target.value.toLowerCase();
+    const rows = document.querySelectorAll("#scheduling tr");
+
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      let shouldHide = true;
+
+      cells.forEach((cell) => {
+        if (cell.textContent.toLowerCase().includes(input)) {
+          shouldHide = false;
+        }
+      });
+
+      if (shouldHide) {
+        row.classList.add("hidden");
+      } else {
+        row.classList.remove("hidden");
+      }
+    });
   };
-  setEditData(updatedEditData);
-  setEditForm(true);
-  setViewDataUI(false);
-  setViewForm(false);
-}
+
+
   return (
     <>
-     <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
+     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       {
-        viewDataUI ? <button onClick={changeView}>Schedule Course</button> : <button onClick={changeView}>View Scheduled Course</button>
+
+        viewFrame ? <button className='toggle_btn' onClick={changeView}>Schedule Course</button> : <button className='toggle_btn' onClick={changeView}>View Scheduled Course</button>
       }
     </div>
     {
-    viewDataUI ?   <div className='user-details-wrapper'>
+    viewFrame ?
+    <div>
+    <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
+    
+    <div className='user-details-wrapper'>
+
     <table>
-      <tbody>
+      <thead>
+        <tr>
+        <th colSpan="11" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
+        </tr>
+      
         <tr>
             <th>S.No</th>
             <th>Course Title</th>
@@ -148,6 +177,8 @@ function handleCourseEditFrom(event){
             <th>Scheduling Date</th>
             <th>Edit</th>
         </tr>
+        </thead>
+        <tbody id='scheduling'>
         {
           viewScheduledCourse.map((data,index)=>{
             return (
@@ -170,6 +201,7 @@ function handleCourseEditFrom(event){
         }
           </tbody>
     </table>
+    </div>
     </div>  : ""
   }
    {
@@ -199,7 +231,9 @@ function handleCourseEditFrom(event){
          {
           tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
         }
-        <div style={{display:"flex"}}>  
+
+        <div  className='grid2-container' >
+
           <select onChange={(e)=>setInputCurrency(e.target.value)}>
             <option>Select currency</option>
             <option value="INR">INR</option>
@@ -209,12 +243,14 @@ function handleCourseEditFrom(event){
               }) 
             }
           </select>
-        <input type='text' placeholder="Enter Fee"  name='fee' onChange={handleInputs} ref={feeRef} ></input>
+
+        <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} ></input>
         </div>
-        <input type='date' placeholder='Date Of Commencement' ref={commencementDate}></input>
-        <input type='date' placeholder='Date of Completion' ref={completionDate}></input>
-        <input type='date' placeholder='Running Date' ref={runningDate}></input>
-        <input type='text'  placeholder={editData.courseCapacity === "" ? "Enter Course Capacity": editData.courseCapacity} name='courseCapacity' onChange={handleInputs} ></input>
+        <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Commencement' ref={commencementDate}></input>
+        <input type='text' onFocus={() => { completionDate.current.type = 'date' }} onBlur={() => { completionDate.current.type = 'text' }} placeholder='Date of Completion' ref={completionDate}></input>
+        <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
+        <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
+
       <button  onClick={handleCourseScheduling}>Submit</button>
     </div> : ""
       }

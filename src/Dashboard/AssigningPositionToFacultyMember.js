@@ -55,24 +55,29 @@ export default function AssigningPositionToFacultyMember() {
 
   return (
     <div className='course-creation-wrapper'>
-      <h3>Assigning Positions to Faculty Members</h3>
-      <select onChange={setFacultyMemberFun}>
-        <option>Select Faculty Member</option>
-        {
-          faculty.map((data, index) => {
-            return data.faculty === user.faculty ? <option key={index} value={data.first_name} data={data.faculty_id}>{data.first_name}</option> : ""
-          })
-        }
-      </select>
-      <select onChange={setPositionFun}>
-        <option>Select Faculty Position</option>
-        {
-          position.map((data, index) => {
-            return <option value={data.faculty_pos} data={data.position_id} key={index}>{data.faculty_pos}</option>
-          })
-        }
-      </select>
-      <button onClick={handlePositionAssigning}>Submit</button>
-    </div>
-  );
+
+    <h3  style={{margin:"20px auto"}}>Assigning Positions to Faculty Members</h3>
+  <select onChange={(e)=>(setFacultyMember(e.target.value))}>
+    <option>Select Faculty Member</option>
+    {
+      faculty.map((data,index)=>{
+       return data.faculty === user.faculty  ?  <option key={index} value={data.first_name}>{data.first_name}</option> : ""
+      })
+    }
+  </select>
+  <select onChange={(e)=>setFacultyPosition(e.target.value)}>
+    <option>Select Faculty Position</option>
+    {
+      viewPosition.map((data,index)=>{
+        return <option value={data.faculty_pos} key={index}>{data.faculty_pos}</option>
+      })
+    }
+    <option>Head</option>
+    <option>Principal</option>
+  </select>
+  <input type={"text"} placeholder={"Faculty Senio Id"} onChange={handleInputs} name="facultyId"/>
+  <Button value={"Submit"} fun={handlePositionAssigning}/>
+</div>
+  )
+
 }

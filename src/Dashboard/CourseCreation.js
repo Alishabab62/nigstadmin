@@ -89,14 +89,14 @@ export default function CourseCreation() {
 useEffect(()=>{
   let data = JSON.parse(localStorage.getItem("user"));
   setUserData(data)
-  const urlFaculty = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/faculty_member_faculty/${data.faculty}`;
+  const urlFaculty = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${data.faculty}`;
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
     }).catch((error)=>{
       console.log(error)
     })
     
-const url = `http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/admin/course_faculty/${data.faculty}`;
+const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
 axios.get(url).then((res)=>{
   setViewData(res.data.course);
 }).catch((error)=>{
@@ -106,7 +106,7 @@ axios.get(url).then((res)=>{
 },[])
 
     function handleCourseCreation(){
-        const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/course/creation";
+        const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/creation";
         const data={
           courseCategory:`${category}`,
           title:`${input.title}`,
@@ -132,18 +132,50 @@ axios.get(url).then((res)=>{
     function changeView(){
       setViewFrame(!viewFrame);
     }
+    
+    const [searchData, setSearchData] = useState("");
+
+    const handleInputChange1 = (event) => {
+      setSearchData(event.target.value);
+      const input = event.target.value.toLowerCase();
+      const rows = document.querySelectorAll("#Courses tr");
+  
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll("td");
+        let shouldHide = true;
+  
+        cells.forEach((cell) => {
+          if (cell.textContent.toLowerCase().includes(input)) {
+            shouldHide = false;
+          }
+        });
+  
+        if (shouldHide) {
+          row.classList.add("hidden");
+        } else {
+          row.classList.remove("hidden");
+        }
+      });
+    };
 
   return (
     <>
-    <div style={{position:"absolute" , top:"120px" , right:"20px"}}>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       {
-        viewFrame ? <button onClick={changeView}>Create Course</button> : <button onClick={changeView}>View Created Course</button>
+        viewFrame ? <button className='toggle_btn' onClick={changeView}>Create Course</button> : <button className='toggle_btn' onClick={changeView}>View Created Course</button>
       }
     </div>
     {
-    viewFrame ?   <div className='user-details-wrapper'>
+    viewFrame ?
+    <div>
+       <input type="text" id="SearchInput" placeholder="Search Cousres" value={searchData} onChange={handleInputChange1} />
+    
+    <div className='user-details-wrapper'>
     <table>
-      <tbody>
+      <thead>
+        <tr>
+        <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>COURSES</th>
+        </tr>
         <tr>
             <th>S.No</th>
             <th>Created At</th>
@@ -159,6 +191,8 @@ axios.get(url).then((res)=>{
             <th>Faculty</th>
             <th>Course Officer</th>
         </tr>
+        </thead>
+        <tbody id='Courses'>
         {
           viewData.map((data,index)=>{
             return (
@@ -182,6 +216,7 @@ axios.get(url).then((res)=>{
         }
           </tbody>
     </table>
+    </div>
     </div>  : ""
   }
   {

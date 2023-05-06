@@ -70,7 +70,7 @@ export default function AssigningPositionToFacultyMember() {
     <option>Head</option>
     <option>Principal</option>
   </select>
-  <input type={"text"} placeholder={"Faculty Position Id"} onChange={handleInputs} name="facultyId"/>
+  <input type={"text"} placeholder={"Faculty Senio Id"} onChange={handleInputs} name="facultyId"/>
   <Button value={"Submit"} fun={handlePositionAssigning}/>
 </div>
   )

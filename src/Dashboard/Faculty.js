@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Logo from '../images/logo.png'
+import Logo from '../images/NIGST LOGO Small.svg'
 import '../CSS/app.css'
 import Button from "../components/Button"
 import ResetPassword from './ResetPassword';

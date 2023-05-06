@@ -50,9 +50,9 @@ export default function FacultyAdmin() {
     return (
         <div className='flex justify-between main-page-header'>
             <div className='side-bar border-r-2 side-bar-wrapper'>
-                <div className=' text-center pt-14 pb-14  border-b-2 mb-8'>
-                    <h3 className='text-lg   text-white font-bold '>Welcome Faculty {user.faculty}</h3>
-                </div> 
+            <div className='text-center pt-14 pb-14 border-b-2 mb-8' style={{ overflow: 'hidden' }}>
+    <h3 className='text-lg text-white font-bold'>Welcome to {user.faculty}</h3>
+</div>
                 <div>
                     <ul className=' text-white cursor-pointer '>
                         {creationFacultyMember ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={creationFacultyFun}>Faculty Members</li> : <li className='p-3 ' onClick={creationFacultyFun}>Faculty Members</li>}

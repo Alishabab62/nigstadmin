@@ -7,6 +7,7 @@ import Faculty from './Dashboard/Faculty';
 import Private from './Dashboard/Private';
 import ChangePassword from './Dashboard/ChangePassword';
 import ForgotPassword from './Dashboard/ForgotPassword';
+import Student from './Dashboard/Student';
 function App() {
 
   return (
@@ -22,6 +23,9 @@ function App() {
           }></Route>
           <Route path='/faculty' element={
             <Private><Faculty/></Private>
+          }></Route>
+          <Route path='/student' element={
+            <Private><Student /></Private>
           }></Route>
           <Route path='/password/:token' element={<ChangePassword/>}></Route>
           <Route path='/forgot' element={<ForgotPassword/>}></Route>

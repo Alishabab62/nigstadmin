@@ -114,7 +114,7 @@ export default function CreationFacultyMember() {
     }).catch((error) => {
       console.log(error)
     })
-
+  };
 
 
   function setTrueLoginAccess(e) {
@@ -338,4 +338,4 @@ export default function CreationFacultyMember() {
     </>
   )
 }
-
+};

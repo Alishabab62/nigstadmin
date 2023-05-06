@@ -39,14 +39,8 @@ export default function CreationFacultyPosition() {
       faculty_pos: `${inputs.facultyPosition}`,
       description: `${inputs.description}`,
     };
-    console.log(
-     data
-    );
-    // const url = "https://nigst.onrender.com/sauth/position";
-    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/position"
-    axios
-      .post(url, data)
-      .then((res) => {
+    const url = "https://nigst.onrender.com/sauth/position"
+    axios.post(url, data).then((res) => {
         setCircularResponse(false);
         setSuccessAlert(true);
         facultyPositionViewFun()
@@ -54,8 +48,7 @@ export default function CreationFacultyPosition() {
           setSuccessAlert(false)
         }, 5000);
         console.log(res);
-      })
-      .catch((error) => {
+      }).catch((error) => {
         setCircularResponse(false);
         setFailAlert(true);
         setInterval(() => {
@@ -68,8 +61,7 @@ export default function CreationFacultyPosition() {
    facultyPositionViewFun()
   },[]);
   function facultyPositionViewFun(){
-    // const url = "https://nigst.onrender.com/sauth/view";
-    const url = "http://nigstserver-env-4.eba-upjrs3n3.ap-south-1.elasticbeanstalk.com/sauth/view"
+    const url = "https://nigst.onrender.com/sauth/view";
     axios.get(url).then((res)=>{
       setViewPosition(res.data.data.reverse());
       console.log(res.data)

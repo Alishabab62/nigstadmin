@@ -18,9 +18,19 @@ export default function CourseScheduling() {
   const [inputCurrency , setInputCurrency] = useState("");
   const [viewData,setViewData] = useState([]);
   const [tempArray,setTempArray] = useState([]);
-  const [viewFrame , setViewFrame] = useState(false);
+  const [viewForm , setViewForm] = useState(true);
+  const [viewDataUI,setViewDataUI] = useState(false);
   const [viewScheduledCourse , setScheduledCourse] = useState([]);
-
+  const [editForm, setEditForm] = useState(false);
+  const [newCommencementDate , setNewCommencementDate] = useState("");
+  const [newRunningDate , setNewRunningDate] = useState("");
+  const [newCompletionDate , setNewCompletionDate] = useState("");
+  const [newStatus , setNewStatus] = useState("")
+  const [editData , setEditData] = useState({
+    courseStatus:"",
+    courseBatch:"",
+    courseId:""
+  });
 
   function handleInputs(e){
     const {name,value} = e.target;
@@ -78,29 +88,33 @@ export default function CourseScheduling() {
     },[courseName]);
 
     function changeView(){
-      setViewFrame(!viewFrame);
+      setViewForm(false);
+      setViewDataUI(true);
+      setEditForm(false)
     }
     // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
-function handleCourseEdit(){
-  setViewFrame(false);
-  // feeRef.current.value = "232"
-  console.log(feeRef)
-  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
+
+function handleCourseEdit(event){
+  event.preventDefault();
+    const url = "https://nigst.onrender.com/admin/updateSchedule";
+
   const data={
-    status:`${""}`,
-    batch:`${""}`,
-    courseID:`${""}`,
-    newStatus:`${""}`,
-    newRunningDate:`${""}`,
-    newComencementDate:`${""}`,
-    newCompletionDate:`${""}`
+    status:`${editData.courseStatus}`,
+    batch:`${editData.courseBatch}`,
+    courseID:`${editData.courseId}`,
+    newStatus:`${newStatus}`,
+    newRunningDate:`${newRunningDate}`,
+    newComencementDate:`${newCommencementDate}`,
+    newCompletionDate:`${newCompletionDate}`
   }
+  console.log(data)
   axios.patch(url,data).then((res)=>{
     console.log(res)
   }).catch((error)=>{
     console.log(error)
   })
 }
+
 
 const [searchData, setSearchData] = useState("");
 
@@ -127,10 +141,12 @@ const [searchData, setSearchData] = useState("");
     });
   };
 
+
   return (
     <>
      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       {
+
         viewFrame ? <button className='toggle_btn' onClick={changeView}>Schedule Course</button> : <button className='toggle_btn' onClick={changeView}>View Scheduled Course</button>
       }
     </div>
@@ -140,6 +156,7 @@ const [searchData, setSearchData] = useState("");
     <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
     
     <div className='user-details-wrapper'>
+
     <table>
       <thead>
         <tr>
@@ -149,6 +166,7 @@ const [searchData, setSearchData] = useState("");
         <tr>
             <th>S.No</th>
             <th>Course Title</th>
+            <th>Course Id</th>
             <th>Date Commencement</th>
             <th>Date Completion</th>
             <th>Course Capacity</th>
@@ -167,6 +185,7 @@ const [searchData, setSearchData] = useState("");
               <tr key={index}>
                 <td>{index+1}</td>
                 <td>{data.title}</td>
+                <td>{data.courseid}</td>
                 <td>{data.datecomencement}</td>
                 <td>{data.datecompletion}</td>
                 <td>{data.coursecapacity}</td>
@@ -175,7 +194,7 @@ const [searchData, setSearchData] = useState("");
                 <td>{data.status}</td>
                 <td>{data.runningdate}</td>
                 <td>{data.schedulingdate}</td>
-                <td onClick={handleCourseEdit} style={{cursor:"pointer"}}>Edit</td>
+                <td onClick={handleCourseEditFrom} style={{cursor:"pointer"}}>Edit</td>
               </tr>
             )
           })
@@ -186,12 +205,11 @@ const [searchData, setSearchData] = useState("");
     </div>  : ""
   }
    {
-    !viewFrame ? 
-   
+    viewForm ? 
     <div className='course-creation-wrapper'>
         <h3>Course Scheduling</h3>
         <select onChange={(e)=>setCourseName(e.target.value)}>
-          <option>Select Course</option>
+           <option>Select Course</option>
           {
             viewData.map((data,index)=>{
               return <option value={data.title} key={index}>{data.title}</option>
@@ -213,25 +231,53 @@ const [searchData, setSearchData] = useState("");
          {
           tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
         }
+
         <div  className='grid2-container' >
+
           <select onChange={(e)=>setInputCurrency(e.target.value)}>
             <option>Select currency</option>
             <option value="INR">INR</option>
             {
               currency.map((data,index)=>{
                 return <option key={index} value={data.currency}>{data.currency}</option>
-              })
+              }) 
             }
           </select>
+
         <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} ></input>
         </div>
         <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Commencement' ref={commencementDate}></input>
         <input type='text' onFocus={() => { completionDate.current.type = 'date' }} onBlur={() => { completionDate.current.type = 'text' }} placeholder='Date of Completion' ref={completionDate}></input>
         <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
         <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
+
       <button  onClick={handleCourseScheduling}>Submit</button>
     </div> : ""
       }
+      {
+    editForm && 
+    <div className='department-creation-wrapper'>
+        <h3>Update Course Status</h3>
+      <form>
+        <select onChange={(e)=>setNewStatus(e.target.value)}>
+          <option>Select Status</option>
+          {editData.courseStatus === "created" ? <option value='schedule'>Schedule</option> : ""}
+          {editData.courseStatus === "created" ? <option value='running'>Running</option> : ""}
+          {editData.courseStatus === "created" ? <option value='postponed'>Postponed</option> : ""}
+          {editData.courseStatus === "created" ? <option value='canceled'>Cancelled</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='running'>Running</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='postponed'>Postponed</option> : ""}
+          {editData.courseStatus === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
+          {editData.courseStatus === "running" ? <option value='complete'>Complete</option> : ""}
+          {editData.courseStatus === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
+        </select>
+        <input type='text' value={editData.courseId} disabled></input>
+        <input type='date' placeholder='newCommencementDate' onChange={(e)=>setNewCommencementDate(e.target.value)}></input>
+        <input type='date' placeholder='newCompletionDate' onChange={(e)=>setNewCompletionDate(e.target.value)}></input>
+        <input type='date' placeholder='newRunningDate' onChange={(e)=>setNewRunningDate(e.target.value)}></input>
+        <button onClick={handleCourseEdit}>Submit</button>
+      </form> </div>
+  }
     </>
   )
 }

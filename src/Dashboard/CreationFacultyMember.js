@@ -41,21 +41,24 @@ export default function CreationFacultyMember() {
     }));
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     const url = "https://nigst.onrender.com/admin/faculty_show";
-    axios.get(url).then((res) => {
+    axios.get(url).then((res)=>{
+
       setFaculty(res.data)
     }).catch((error) => {
       console.log(error)
     })
-    facultyViewFun();
-    let user = JSON.parse(localStorage.getItem("user"));
-    setUser(user)
-  }, [])
 
-  function facultyViewFun() {
+   facultyViewFun();
+   let user = JSON.parse(localStorage.getItem("user"));
+   setUser(user)
+  },[])
+
+  function facultyViewFun(){
     const urlView = "https://nigst.onrender.com/sauth/faculty_view"
-    axios.get(urlView).then((res) => {
+    axios.get(urlView).then((res)=>{
+
       console.log(res)
       setFacultyView(res.data.data.reverse())
     }).catch((error) => {
@@ -63,7 +66,9 @@ export default function CreationFacultyMember() {
     })
   }
 
-  function handleCreationMembers() {
+
+  function handleCreationMembers(){
+
     const url = "https://nigst.onrender.com/sauth/create";
     const data = {
       first_name: `${input.f_name}`,
@@ -97,6 +102,7 @@ export default function CreationFacultyMember() {
     setViewFrame(!viewFrame);
   }
 
+
   function setFalseLoginAccess(e) {
     const url = "https://nigst.onrender.com/admin/access";
     const data = {
@@ -108,7 +114,8 @@ export default function CreationFacultyMember() {
     }).catch((error) => {
       console.log(error)
     })
-  }
+
+
 
   function setTrueLoginAccess(e) {
     const url = "https://nigst.onrender.com/admin/access";
@@ -121,7 +128,7 @@ export default function CreationFacultyMember() {
     }).catch((error) => {
       console.log(error)
     })
-  }
+
 
   function statusChange() {
     setOpen(false)

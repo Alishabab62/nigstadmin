@@ -5,11 +5,19 @@ export default function AssigningPositionToFacultyMember() {
   const [faculty, setFaculty] = useState([]);
   const [facultyPosition, setFacultyPosition] = useState("");
   const [user, setUser] = useState("");
-  const [position, setPosition] = useState([]);
+  const [viewPosition, setPosition] = useState([]);
   const [facId,setFacId] = useState("");
   const [positionId,setPositionId] = useState("");
+  const [input , setInput] = useState({
+    facultyId:""
+  })
  
-
+  function handleInputs(e) {
+    const { name, value } = e.target;
+    setInput((prevInput) => ({
+      ...prevInput, [name]: value
+    }));
+  }
   function handlePositionAssigning(e) {
     const url = "https://nigst.onrender.com/sauth/possition_assi";
     const data = {
@@ -57,7 +65,7 @@ export default function AssigningPositionToFacultyMember() {
     <div className='course-creation-wrapper'>
 
     <h3  style={{margin:"20px auto"}}>Assigning Positions to Faculty Members</h3>
-  <select onChange={(e)=>(setFacultyMember(e.target.value))}>
+  <select onChange={setFacultyMemberFun}>
     <option>Select Faculty Member</option>
     {
       faculty.map((data,index)=>{
@@ -65,18 +73,16 @@ export default function AssigningPositionToFacultyMember() {
       })
     }
   </select>
-  <select onChange={(e)=>setFacultyPosition(e.target.value)}>
+  <select onChange={setPositionFun}>
     <option>Select Faculty Position</option>
     {
       viewPosition.map((data,index)=>{
         return <option value={data.faculty_pos} key={index}>{data.faculty_pos}</option>
       })
     }
-    <option>Head</option>
-    <option>Principal</option>
   </select>
-  <input type={"text"} placeholder={"Faculty Senio Id"} onChange={handleInputs} name="facultyId"/>
-  <Button value={"Submit"} fun={handlePositionAssigning}/>
+  <input type={"text"} placeholder={"Faculty Senior Id"} onChange={handleInputs} name="facultyId"/>
+  <button value={"Submit"} onClick={handlePositionAssigning}>Submit</button>
 </div>
   )
 

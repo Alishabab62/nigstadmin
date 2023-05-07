@@ -9,6 +9,7 @@ import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
 import Logo from '../images/logo.png'
 import CreationFacultysAdmin from "./CreationFacultysAdmin";
+import CreationFacultyMember from "./CreationFacultyMember";
 
 export default function NIGSTAdmin() {
   const [departmentCreation, setDepartmentCreation] = useState(false);
@@ -153,6 +154,7 @@ export default function NIGSTAdmin() {
           {courseAssignment ? <DepartmentCourseAssignment /> : ""}
           {tender ? <Tender /> : ""}
           {facultyAdmin ? <CreationFacultysAdmin/> : ""}
+          <CreationFacultyMember/>
         </div>
       </div>
     </div>

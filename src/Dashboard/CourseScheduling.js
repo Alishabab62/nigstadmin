@@ -31,7 +31,7 @@ export default function CourseScheduling() {
     courseBatch:"",
     courseId:""
   });
-
+  const [viewFrame , setFrame] = useState(false);
   function handleInputs(e){
     const {name,value} = e.target;
     setInput((prevInput)=>({
@@ -94,7 +94,7 @@ export default function CourseScheduling() {
     }
     // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
 
-function handleCourseEdit(event){
+function handleCourseEditForm(event){
   event.preventDefault();
     const url = "https://nigst.onrender.com/admin/updateSchedule";
 
@@ -194,7 +194,7 @@ const [searchData, setSearchData] = useState("");
                 <td>{data.status}</td>
                 <td>{data.runningdate}</td>
                 <td>{data.schedulingdate}</td>
-                <td onClick={handleCourseEditFrom} style={{cursor:"pointer"}}>Edit</td>
+                <td onClick={handleCourseEditForm} style={{cursor:"pointer"}}>Edit</td>
               </tr>
             )
           })
@@ -275,7 +275,7 @@ const [searchData, setSearchData] = useState("");
         <input type='date' placeholder='newCommencementDate' onChange={(e)=>setNewCommencementDate(e.target.value)}></input>
         <input type='date' placeholder='newCompletionDate' onChange={(e)=>setNewCompletionDate(e.target.value)}></input>
         <input type='date' placeholder='newRunningDate' onChange={(e)=>setNewRunningDate(e.target.value)}></input>
-        <button onClick={handleCourseEdit}>Submit</button>
+        <button onClick={handleCourseEditForm}>Submit</button>
       </form> </div>
   }
     </>

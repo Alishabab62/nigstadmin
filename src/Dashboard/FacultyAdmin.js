@@ -9,14 +9,13 @@ import CourseScheduling from './CourseScheduling'
 import CreationFacultyMember from './CreationFacultyMember'
 
 export default function FacultyAdmin() {
-    const [creationFacultyMember, setCreationFacultyMember] = useState(false)
+    const [creationFacultyMember, setCreationFacultyMember] = useState(true)
     const [courseCreation, setCourseCreation] = useState(false);
     const [assigningPosition, setAssigningPosition] = useState(false);
     const [courseScheduling, setCourseScheduling] = useState(false);
     const [user,setUser] = useState("");
 
     function creationFacultyFun() {
-        console.log("hello")
         setCreationFacultyMember(true);
         setCourseCreation(false);
         setAssigningPosition(false);
@@ -73,7 +72,8 @@ export default function FacultyAdmin() {
                     <div style={{position:'absolute',right:'20px'}}><Button value={"Logout"} fun={logout} /> </div>
                 </header>
                 <div className='min-h-max flex justify-center border-t-2'>
-                    <CreationFacultyMember/>
+                    
+                    {creationFacultyMember && <CreationFacultyMember/>}
                     {courseCreation ? <CourseCreation /> : ""}
                     {assigningPosition ? <AssigningPositionToFacultyMember /> : ""}
                     {courseScheduling ? <CourseScheduling /> : ""}

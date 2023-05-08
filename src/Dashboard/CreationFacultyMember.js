@@ -129,12 +129,13 @@ export default function CreationFacultyMember() {
     }).catch((error) => {
       console.log(error)
     })
-
+  }
 
     function statusChange() {
       setOpen(false)
       userStatus === "green" ? setFalseLoginAccess() : setTrueLoginAccess()
     }
+
     const handleClickOpen = (e) => {
       setOpen(true);
       setUserEmail(e.target.getAttribute("data"));
@@ -153,17 +154,14 @@ export default function CreationFacultyMember() {
       setSearchData(event.target.value);
       const input = event.target.value.toLowerCase();
       const rows = document.querySelectorAll("#faculties tr");
-
       rows.forEach((row) => {
         const cells = row.querySelectorAll("td");
         let shouldHide = true;
-
         cells.forEach((cell) => {
           if (cell.textContent.toLowerCase().includes(input)) {
             shouldHide = false;
           }
         });
-
         if (shouldHide) {
           row.classList.add("hidden");
         } else {
@@ -339,4 +337,4 @@ export default function CreationFacultyMember() {
       </>
     )
   }
-}
+

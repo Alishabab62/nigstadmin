@@ -26,6 +26,7 @@ export default function CourseScheduling() {
   const [newRunningDate, setNewRunningDate] = useState("");
   const [newCompletionDate, setNewCompletionDate] = useState("");
   const [newStatus, setNewStatus] = useState("")
+  const [demo,setDemo] = useState({})
   const [editData, setEditData] = useState({
     courseStatus: "",
     courseBatch: "",
@@ -97,30 +98,33 @@ export default function CourseScheduling() {
   // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
 
   function handleCourseEditForm(event) {
-    console.log(event.target)
-    let dataEdit={
-      courseStatus: event.target.parentElement.children[8],
-      courseBatch: event.target.parentElement.children[7],
-      courseId: event.target.parentElement.children[2]
-    }
-    setEditData(dataEdit)
+    console.log(event.target.parentElement.children[8].innerText)
+    const courseStatus = event.target.parentElement.children[8].innerText;
+    const courseBatch = event.target.parentElement.children[7].innerText;
+    const courseId = event.target.parentElement.children[2].innerText;
+    let dataEdit = { courseStatus, courseBatch, courseId }
+    console.log(dataEdit)
+    console.log(editData)
+    console.log(demo)
+    setDemo(dataEdit)
+    setEditData(demo)
     event.preventDefault();
-    const url = "https://nigst.onrender.com/admin/updateSchedule";
-    const data = {
-      status: `${editData.courseStatus}`,
-      batch: `${editData.courseBatch}`,
-      courseID: `${editData.courseId}`,
-      newStatus: `${newStatus}`,
-      newRunningDate: `${newRunningDate}`,
-      newComencementDate: `${newCommencementDate}`,
-      newCompletionDate: `${newCompletionDate}`
-    }
-    console.log(data)
-    axios.patch(url, data).then((res) => {
-      console.log(res)
-    }).catch((error) => {
-      console.log(error)
-    })
+    // const url = "https://nigst.onrender.com/admin/updateSchedule";
+    // const data = {
+    //   status: `${editData.courseStatus}`,
+    //   batch: `${editData.courseBatch}`,
+    //   courseID: `${editData.courseId}`,
+    //   newStatus: `${newStatus}`,
+    //   newRunningDate: `${newRunningDate}`,
+    //   newComencementDate: `${newCommencementDate}`,
+    //   newCompletionDate: `${newCompletionDate}`
+    // }
+    // console.log(data)
+    // axios.patch(url, data).then((res) => {
+    //   console.log(res)
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
   }
 
 

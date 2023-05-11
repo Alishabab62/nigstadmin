@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.16d601e4.css",
+    "main.js": "/static/js/main.787bc024.js",
+    "static/media/NIGST LOGO Small.svg": "/static/media/NIGST LOGO Small.b404a4a59247d747c2959354f6709be4.svg",
+    "static/media/logo.png": "/static/media/logo.7ea794240685501c7026.png",
+    "index.html": "/index.html",
+    "main.16d601e4.css.map": "/static/css/main.16d601e4.css.map",
+    "main.787bc024.js.map": "/static/js/main.787bc024.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.16d601e4.css",
+    "static/js/main.787bc024.js"
+  ]
+}

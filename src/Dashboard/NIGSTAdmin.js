@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import DepartmentCreation from "./DepartmentCreation";
 import CreationFacultyPosition from "./CreationFacultyPosition";
 import Button from "../components/Button";
-import CourseCategoryCreation from "./CourseCategoryCreation";
+// import CourseCategoryCreation from "./CourseCategoryCreation";
 import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
 import Logo from '../images/logo.png'
-import CreationFacultysAdmin from "./CreationFacultysAdmin";
+// import CreationFacultysAdmin from "./CreationFacultysAdmin";
 
 
 export default function NIGSTAdmin() {
@@ -107,11 +107,11 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
             </li>} 
-            {courseCategory ? <li style={{background:"#ffcb00"}} onClick={courseCategoryFun}>
+            {/* {courseCategory ? <li style={{background:"#ffcb00"}} onClick={courseCategoryFun}>
               Course Category Creation
             </li> :  <li className="p-3 " onClick={courseCategoryFun}>
               Course Category Creation
-            </li>}
+            </li>} */}
            {courseAssignment ? <li style={{background:"#ffcb00"}} onClick={courseAssignmentFun}>
               Organization-Course Assignment
             </li> : <li className="p-3 " onClick={courseAssignmentFun}>
@@ -127,13 +127,13 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={handleTenderFun}>
               Tender
             </li>}
-            {
+            {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
               Faculty Admin </li> : <li className="p-3 " onClick={facultyAdminCreationFun}>
               Faculty Admin
               </li>
             }
-            <li className="p-3 ">Content Updation </li>
+            <li className="p-3 ">Content Updation </li> */}
           </ul>
         </div>
       </div>
@@ -149,11 +149,11 @@ export default function NIGSTAdmin() {
         <div className="min-h-max flex justify-center border-t-2 min-h-[80%]">
           {departmentCreation ? <DepartmentCreation /> : ""}
           {facultyPositionCreation ? <CreationFacultyPosition /> : ""}
-          {courseCategory ? <CourseCategoryCreation /> : ""}
+          {/* {courseCategory ? <CourseCategoryCreation /> : ""} */}
           {users ? <NewUserVerification /> : ""}
           {courseAssignment ? <DepartmentCourseAssignment /> : ""}
           {tender ? <Tender /> : ""}
-          {facultyAdmin ? <CreationFacultysAdmin/> : ""}
+          {/* {facultyAdmin ? <CreationFacultysAdmin/> : ""} */}
         </div>
       </div>
     </div>

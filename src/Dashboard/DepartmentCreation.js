@@ -252,7 +252,7 @@ export default function DepartmentCreation() {
     let objectKeys = Object.keys(myCountryCodesObject);
     setCountryCode(objectKeys);
     setCountryCodeObject(myCountryCodesObject);
-    const url = "https://nigst.onrender.com/dep/othercategory";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/dep/othercategory";
     axios.get(url).then((res) => {
       setOtherDropdown(res.data.organizations)
 
@@ -264,7 +264,7 @@ export default function DepartmentCreation() {
   }, []);
 
   function viewOrganization(){
-    const urlView = `https://nigst.onrender.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
+    const urlView = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
     axios.get(urlView).then((res)=>{
       setOrganisationView(res.data.reverse());
 
@@ -299,7 +299,7 @@ export default function DepartmentCreation() {
       console.log(
         data
       );
-      const url = "https://nigst.onrender.com/dep/d";
+      const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/dep/d";
       axios
         .post(url, data)
         .then((res) => {

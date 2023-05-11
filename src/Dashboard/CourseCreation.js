@@ -90,7 +90,7 @@ useEffect(()=>{
   let data = JSON.parse(localStorage.getItem("user"));
   setUserData(data)
 
-  const urlFaculty = `https://nigst.onrender.com/admin/faculty_member_faculty/${data.faculty}`;
+  const urlFaculty = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${data.faculty}`;
 
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
@@ -99,7 +99,7 @@ useEffect(()=>{
     })
     
 
-const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
+const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
 
 axios.get(url).then((res)=>{
   setViewData(res.data.course);
@@ -111,7 +111,7 @@ axios.get(url).then((res)=>{
 
     function handleCourseCreation(){
 
-        const url = "https://nigst.onrender.com/course/creation";
+        const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/creation";
 
         const data={
           courseCategory:`${category}`,

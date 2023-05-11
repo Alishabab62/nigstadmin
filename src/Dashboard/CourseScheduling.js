@@ -42,7 +42,7 @@ export default function CourseScheduling() {
   useEffect(() => {
     setCurrency(getAllISOCodes());
     let data = JSON.parse(localStorage.getItem("user"));
-    const url = `https://nigst.onrender.com/admin/course_faculty/${data.faculty}`;
+    const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res) => {
       setViewData(res.data.course)
     }).catch((error) => {
@@ -58,7 +58,7 @@ export default function CourseScheduling() {
   }, [])
 
   function handleCourseScheduling() {
-    const url = "https://nigst.onrender.com/course/scheduler";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/scheduler";
     const data = {
       courseName: `${courseName}`,
       fees: `${input.fee}`,

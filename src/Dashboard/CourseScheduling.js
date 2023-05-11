@@ -26,7 +26,6 @@ export default function CourseScheduling() {
   const [newRunningDate, setNewRunningDate] = useState("");
   const [newCompletionDate, setNewCompletionDate] = useState("");
   const [newStatus, setNewStatus] = useState("")
-  const [demo,setDemo] = useState({})
   const [editData, setEditData] = useState({
     courseStatus: "",
     courseBatch: "",
@@ -50,7 +49,7 @@ export default function CourseScheduling() {
       console.log(error)
     })
 
-    const viewDataUrl = "https://nigst.onrender.com/course/view_scheduled";
+    const viewDataUrl = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/view_scheduled";
     axios.get(viewDataUrl).then((res) => {
       setScheduledCourse(res.data.data);
     }).catch((error) => {
@@ -95,36 +94,39 @@ export default function CourseScheduling() {
     // setViewDataUI(true);
     setEditForm(false)
   }
-  // status,batch,courseID,newStatus,newRunningDate,newComencementDate,newCompletionDate
 
   function handleCourseEditForm(event) {
-    console.log(event.target.parentElement.children[8].innerText)
+    event.preventDefault();
+    console.log(editData)
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
+    const data = {
+      status: editData.courseStatus,
+      batch: editData.courseBatch,
+      courseID: editData.courseId,
+      newStatus: newStatus,
+      newRunningDate: newRunningDate,
+      newComencementDate: newCommencementDate,
+      newCompletionDate: newCompletionDate,
+    };
+    console.log(data);
+    axios
+      .patch(url, data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function handleEditForm(event) {
+    setEditForm(true)
+    setFrame(false)
     const courseStatus = event.target.parentElement.children[8].innerText;
     const courseBatch = event.target.parentElement.children[7].innerText;
     const courseId = event.target.parentElement.children[2].innerText;
-    let dataEdit = { courseStatus, courseBatch, courseId }
-    console.log(dataEdit)
-    console.log(editData)
-    console.log(demo)
-    setDemo(dataEdit)
-    setEditData(demo)
-    event.preventDefault();
-    // const url = "https://nigst.onrender.com/admin/updateSchedule";
-    // const data = {
-    //   status: `${editData.courseStatus}`,
-    //   batch: `${editData.courseBatch}`,
-    //   courseID: `${editData.courseId}`,
-    //   newStatus: `${newStatus}`,
-    //   newRunningDate: `${newRunningDate}`,
-    //   newComencementDate: `${newCommencementDate}`,
-    //   newCompletionDate: `${newCompletionDate}`
-    // }
-    // console.log(data)
-    // axios.patch(url, data).then((res) => {
-    //   console.log(res)
-    // }).catch((error) => {
-    //   console.log(error)
-    // })
+    const dataEdit = { courseStatus, courseBatch, courseId };
+    setEditData(dataEdit);
   }
 
 
@@ -206,7 +208,7 @@ export default function CourseScheduling() {
                           <td>{data.status}</td>
                           <td>{data.runningdate}</td>
                           <td>{data.schedulingdate}</td>
-                          <td onClick={handleCourseEditForm} style={{ cursor: "pointer" }}>Edit</td>
+                          <td onClick={handleEditForm} style={{ cursor: "pointer" }}>Edit</td>
                         </tr>
                       )
                     })

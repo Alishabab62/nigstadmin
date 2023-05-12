@@ -21,9 +21,9 @@ export default function AssigningPositionToFacultyMember() {
   function handlePositionAssigning(e) {
     const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
     const data = {
-      facultyId: input.facultyId,
+      facultyId: positionId,
       faculty_pos: facultyPosition,
-      position_assi_id: positionId,
+      position_assi_id: input.facultyId,
       faculty_admin:user.faculty
     };
     console.log(data)

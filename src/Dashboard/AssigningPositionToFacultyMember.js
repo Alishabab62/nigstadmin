@@ -21,7 +21,7 @@ export default function AssigningPositionToFacultyMember() {
   function handlePositionAssigning(e) {
     const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
     const data = {
-      facultyId: positionId,
+      facultyId: facId,
       faculty_pos: facultyPosition,
       position_assi_id: input.facultyId,
       faculty_admin:user.faculty
@@ -69,19 +69,19 @@ export default function AssigningPositionToFacultyMember() {
     <option>Select Faculty Member</option>
     {
       faculty.map((data,index)=>{
-       return data.faculty === user.faculty  ?  <option key={index} value={data.first_name}>{data.first_name}</option> : ""
+       return data.faculty === user.faculty  ?  <option key={index} value={data.first_name} data={data.faculty_id}>{data.first_name}</option> : ""
       })
     }
   </select>
-  <select onChange={setPositionFun}>
+  <select onChange={(e)=>setPositionFun(e)}>
     <option>Select Faculty Position</option>
     {
       viewPosition.map((data,index)=>{
-        return <option value={data.faculty_pos} key={index} data={data.position_id}>{data.faculty_pos}</option>
+        return <option value={data.faculty_pos} key={index} >{data.faculty_pos}</option>
       })
     }
   </select>
-  <input type={"text"} placeholder={"Faculty Senior Id"} onChange={handleInputs} name="facultyId"/>
+  <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId"/>
   <button value={"Submit"} onClick={handlePositionAssigning}>Submit</button>
 </div>
   )

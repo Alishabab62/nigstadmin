@@ -89,24 +89,19 @@ export default function CourseCreation() {
 useEffect(()=>{
   let data = JSON.parse(localStorage.getItem("user"));
   setUserData(data)
-
   const urlFaculty = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${data.faculty}`;
-
     axios.get(urlFaculty).then((res)=>{
       setFaculty(res.data.data)
     }).catch((error)=>{
       console.log(error)
     })
     
-
 const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
-
 axios.get(url).then((res)=>{
   setViewData(res.data.course);
 }).catch((error)=>{
   console.log(error)
 })
-
 },[])
 
     function handleCourseCreation(){
@@ -165,7 +160,7 @@ axios.get(url).then((res)=>{
     };
 
   return (
-    <>
+    <div style={{display:"flex" , flexDirection:"column"}}>
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
       {
         viewFrame ? <button className='toggle_btn' onClick={changeView}>Create Course</button> : <button className='toggle_btn' onClick={changeView}>View Created Course</button>
@@ -213,8 +208,8 @@ axios.get(url).then((res)=>{
                 <td>{data.course_mode}</td>
                 <td>{data.duration}</td>
                 <td>{data.course_type}</td>
-                <td>{data.course_director}</td>
-                <td>{data.course_director}</td>
+                <td>{data.course_director.split(" ")[3]}</td>
+                <td>{data.course_director.split(" ")[3]}</td>
                 <td>{data.course_officer}</td>
               </tr>
             )
@@ -298,6 +293,6 @@ axios.get(url).then((res)=>{
 </div> : ""
   }
    
-    </>
+    </div >
   )
 }

@@ -46,7 +46,7 @@ function Tender() {
  
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
-  const url = `https://nigst.onrender.com/tender/vpdf/${tenderId}`;
+  const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -65,7 +65,7 @@ useEffect(()=>{
 },[])
 
 function tenderViewFun(){
-  const url = "https://nigst.onrender.com/tender/view";
+  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
@@ -83,7 +83,7 @@ function handleInputs(e){
 function handleSubmit(e) {
   if(file.current.files[0] !== undefined){
     e.preventDefault();
-    const url = "https://nigst.onrender.com/tender/create";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
     formData.append("tenderRefNo", input.ref);
@@ -116,7 +116,7 @@ function handleCorrigendum(e){
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
   formData.append("pdf", corrigendumPdf.current.files[0]);
-  const url = "https://nigst.onrender.com/tender/corrigendum"
+  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/corrigendum"
   axios.post(url,formData).then((res)=>{
     setSuccessAlert(true);
     setTimeout(() => {
@@ -132,7 +132,7 @@ function handleCorrigendum(e){
 
 function handleArchive(e){
   setOpen(false);
-  const url = "https://nigst.onrender.com/tender/archive";
+  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/archive";
   const data = {
     tender_number:`${tenderNo}`
   }
@@ -153,7 +153,7 @@ const handleClose = () => {
   setOpen(false);
 };
   return (
-    <>
+    <div style={{display:"flex",flexDirection:"column"}}>
       {
       formSelect ?   <div className='creation'>
         <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
@@ -257,7 +257,7 @@ const handleClose = () => {
         </DialogActions>
       </Dialog> 
     </div>
-    </>
+    </div>
   );
 }
 

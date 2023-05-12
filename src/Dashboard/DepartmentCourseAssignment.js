@@ -98,7 +98,7 @@ export default function DepartmentCourseAssignment() {
   }
 
   useEffect(() => {
-    const url = "https://nigst.onrender.com/dep/v";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/dep/v";
     axios.get(url).then((res) => {
       setOrgView(res.data)
     }).catch((error) => {
@@ -108,7 +108,7 @@ export default function DepartmentCourseAssignment() {
   }, [])
 
   function departmentView() {
-    const viewUrl = "https://nigst.onrender.com/dep/viewda";
+    const viewUrl = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/dep/viewda";
     axios.get(viewUrl).then((res) => {
       setViewCourse(res.data.reverse());
     }).catch((error) => {
@@ -118,7 +118,7 @@ export default function DepartmentCourseAssignment() {
 
   function handleCourseCodeAndNo(event) {
     event.preventDefault();
-    const url = `https://nigst.onrender.com/course/send_course/${code}/${number}/${category}`
+    const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/send_course/${code}/${number}/${category}`
     axios.get(url).then((res) => {
       setSecondStep(true);
       setFirstStep(false)
@@ -129,7 +129,7 @@ export default function DepartmentCourseAssignment() {
   }
   function handleSecondStepCourseId(event) {
     event.preventDefault();
-    const url = `https://nigst.onrender.com/course/send_batch_info/${firstStepData[0].courseid}`;
+    const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/course/send_batch_info/${firstStepData[0].courseid}`;
     axios.get(url).then((res) => {
       console.log(res)
       setSecondStep(false);
@@ -142,7 +142,7 @@ export default function DepartmentCourseAssignment() {
 
   function handleFinalSubmit(event) {
     event.preventDefault();
-    const url = "https://nigst.onrender.com/dep/organization_assign";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/dep/organization_assign";
     const data = {
       organization: `${orgName}`,
       courseid: `${firstStepData[0].courseid}`,

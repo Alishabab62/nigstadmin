@@ -19,9 +19,9 @@ export default function AssigningPositionToFacultyMember() {
     }));
   }
   function handlePositionAssigning(e) {
-    const url = "https://nigst.onrender.com/sauth/possition_assi";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
     const data = {
-      facultyId: facId,
+      facultyId: input.facultyId,
       faculty_pos: facultyPosition,
       position_assi_id: positionId,
       faculty_admin:user.faculty
@@ -35,14 +35,14 @@ export default function AssigningPositionToFacultyMember() {
   }
 
   useEffect(() => {
-    const urlFaculty = "https://nigst.onrender.com/sauth/faculty_view";
+    const urlFaculty = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/faculty_view";
     axios.get(urlFaculty).then((res) => {
       setFaculty(res.data.data);
       console.log(res.data);
     }).catch((error) => {
       console.log(error);
     });
-    const positionUrl = "https://nigst.onrender.com/sauth/send";
+    const positionUrl = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/send";
     axios.get(positionUrl).then((res) => {
       setPosition(res.data.position);
     }).catch((error) => {
@@ -77,7 +77,7 @@ export default function AssigningPositionToFacultyMember() {
     <option>Select Faculty Position</option>
     {
       viewPosition.map((data,index)=>{
-        return <option value={data.faculty_pos} key={index}>{data.faculty_pos}</option>
+        return <option value={data.faculty_pos} key={index} data={data.position_id}>{data.faculty_pos}</option>
       })
     }
   </select>

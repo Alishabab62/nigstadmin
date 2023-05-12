@@ -14,74 +14,74 @@ import Logo from '../images/logo.png'
 export default function NIGSTAdmin() {
   const [departmentCreation, setDepartmentCreation] = useState(false);
   const [facultyPositionCreation, setFacultyPositionCreation] = useState(false);
-  const [courseCategory, setCourseCategory] = useState(false);
+  // const [courseCategory, setCourseCategory] = useState(false);
   const [users, setUsers] = useState(false);
   const [courseAssignment, setCourseAssignment] = useState(false); 
   const [tender, setTender] = useState(false);
-  const [facultyAdmin , setFacultyAdmin] = useState(false);
+  // const [facultyAdmin , setFacultyAdmin] = useState(false);
 
   function departmentFun() {
     setDepartmentCreation(true);
     setFacultyPositionCreation(false);
-    setCourseCategory(false);
+    // setCourseCategory(false);
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
-    setFacultyAdmin(false)
+    // setFacultyAdmin(false)
   }
   function facultyPositionFun() {
     setFacultyPositionCreation(true);
     setDepartmentCreation(false);
-    setCourseCategory(false);
+    // setCourseCategory(false);
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
-    setFacultyAdmin(false)
+    // setFacultyAdmin(false)
   }
-  function courseCategoryFun() {
-    setCourseCategory(true);
-    setDepartmentCreation(false);
-    setFacultyPositionCreation(false);
-    setUsers(false);
-    setCourseAssignment(false);
-    setTender(false);
-    setFacultyAdmin(false)
-  }
-  function facultyAdminCreationFun() {
-    setFacultyAdmin(true)
-    setDepartmentCreation(false);
-    setFacultyPositionCreation(false);
-    setCourseCategory(false);
-    setUsers(false);
-    setCourseAssignment(false);
-    setTender(false);
-  }
+  // function courseCategoryFun() {
+  //   setCourseCategory(true);
+  //   setDepartmentCreation(false);
+  //   setFacultyPositionCreation(false);
+  //   setUsers(false);
+  //   setCourseAssignment(false);
+  //   setTender(false);
+  //   setFacultyAdmin(false)
+  // }
+  // function facultyAdminCreationFun() {
+  //   // setFacultyAdmin(true)
+  //   setDepartmentCreation(false);
+  //   setFacultyPositionCreation(false);
+  //   // setCourseCategory(false);
+  //   setUsers(false);
+  //   setCourseAssignment(false);
+  //   setTender(false);
+  // }
   function usersFun() {
     setUsers(true); 
-    setCourseCategory(false);
+    // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
     setCourseAssignment(false);
     setTender(false);
-    setFacultyAdmin(false)
+    // setFacultyAdmin(false)
   }
   function courseAssignmentFun() {
     setCourseAssignment(true);
     setUsers(false);
-    setCourseCategory(false);
+    // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
     setTender(false);
-    setFacultyAdmin(false)
+    // setFacultyAdmin(false)
   }
   function handleTenderFun() {
     setTender(true);
     setCourseAssignment(false);
     setUsers(false);
-    setCourseCategory(false);
+    // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
-    setFacultyAdmin(false)
+    // setFacultyAdmin(false)
   }
   function logout(){
     window.location.hash = "/";

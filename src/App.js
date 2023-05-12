@@ -22,7 +22,7 @@ function App() {
             <Private path={"Faculty Admin"}><FacultyAdmin/></Private>
           }></Route>
           <Route path='/faculty' element={
-            <Private path={"faculty"}><Faculty/></Private>
+            <Private path={"NIGST Admin"}><Faculty/></Private>
           }></Route>
           <Route path='/student' element={
             <Private path={"NIGST Admin"}><Student /></Private>

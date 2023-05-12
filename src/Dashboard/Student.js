@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import ViewCourses from './ViewCourses';
-import VerificationPage from './VerificationPage';
+// import VerificationPage from './VerificationPage';
 
 
 

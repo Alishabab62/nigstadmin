@@ -10,6 +10,7 @@ export default function Private({children , path }) {
       return children;
     }
     else{
+      localStorage.clear("user")
     return <Navigate to="/" />;
     }
   }

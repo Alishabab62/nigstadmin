@@ -157,7 +157,7 @@ export default function CourseScheduling() {
 
 
   return (
-    <>
+    <div style={{display:"flex" , flexDirection:"column"}}> 
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
@@ -292,6 +292,6 @@ export default function CourseScheduling() {
             <button onClick={handleCourseEditForm}>Submit</button>
           </form> </div>
       }
-    </>
+    </div>
   )
 }

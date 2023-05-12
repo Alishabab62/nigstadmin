@@ -43,7 +43,7 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(() => {
-    const url = "https://nigst.onrender.com/admin/faculty_show";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/faculty_show";
     axios.get(url).then((res) => {
 
       setFaculty(res.data)
@@ -57,7 +57,7 @@ export default function CreationFacultyMember() {
   }, [])
 
   function facultyViewFun() {
-    const urlView = "https://nigst.onrender.com/sauth/faculty_view"
+    const urlView = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
     axios.get(urlView).then((res) => {
 
       console.log(res)
@@ -70,7 +70,7 @@ export default function CreationFacultyMember() {
 
   function handleCreationMembers() {
 
-    const url = "https://nigst.onrender.com/sauth/create";
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/create";
     const data = {
       first_name: `${input.f_name}`,
       middle_name: `${input.m_name}`,
@@ -105,7 +105,8 @@ export default function CreationFacultyMember() {
 
 
   function setFalseLoginAccess(e) {
-    const url = "https://nigst.onrender.com/admin/access";
+    console.log("false")
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "false"
@@ -119,7 +120,8 @@ export default function CreationFacultyMember() {
   }
 
   function setTrueLoginAccess(e) {
-    const url = "https://nigst.onrender.com/admin/access";
+    console.log("true")
+    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "true"
@@ -171,7 +173,7 @@ export default function CreationFacultyMember() {
     };
 
     return (
-      <>
+      <div style={{display:"flex" , flexDirection:"column"}}>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
           {
             viewFrame ? <button className='toggle_btn' onClick={viewData}>Create Faculty</button> : <button className='toggle_btn' onClick={viewData}>View Created Faculty</button>
@@ -234,7 +236,7 @@ export default function CreationFacultyMember() {
                                       borderRadius: "50%",
                                       height: "30px",
                                       width: "30px",
-                                      color: "white",
+                                      color: "green",
                                       border: "none",
                                       cursor: "pointer",
                                     }}
@@ -250,7 +252,7 @@ export default function CreationFacultyMember() {
                                       borderRadius: "50%",
                                       height: "30px",
                                       width: "30px",
-                                      color: "white",
+                                      color: "red",
                                       border: "none",
                                       cursor: "pointer",
                                     }}
@@ -334,7 +336,7 @@ export default function CreationFacultyMember() {
             </Button>
           </DialogActions>
         </Dialog>
-      </>
+      </div>
     )
   }
 

@@ -22,7 +22,7 @@ export default function Login() {
 
   function handleLoginAdmin() {
     console.log("hello admin")
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sadmin/login";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sadmin/login";
     const data = {
       username: `${inputs.email}`,
       password: `${inputs.password}`
@@ -44,7 +44,7 @@ export default function Login() {
 
   function handleLoginFaculty() {
     console.log("hello faculty")
-    const url = "https://nigst.onrender.com/sauth/login";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/login";
     const data = {
       email: `${inputs.email}`,
       password: `${inputs.password}`

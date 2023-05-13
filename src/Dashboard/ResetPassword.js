@@ -15,7 +15,7 @@ export default function ResetPassword() {
   }
 
   function handleResetPassword(){
-    const url = "https://nigst.onrender.com/sauth/change";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/change";
     const data = {
       facultyId:`${input.faculty}`,
       oldPassword:`${input.password}`,

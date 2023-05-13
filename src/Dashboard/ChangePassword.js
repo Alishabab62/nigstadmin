@@ -16,7 +16,7 @@ export default function ChangePassword() {
   function changePassword(){
     let token = window.location.href.split("/")[5];
     console.log(token)
-    const url = "https://nigst.onrender.com/sauth/reset";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/reset";
     const data ={
       password:`${input.password}`,
       resetToken:`${token}`

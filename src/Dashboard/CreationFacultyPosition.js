@@ -39,7 +39,7 @@ export default function CreationFacultyPosition() {
       faculty_pos: `${inputs.facultyPosition}`,
       description: `${inputs.description}`,
     };
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/position"
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/position"
     axios.post(url, data).then((res) => {
         setCircularResponse(false);
         setSuccessAlert(true);
@@ -61,7 +61,7 @@ export default function CreationFacultyPosition() {
    facultyPositionViewFun()
   },[]);
   function facultyPositionViewFun(){
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/view";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/view";
     axios.get(url).then((res)=>{
       setViewPosition(res.data.data.reverse());
       console.log(res.data)

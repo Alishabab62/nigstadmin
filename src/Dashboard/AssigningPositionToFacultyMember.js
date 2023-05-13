@@ -35,14 +35,14 @@ export default function AssigningPositionToFacultyMember() {
   }
 
   useEffect(() => {
-    const urlFaculty = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/faculty_view";
+    const urlFaculty = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view";
     axios.get(urlFaculty).then((res) => {
       setFaculty(res.data.data);
       console.log(res.data);
     }).catch((error) => {
       console.log(error);
     });
-    const positionUrl = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/send";
+    const positionUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/send";
     axios.get(positionUrl).then((res) => {
       setPosition(res.data.position);
     }).catch((error) => {

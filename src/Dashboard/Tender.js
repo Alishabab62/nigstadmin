@@ -116,7 +116,7 @@ function handleCorrigendum(e){
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
   formData.append("pdf", corrigendumPdf.current.files[0]);
-  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/corrigendum"
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corrigendum"
   axios.post(url,formData).then((res)=>{
     setSuccessAlert(true);
     setTimeout(() => {
@@ -132,7 +132,7 @@ function handleCorrigendum(e){
 
 function handleArchive(e){
   setOpen(false);
-  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/archive";
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/archive";
   const data = {
     tender_number:`${tenderNo}`
   }

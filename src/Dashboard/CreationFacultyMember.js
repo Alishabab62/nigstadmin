@@ -43,7 +43,7 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(() => {
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/faculty_show";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_show";
     axios.get(url).then((res) => {
 
       setFaculty(res.data)
@@ -57,7 +57,7 @@ export default function CreationFacultyMember() {
   }, [])
 
   function facultyViewFun() {
-    const urlView = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
+    const urlView = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
     axios.get(urlView).then((res) => {
 
       console.log(res)
@@ -70,7 +70,7 @@ export default function CreationFacultyMember() {
 
   function handleCreationMembers() {
 
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/create";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
     const data = {
       first_name: `${input.f_name}`,
       middle_name: `${input.m_name}`,
@@ -106,7 +106,7 @@ export default function CreationFacultyMember() {
 
   function setFalseLoginAccess(e) {
     console.log("false")
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/access";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "false"
@@ -121,7 +121,7 @@ export default function CreationFacultyMember() {
 
   function setTrueLoginAccess(e) {
     console.log("true")
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/access";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "true"

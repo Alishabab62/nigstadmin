@@ -46,7 +46,7 @@ function Tender() {
  
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
-  const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -65,7 +65,7 @@ useEffect(()=>{
 },[])
 
 function tenderViewFun(){
-  const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/view";
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
@@ -83,7 +83,7 @@ function handleInputs(e){
 function handleSubmit(e) {
   if(file.current.files[0] !== undefined){
     e.preventDefault();
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/tender/create";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
     formData.append("tenderRefNo", input.ref);

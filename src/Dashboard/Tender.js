@@ -46,6 +46,7 @@ function Tender() {
  
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
+  console.log(tenderId)
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
@@ -183,7 +184,7 @@ const handleClose = () => {
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>{data.corrigenda[0].corrigendum}</td>
-                  <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}><AiFillFilePdf style={{color:"red"}}/></td>
+                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}} data={data.tender_ref_no} onClick={viewPDF}/></button></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )

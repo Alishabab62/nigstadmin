@@ -275,7 +275,7 @@ export default function CourseScheduling() {
           <form>
             <select onChange={(e) => setNewStatus(e.target.value)}>
               <option>Select Status</option>
-              {editData.courseStatus === "created" ? <option value='schedule'>Schedule</option> : ""}
+              {editData.courseStatus === "created" ? <option value='scheduled'>Schedule</option> : ""}
               {editData.courseStatus === "created" ? <option value='running'>Running</option> : ""}
               {editData.courseStatus === "created" ? <option value='postponed'>Postponed</option> : ""}
               {editData.courseStatus === "created" ? <option value='canceled'>Cancelled</option> : ""}

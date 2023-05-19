@@ -7,7 +7,7 @@ export default function ViewCourses() {
     useEffect(()=>{
     let data = JSON.parse(localStorage.getItem("user"));
     console.log(data.faculty);
-    const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/P_&_RS`;
+    const url = `http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res)=>{
       setViewData(res.data.course);
     }).catch((error)=>{

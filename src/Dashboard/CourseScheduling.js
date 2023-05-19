@@ -160,7 +160,7 @@ const [searchData, setSearchData] = useState("");
     <table>
       <thead>
         <tr>
-        <th colSpan="11" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
+        <th colSpan="12" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
         </tr>
       
         <tr>

@@ -21,7 +21,6 @@ export default function Login() {
   }
 
   function handleLoginAdmin() {
-    console.log("hello admin")
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sadmin/login";
     const data = {
       username: `${inputs.email}`,
@@ -42,8 +41,8 @@ export default function Login() {
   }
 
 
-  function handleLoginFaculty() {
-    console.log("hello faculty")
+  function handleLoginFaculty(e) {
+    e.preventDefault()
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/login";
     const data = {
       email: `${inputs.email}`,
@@ -58,12 +57,12 @@ export default function Login() {
     }) 
   }
 
-  function handleLogin(){
+  function handleLogin(e){
     if(loginType === "admin"){
       handleLoginAdmin()
     }
     else{
-      handleLoginFaculty()
+      handleLoginFaculty(e)
     }
   }
 

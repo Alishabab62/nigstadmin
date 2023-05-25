@@ -12,16 +12,22 @@ const pdf = useRef();
 
 
 function handleReportSubmission(){
-
   const user = JSON.parse(localStorage.getItem("user"));
-  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/";
-  const data={
-    facultyId:`${user.id}`,
-    scheduleId:`${scheduleId}`,
-    remarks:`${remark}`,
-    pdf:pdf.current.file[0]
-  };
-  axios.post(url,data).then((res)=>{
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/report/submit";
+  const formData = new FormData();
+  formData.append("facultyId",user.id);
+  formData.append("scheduleId",scheduleId);
+  formData.append("remarks",remark);
+  formData.append("pdf",pdf.current.files[0]);
+  formData.append("faculty",user.faculty);
+  // const data={
+  //   facultyId:`${user.id}`,
+  //   scheduleId:`${scheduleId}`,
+  //   remarks:`${remark}`,
+  //   pdf:pdf.current.files[0],
+  //   faculty:`${user.faculty}`
+  // };
+  axios.post(url,formData).then((res)=>{
     console.log(res)
   }).catch((error)=>{
     console.log(error)

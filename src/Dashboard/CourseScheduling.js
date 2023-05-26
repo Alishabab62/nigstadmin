@@ -39,7 +39,7 @@ export default function CourseScheduling() {
     }));
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     setCurrency(getAllISOCodes());
     let data = JSON.parse(localStorage.getItem("user"));
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;

@@ -20,13 +20,6 @@ function handleReportSubmission(){
   formData.append("remarks",remark);
   formData.append("pdf",pdf.current.files[0]);
   formData.append("faculty",user.faculty);
-  // const data={
-  //   facultyId:`${user.id}`,
-  //   scheduleId:`${scheduleId}`,
-  //   remarks:`${remark}`,
-  //   pdf:pdf.current.files[0],
-  //   faculty:`${user.faculty}`
-  // };
   axios.post(url,formData).then((res)=>{
     console.log(res)
   }).catch((error)=>{

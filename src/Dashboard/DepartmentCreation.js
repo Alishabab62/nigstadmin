@@ -458,7 +458,7 @@ export default function DepartmentCreation() {
     // confirm("shs")
   }
   return (
-    <>
+    <div>
       {filter ? <div className='filter-wrapper-department'>
         <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs} />
         <select onChange={(e)=>setTypeFilter(e.target.value)}>
@@ -705,6 +705,6 @@ export default function DepartmentCreation() {
         </div>
         <Button value={"Submit"} fun={handleDepartmentCreation} />
       </div> : ""}
-    </>
+    </div>
   );
 }

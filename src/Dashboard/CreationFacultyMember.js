@@ -8,6 +8,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+
 export default function CreationFacultyMember() {
   const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
@@ -41,23 +42,23 @@ export default function CreationFacultyMember() {
     }));
   }
 
-  useEffect(()=>{
-    const url = "https://nigst.onrender.com/admin/faculty_show";
-    axios.get(url).then((res)=>{
+  useEffect(() => {
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_show";
+    axios.get(url).then((res) => {
 
       setFaculty(res.data)
     }).catch((error) => {
       console.log(error)
     })
 
-   facultyViewFun();
-   let user = JSON.parse(localStorage.getItem("user"));
-   setUser(user)
-  },[])
+    facultyViewFun();
+    let user = JSON.parse(localStorage.getItem("user"));
+    setUser(user)
+  }, [])
 
-  function facultyViewFun(){
-    const urlView = "https://nigst.onrender.com/sauth/faculty_view"
-    axios.get(urlView).then((res)=>{
+  function facultyViewFun() {
+    const urlView = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
+    axios.get(urlView).then((res) => {
 
       console.log(res)
       setFacultyView(res.data.data.reverse())
@@ -67,9 +68,9 @@ export default function CreationFacultyMember() {
   }
 
 
-  function handleCreationMembers(){
+  function handleCreationMembers() {
 
-    const url = "https://nigst.onrender.com/sauth/create";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
     const data = {
       first_name: `${input.f_name}`,
       middle_name: `${input.m_name}`,
@@ -104,7 +105,8 @@ export default function CreationFacultyMember() {
 
 
   function setFalseLoginAccess(e) {
-    const url = "https://nigst.onrender.com/admin/access";
+    console.log("false")
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "false"
@@ -118,7 +120,8 @@ export default function CreationFacultyMember() {
 
 
   function setTrueLoginAccess(e) {
-    const url = "https://nigst.onrender.com/admin/access";
+    console.log("true")
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
       access: "true"
@@ -128,12 +131,13 @@ export default function CreationFacultyMember() {
     }).catch((error) => {
       console.log(error)
     })
-
+  }
 
   function statusChange() {
     setOpen(false)
     userStatus === "green" ? setFalseLoginAccess() : setTrueLoginAccess()
   }
+
   const handleClickOpen = (e) => {
     setOpen(true);
     setUserEmail(e.target.getAttribute("data"));
@@ -152,17 +156,14 @@ export default function CreationFacultyMember() {
     setSearchData(event.target.value);
     const input = event.target.value.toLowerCase();
     const rows = document.querySelectorAll("#faculties tr");
-
     rows.forEach((row) => {
       const cells = row.querySelectorAll("td");
       let shouldHide = true;
-
       cells.forEach((cell) => {
         if (cell.textContent.toLowerCase().includes(input)) {
           shouldHide = false;
         }
       });
-
       if (shouldHide) {
         row.classList.add("hidden");
       } else {
@@ -172,7 +173,7 @@ export default function CreationFacultyMember() {
   };
 
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
           viewFrame ? <button className='toggle_btn' onClick={viewData}>Create Faculty</button> : <button className='toggle_btn' onClick={viewData}>View Created Faculty</button>
@@ -181,98 +182,98 @@ export default function CreationFacultyMember() {
 
       {
         viewFrame ?
-        <div>
-        <input type="text" id="SearchInput" placeholder="Search Faculties" value={searchData} onChange={handleInputChange1} />
-        
-        <div className='user-details-wrapper'>
-          
-          <table>
-            <thead>
-              <tr>
-                <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>FACULTIES</th>
-              </tr>
-              <tr>
-                <th>S.No</th>
-                <th>Faculty Id.</th>
-                <th>Created At</th>
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Faculty</th>
-                <th>Designation</th>
-                <th>Gender</th>
-                <th>Edu.</th>
-                <th>Admin Verification</th>
-              </tr>
-            </thead>
-            <tbody id='faculties'>
-              {
-                facultyView.map((data, index) => {
-                  return data.faculty === user.faculty ?
-                    (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{data.faculty_id}</td>
-                        <td>{data.created_on_date_time}</td>
-                        <td>{data.first_name}</td>
-                        <td>{data.middle_name}</td>
-                        <td>{data.last_name}</td>
-                        <td>{data.phone}</td>
-                        <td>{data.email}</td>
-                        <td>{data.faculty}</td>
-                        <td>{data.designation}</td>
-                        <td>{data.gender}</td>
-                        <td>{data.education}</td>
-                        <td>
-  {data.admin_verified ? (
-    <button
-      data={data.email}
-      onClick={handleClickOpen}
-      style={{
-        backgroundColor: "green",
-        borderRadius: "50%",
-        height: "30px",
-        width: "30px",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-      }}
-    >
-      <i className="fas fa-check" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-    </button>
-  ) : (
-    <button
-      data={data.email}
-      onClick={handleClickOpen}
-      style={{
-        backgroundColor: "red",
-        borderRadius: "50%",
-        height: "30px",
-        width: "30px",
-        color: "white",
-        border: "none",
-        cursor: "pointer",
-      }}
-    >
-      <i className="fas fa-times" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-    </button>
-  )}
-</td>
+          <div>
+            <input type="text" id="SearchInput" placeholder="Search Faculties" value={searchData} onChange={handleInputChange1} />
 
-                      </tr>
-                    ) : ""
-                })
-              }
-            </tbody>
-          </table>
-        </div>
-        </div> : ""
+            <div className='user-details-wrapper'>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>FACULTIES</th>
+                  </tr>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Faculty Id.</th>
+                    <th>Created At</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Faculty</th>
+                    <th>Designation</th>
+                    <th>Gender</th>
+                    <th>Edu.</th>
+                    <th>Admin Verification</th>
+                  </tr>
+                </thead>
+                <tbody id='faculties'>
+                  {
+                    facultyView.map((data, index) => {
+                      return data.faculty === user.faculty ?
+                        (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>{data.faculty_id}</td>
+                            <td>{data.created_on_date_time}</td>
+                            <td>{data.first_name}</td>
+                            <td>{data.middle_name}</td>
+                            <td>{data.last_name}</td>
+                            <td>{data.phone}</td>
+                            <td>{data.email}</td>
+                            <td>{data.faculty}</td>
+                            <td>{data.designation}</td>
+                            <td>{data.gender}</td>
+                            <td>{data.education}</td>
+                            <td>
+                              {data.admin_verified ? (
+                                <button
+                                  data={data.email}
+                                  onClick={handleClickOpen}
+                                  style={{
+                                    backgroundColor: "green",
+                                    borderRadius: "50%",
+                                    height: "30px",
+                                    width: "30px",
+                                    color: "green",
+                                    border: "none",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i className="fas fa-check" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
+                                </button>
+                              ) : (
+                                <button
+                                  data={data.email}
+                                  onClick={handleClickOpen}
+                                  style={{
+                                    backgroundColor: "red",
+                                    borderRadius: "50%",
+                                    height: "30px",
+                                    width: "30px",
+                                    color: "red",
+                                    border: "none",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <i className="fas fa-times" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
+                                </button>
+                              )}
+                            </td>
+
+                          </tr>
+                        ) : ""
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div> : ""
       }
       {
         !viewFrame ? <div className="faculty-member-creation-wrapper">
-          <h3 style={{margin:"20px auto"}}>Creation Faculty Member</h3>
+          <h3 style={{ margin: "20px auto" }}>Creation Faculty Member</h3>
           {successAlert ? <Alert severity="success" style={{ marginBottom: "10px" }}>Faculty Created Successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{ marginBottom: "10px" }}>Something Went Wrong Please try again later</Alert> : ""}
           {/* {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""} */}
@@ -335,7 +336,7 @@ export default function CreationFacultyMember() {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   )
 }
-};
+

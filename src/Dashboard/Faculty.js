@@ -44,6 +44,5 @@ export default function Faculty() {
             </div>
         </div>
     </div>
-    </div>
   )
 }

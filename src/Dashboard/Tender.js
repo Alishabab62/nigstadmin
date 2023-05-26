@@ -24,7 +24,10 @@ function Tender() {
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [viewTender , setViewTender] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const [tenderNo , setTenderNo] = useState("")
+  const [tenderNo , setTenderNo] = useState("");
+  const [tenderArchiveSuccess,setTenderArchiveSuccess] = useState(false);
+  const [viewArchiveTender,setViewArchiveTender] = useState(false);
+  const [viewArchive,setViewArchive] = useState([]);
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -33,20 +36,43 @@ function Tender() {
   });
 
   const toggleTenders = () => {
-    setShowTenders(!showTenders)
-    setFormSelect(!formSelect)
-    setFilter(!filter)
+    setShowTenders(true)
+    setFormSelect(false)
+    setFilter(false)
+    setViewArchiveTender(false)
   };
   const toggleCorrigendum = () => {
-    setShowCorrigendum(!showCorrigendum);
-    setFormSelect(!formSelect)
-    setFilter(!filter)
+    setShowCorrigendum(true);
+    setFormSelect(false)
+    setViewArchiveTender(false)
+    setFilter(false)
   };
-
- 
+function archiveFun(){
+    setViewArchiveTender(true)
+    setShowCorrigendum(false);
+    setFilter(false)
+    setShowTenders(false)
+}
+ function closeTenderForm(){
+    setViewArchiveTender(false)
+    setShowCorrigendum(false);
+    setFilter(false)
+    setFormSelect(true)
+    setFilter(true)
+    setShowTenders(false)
+ }
+//  function closeCorregendumForm(){
+//   setViewArchiveTender(false)
+//   setShowCorrigendum(false);
+//   setFilter(false)
+//   setFormSelect(true)
+//   setFilter(true)
+//   setShowTenders(false)
+//  }
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
-  const url = `https://nigst.onrender.com/tender/vpdf/${tenderId}`;
+  console.log(tenderId)
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -62,10 +88,17 @@ function viewPDF(e) {
 
 useEffect(()=>{
   tenderViewFun()
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view_archive";
+  axios.get(url).then((res)=>{
+    console.log(res.data.data)
+    setViewArchive(res.data.data)
+  }).catch((error)=>{
+    console.log(error)
+  })
 },[])
 
 function tenderViewFun(){
-  const url = "https://nigst.onrender.com/tender/view";
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
@@ -83,7 +116,7 @@ function handleInputs(e){
 function handleSubmit(e) {
   if(file.current.files[0] !== undefined){
     e.preventDefault();
-    const url = "https://nigst.onrender.com/tender/create";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
     formData.append("tenderRefNo", input.ref);
@@ -116,7 +149,7 @@ function handleCorrigendum(e){
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
   formData.append("pdf", corrigendumPdf.current.files[0]);
-  const url = "https://nigst.onrender.com/tender/corrigendum"
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corrigendum"
   axios.post(url,formData).then((res)=>{
     setSuccessAlert(true);
     setTimeout(() => {
@@ -132,12 +165,17 @@ function handleCorrigendum(e){
 
 function handleArchive(e){
   setOpen(false);
-  const url = "https://nigst.onrender.com/tender/archive";
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/archive";
   const data = {
     tender_number:`${tenderNo}`
   }
   axios.patch(url,data).then((res)=>{
-    console.log(res)
+    if(res.data.message=== "Tender archived successfully"){
+      setTenderArchiveSuccess(true)
+    }
+    setTimeout(() => {
+      setTenderArchiveSuccess(false)
+    }, 5000);
   }).catch((error)=>{
     console.log(error)
   })
@@ -153,12 +191,13 @@ const handleClose = () => {
   setOpen(false);
 };
   return (
-    <>
+    <div style={{display:"flex",flexDirection:"column"}}>
+      {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
       {
-      formSelect ?   <div className='creation'>
+      formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
         <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
         <button className='openform' onClick={toggleCorrigendum}>Create New Corregendom</button>
-        <button className='openform'>View Archive Tender</button>
+        <button className='openform' onClick={archiveFun}>View Archive Tender</button>
       </div> : ""
       }
       {filter ? <div className='user-details-wrapper'>
@@ -183,8 +222,39 @@ const handleClose = () => {
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>{data.corrigenda[0].corrigendum}</td>
-                  <td data={data.tender_ref_no} onClick={viewPDF} style={{cursor:"pointer"}}><AiFillFilePdf style={{color:"red"}}/></td>
+                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
+              </tr>
+                )
+              })
+            }
+           
+        </table>
+        </div> : "" }
+        {viewArchiveTender ? <div className='user-details-wrapper'>
+        <table>
+            <tr>
+                <th>S.No</th>
+                <th>Tender No</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Corregendom</th>
+                {/* <th>File</th> */}
+                {/* <th>Move to Archive</th> */}
+            </tr>
+            {
+              viewArchive.map((data,index)=>{
+                return (
+                  <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{data.tender_ref_no}</td>
+                  <td>{data.description}</td>
+                  <td>{data.startdate}</td>
+                  <td>{data.enddate}</td>
+                  <td>{data.corrigendum[0].corrigendum}</td>
+                  {/* <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td> */}
+                  {/* <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td> */}
               </tr>
                 )
               })
@@ -200,7 +270,7 @@ const handleClose = () => {
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
-          <button className='close-btn' onClick={toggleTenders}>&times;</button>
+          <button className='close-btn' onClick={closeTenderForm}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"}/>
@@ -218,7 +288,7 @@ const handleClose = () => {
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Corregendom Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
-          <button className="close-btn" onClick={toggleCorrigendum}>&times;</button>
+          <button className="close-btn" onClick={closeTenderForm}>&times;</button>
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>
@@ -257,7 +327,7 @@ const handleClose = () => {
         </DialogActions>
       </Dialog> 
     </div>
-    </>
+    </div>
   );
 }
 

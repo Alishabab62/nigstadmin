@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
-// import { Alert, CircularProgress } from '@mui/material';
+import { Alert} from '@mui/material';
 import axios from 'axios';
 
 export default function DepartmentCourseAssignment() {
@@ -11,7 +11,8 @@ export default function DepartmentCourseAssignment() {
   const [orgName, setOrgName] = useState();
   // const [courseId , setCourseId] = useState();
   // const [successAlert, setSuccessAlert] = useState(false);
-  // const [failAlert, setFailAlert] = useState(false);
+  const [failAlert, setFailAlert] = useState(false);
+  const [failAlert1, setFailAlert1] = useState(false);
   // const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [viewCourse, setViewCourse] = useState([]);
   const [category, setCategory] = useState("");
@@ -94,11 +95,10 @@ export default function DepartmentCourseAssignment() {
       ...prevInputs,
       [name]: value,
     }));
-    console.log(inputs)
   }
 
   useEffect(() => {
-    const url = "https://nigst.onrender.com/dep/v";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/v";
     axios.get(url).then((res) => {
       setOrgView(res.data)
     }).catch((error) => {
@@ -108,7 +108,7 @@ export default function DepartmentCourseAssignment() {
   }, [])
 
   function departmentView() {
-    const viewUrl = "https://nigst.onrender.com/dep/viewda";
+    const viewUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/viewda";
     axios.get(viewUrl).then((res) => {
       setViewCourse(res.data.reverse());
     }).catch((error) => {
@@ -118,18 +118,25 @@ export default function DepartmentCourseAssignment() {
 
   function handleCourseCodeAndNo(event) {
     event.preventDefault();
-    const url = `https://nigst.onrender.com/course/send_course/${code}/${number}/${category}`
+    const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/send_course/${code}/${number}/${category}`
     axios.get(url).then((res) => {
       setSecondStep(true);
       setFirstStep(false)
       setFirstStepData(res.data.course);
     }).catch((error) => {
-      console.log(error)
+
+      console.log(error.response.data.message)
+      if(error.response.data.message === "No Course Found!"){
+        setFailAlert1(true)
+      }
+      setTimeout(() => {
+        setFailAlert1(false)
+      }, 5000);
     })
   }
   function handleSecondStepCourseId(event) {
     event.preventDefault();
-    const url = `https://nigst.onrender.com/course/send_batch_info/${firstStepData[0].courseid}`;
+    const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/send_batch_info/${firstStepData[0].courseid}`;
     axios.get(url).then((res) => {
       console.log(res)
       setSecondStep(false);
@@ -142,7 +149,7 @@ export default function DepartmentCourseAssignment() {
 
   function handleFinalSubmit(event) {
     event.preventDefault();
-    const url = "https://nigst.onrender.com/dep/organization_assign";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/organization_assign";
     const data = {
       organization: `${orgName}`,
       courseid: `${firstStepData[0].courseid}`,
@@ -157,6 +164,12 @@ export default function DepartmentCourseAssignment() {
       console.log(res)
     }).catch((error) => {
       console.log(error)
+      if(error.response.data.message === "This course already assigned to KSPL"){
+        setFailAlert(true)
+      }
+      setTimeout(() => {
+        setFailAlert(false)
+      }, 5000);
     })
   }
   return (
@@ -190,30 +203,8 @@ export default function DepartmentCourseAssignment() {
         </table>
       </div> : ""}
       {!filter && <div className='department-creation-wrapper'>
-        {/* {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Department Course Assignment Create successfully</Alert> : ""}
-          {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
-          {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""} */}
-        {/* {responseCircular ? (
-        <div
-          style={{
-            width: "29%",
-            height: "30%",
-            left: "33%",
-            backgroundColor: "rgb(211,211,211)",
-            borderRadius: "10px",
-            top: "100px",
-            position: "absolute",
-            padding: "10px 20px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress style={{ height: "50px", width: "50px" }} />
-        </div>
-      ) : (
-        ""
-      )} */}
+       {failAlert ? <Alert severity='error'>This course id already assigned</Alert> : ""}
+       {failAlert1 ? <Alert severity='error'>No course found</Alert> : ""}
         <h3>Department Course Assignment</h3>
       <form>
             <select onChange={(e) => setOrgName(e.target.value)}>

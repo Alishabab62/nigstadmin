@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import Button from "../components/Button"
-import CreationFacultyMember from './CreationFacultyMember';
+
 import CourseCreation from './CourseCreation'
 import AssigningPositionToFacultyMember from './AssigningPositionToFacultyMember'
 import CourseScheduling from './CourseScheduling'
+import CreationFacultyMember from './CreationFacultyMember'
+import CourseReportToFaculty from './CourseReportToFaculty'
 
 export default function FacultyAdmin() {
     const [creationFacultyMember, setCreationFacultyMember] = useState(true)
     const [courseCreation, setCourseCreation] = useState(false);
     const [assigningPosition, setAssigningPosition] = useState(false);
     const [courseScheduling, setCourseScheduling] = useState(false);
+    const [courseReport,setCourseReport] = useState("");
     const [user,setUser] = useState("");
 
     function creationFacultyFun() {
@@ -38,6 +41,13 @@ export default function FacultyAdmin() {
         setCreationFacultyMember(false);
         setAssigningPosition(false);
     }
+    function courseReportFun(){
+        setCourseReport(true);
+        setCourseScheduling(false);
+        setCourseCreation(false);
+        setCreationFacultyMember(false);
+        setAssigningPosition(false);
+    }
     function logout(){
         window.location.hash = "/";
         localStorage.clear("user")
@@ -49,15 +59,16 @@ export default function FacultyAdmin() {
     return (
         <div className='flex justify-between main-page-header'>
             <div className='side-bar border-r-2 side-bar-wrapper'>
-            <div className='text-center pt-14 pb-14 border-b-2 mb-8' style={{ overflow: 'hidden' }}>
-    <h3 className='text-lg text-white font-bold'>Welcome to {user.faculty}</h3>
-</div>
+                <div className=' text-center border-b-2 mb-8'>
+                    <h3 className='text-lg   text-white font-bold '>Welcome Faculty {user.faculty}</h3>
+                </div> 
                 <div>
                     <ul className=' text-white cursor-pointer '>
                         {creationFacultyMember ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={creationFacultyFun}>Faculty Members</li> : <li className='p-3 ' onClick={creationFacultyFun}>Faculty Members</li>}
                         {assigningPosition ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={assigningPositionFun}>Assigning Positions to Faculty Members</li> : <li className='p-3 ' onClick={assigningPositionFun}>Assigning Positions to Faculty Members</li>}
                         {courseCreation ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={courseCreationFun}>Course Creation</li> : <li className='p-3 ' onClick={courseCreationFun}>Course Creation</li>}
                         {courseScheduling ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={courseSchedulingFun}>Course Scheduling</li> : <li className='p-3 ' onClick={courseSchedulingFun}>Course Scheduling</li>}
+                        {courseReport ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={courseReportFun}>View Course Report</li> : <li className='p-3 ' onClick={courseReportFun}>View Course Report</li>}
                     </ul>
 
                 </div>
@@ -71,10 +82,12 @@ export default function FacultyAdmin() {
                     <div style={{position:'absolute',right:'20px'}}><Button value={"Logout"} fun={logout} /> </div>
                 </header>
                 <div className='min-h-max flex justify-center border-t-2'>
-                    {creationFacultyMember ? <CreationFacultyMember /> : ""}
+                    
+                    {creationFacultyMember && <CreationFacultyMember/>}
                     {courseCreation ? <CourseCreation /> : ""}
                     {assigningPosition ? <AssigningPositionToFacultyMember /> : ""}
                     {courseScheduling ? <CourseScheduling /> : ""}
+                    {courseReport ? <CourseReportToFaculty/> : ""}
                 </div>
             </div>
         </div>

@@ -34,7 +34,7 @@ export default function CourseCategoryCreation() {
       course_category_name: `${inputs.courseCategory}`,
       description: `${inputs.description}`,
     };
-    const url = "https://nigst.onrender.com/category/create";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/category/create";
     axios
       .post(url, data)
       .then((res) => {
@@ -68,7 +68,7 @@ useEffect(()=>{
 },[]);
 
 function courseCategoryFun(){
-  const url = "https://nigst.onrender.com/category/view"
+  const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/category/view"
   axios.get(url).then((res)=>{
     setViewData(res.data.categories.reverse())
     console.log(res);

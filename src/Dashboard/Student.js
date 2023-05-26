@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Logo from '../images/logo.png'
 import '../CSS/app.css'
 import ViewCourses from './ViewCourses';
-import VerificationPage from './VerificationPage';
+// import VerificationPage from './VerificationPage';
 
 
 
@@ -24,7 +24,7 @@ function logout(){
         </div>
         <div>
             <ul className=' text-white cursor-pointer '>
-                {viewCourse ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={viewCourseFun}>View Courses</li> : <li className='p-3 ' onClick={viewCourseFun}>View Courses</li>}
+                {viewCourse ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={viewCourseFun}>Courses</li> : <li className='p-3 ' onClick={viewCourseFun}>Courses</li>}
             </ul>
         </div>
         </div>
@@ -37,7 +37,7 @@ function logout(){
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
                 { viewCourse ? <ViewCourses/> : ""}
-                <VerificationPage/>
+                {/* <VerificationPage/> */}
             </div>
         </div>
     </div>

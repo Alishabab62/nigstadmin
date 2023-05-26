@@ -252,7 +252,7 @@ export default function DepartmentCreation() {
     let objectKeys = Object.keys(myCountryCodesObject);
     setCountryCode(objectKeys);
     setCountryCodeObject(myCountryCodesObject);
-    const url = "https://nigst.onrender.com/dep/othercategory";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/othercategory";
     axios.get(url).then((res) => {
       setOtherDropdown(res.data.organizations)
 
@@ -264,7 +264,7 @@ export default function DepartmentCreation() {
   }, []);
 
   function viewOrganization(){
-    const urlView = `https://nigst.onrender.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
+    const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
     axios.get(urlView).then((res)=>{
       setOrganisationView(res.data.reverse());
 
@@ -299,7 +299,7 @@ export default function DepartmentCreation() {
       console.log(
         data
       );
-      const url = "https://nigst.onrender.com/dep/d";
+      const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/d";
       axios
         .post(url, data)
         .then((res) => {
@@ -458,7 +458,7 @@ export default function DepartmentCreation() {
     // confirm("shs")
   }
   return (
-    <>
+    <div>
       {filter ? <div className='filter-wrapper-department'>
         <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs} />
         <select onChange={(e)=>setTypeFilter(e.target.value)}>
@@ -705,6 +705,6 @@ export default function DepartmentCreation() {
         </div>
         <Button value={"Submit"} fun={handleDepartmentCreation} />
       </div> : ""}
-    </>
+    </div>
   );
 }

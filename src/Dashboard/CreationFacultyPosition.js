@@ -23,17 +23,17 @@ export default function CreationFacultyPosition() {
       ...prevInputs,
       [name]: value,
     }));
-    console.log(inputs)
   }
 
   function handleFacultyCreation() {
-    if(inputs.facultyPosition === "" && inputs.description === ""){
+    if(inputs.facultyPosition === "" || inputs.description === ""){
       setEmptyFieldAlert(true);
       setTimeout(() => {
-        
+        setEmptyFieldAlert(false)
       }, 5000);
       return;
     }
+   else{
     setCircularResponse(true);
     const data = {
       faculty_pos: `${inputs.facultyPosition}`,
@@ -47,15 +47,16 @@ export default function CreationFacultyPosition() {
         setTimeout(() => {
           setSuccessAlert(false)
         }, 5000);
-        console.log(res);
       }).catch((error) => {
         setCircularResponse(false);
-        setFailAlert(true);
+        if(error.response.data.message == "Faculty position already exists."){
+          setFailAlert(true);
+        }
         setInterval(() => {
           setFailAlert(false);
         }, 5000);
-        console.log(error);
       });
+   }
   }
   useEffect(()=>{
    facultyPositionViewFun()
@@ -64,7 +65,6 @@ export default function CreationFacultyPosition() {
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/view";
     axios.get(url).then((res)=>{
       setViewPosition(res.data.data.reverse());
-      console.log(res.data)
     }).catch((error)=>{
       console.log(error);
     })
@@ -73,7 +73,7 @@ export default function CreationFacultyPosition() {
     <div style={{display:"flex" , justifyContent:"space-evenly"}}>
     <div className="department-creation-wrapper-position">
         {successAlert ? <Alert severity="success">Faculty Position Create successfully</Alert> : ""}
-        {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
+        {failAlert ? <Alert severity="error">Faculty Position Already Exists</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
       {responseCircular ? (
         <div
@@ -122,7 +122,7 @@ export default function CreationFacultyPosition() {
       {
         viewPosition.map((data,index)=>{
           return(
-            <tr>
+            <tr key={index}>
             <td>{index+1}</td>
             <td>{data.position_id}</td>
             <td>{data.faculty_pos}</td>

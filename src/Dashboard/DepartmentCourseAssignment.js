@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import Button from "../components/Button";
-// import { Alert, CircularProgress } from '@mui/material';
+import { Alert} from '@mui/material';
 import axios from 'axios';
 
 export default function DepartmentCourseAssignment() {
@@ -11,7 +11,8 @@ export default function DepartmentCourseAssignment() {
   const [orgName, setOrgName] = useState();
   // const [courseId , setCourseId] = useState();
   // const [successAlert, setSuccessAlert] = useState(false);
-  // const [failAlert, setFailAlert] = useState(false);
+  const [failAlert, setFailAlert] = useState(false);
+  const [failAlert1, setFailAlert1] = useState(false);
   // const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [viewCourse, setViewCourse] = useState([]);
   const [category, setCategory] = useState("");
@@ -94,7 +95,6 @@ export default function DepartmentCourseAssignment() {
       ...prevInputs,
       [name]: value,
     }));
-    console.log(inputs)
   }
 
   useEffect(() => {
@@ -124,7 +124,14 @@ export default function DepartmentCourseAssignment() {
       setFirstStep(false)
       setFirstStepData(res.data.course);
     }).catch((error) => {
-      console.log(error)
+
+      console.log(error.response.data.message)
+      if(error.response.data.message === "No Course Found!"){
+        setFailAlert1(true)
+      }
+      setTimeout(() => {
+        setFailAlert1(false)
+      }, 5000);
     })
   }
   function handleSecondStepCourseId(event) {
@@ -157,6 +164,12 @@ export default function DepartmentCourseAssignment() {
       console.log(res)
     }).catch((error) => {
       console.log(error)
+      if(error.response.data.message === "This course already assigned to KSPL"){
+        setFailAlert(true)
+      }
+      setTimeout(() => {
+        setFailAlert(false)
+      }, 5000);
     })
   }
   return (
@@ -190,30 +203,8 @@ export default function DepartmentCourseAssignment() {
         </table>
       </div> : ""}
       {!filter && <div className='department-creation-wrapper'>
-        {/* {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Department Course Assignment Create successfully</Alert> : ""}
-          {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
-          {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""} */}
-        {/* {responseCircular ? (
-        <div
-          style={{
-            width: "29%",
-            height: "30%",
-            left: "33%",
-            backgroundColor: "rgb(211,211,211)",
-            borderRadius: "10px",
-            top: "100px",
-            position: "absolute",
-            padding: "10px 20px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress style={{ height: "50px", width: "50px" }} />
-        </div>
-      ) : (
-        ""
-      )} */}
+       {failAlert ? <Alert severity='error'>This course id already assigned</Alert> : ""}
+       {failAlert1 ? <Alert severity='error'>No course found</Alert> : ""}
         <h3>Department Course Assignment</h3>
       <form>
             <select onChange={(e) => setOrgName(e.target.value)}>

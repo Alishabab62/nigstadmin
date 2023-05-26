@@ -21,7 +21,7 @@ export default function Faculty() {
   return (
     <div className='flex justify-between main-page-header'>
         <div className='side-bar border-r-2 side-bar-wrapper'> 
-        <div className=' text-center pt-14 pb-14  border-b-2 mb-8'>
+        <div className=' text-center   border-b-2 mb-8'>
         <h3 className='text-lg   text-white font-bold ' style={{textAlign:"center"}}>Welcome Faculty</h3>
         </div>
         <div>

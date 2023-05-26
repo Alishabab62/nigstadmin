@@ -90,7 +90,7 @@ export default function NIGSTAdmin() {
   return (
     <div className="flex justify-between main-page-header">
       <div className="side-bar border-r-2 side-bar-wrapper">
-        <div className=" text-center pt-14 pb-14  border-b-2 mb-8">
+        <div className=" text-center   border-b-2 mb-8">
           <h3 className="text-lg   text-white font-bold ">
             Welcome NIGST Admin
           </h3>
@@ -146,7 +146,7 @@ export default function NIGSTAdmin() {
             <Button value={"Logout"} fun={logout}/>
           </div>
         </header>
-        <div className="min-h-max flex justify-center border-t-2 min-h-[80%]">
+        <div className="min-h-max flex justify-center border-t-2 min-h-[80%] flex-col">
           {departmentCreation ? <DepartmentCreation /> : ""}
           {facultyPositionCreation ? <CreationFacultyPosition /> : ""}
           {/* {courseCategory ? <CourseCategoryCreation /> : ""} */}

@@ -19,7 +19,6 @@ export default function CourseScheduling() {
   const [viewData, setViewData] = useState([]);
   const [tempArray, setTempArray] = useState([]);
   const [viewForm, setViewForm] = useState(true);
-  // const [viewDataUI,setViewDataUI] = useState(false);
   const [viewScheduledCourse, setScheduledCourse] = useState([]);
   const [editForm, setEditForm] = useState(false);
   const [newCommencementDate, setNewCommencementDate] = useState("");

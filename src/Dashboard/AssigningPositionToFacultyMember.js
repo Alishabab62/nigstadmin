@@ -6,12 +6,13 @@ export default function AssigningPositionToFacultyMember() {
   const [facultyPosition, setFacultyPosition] = useState("");
   const [user, setUser] = useState("");
   const [viewPosition, setPosition] = useState([]);
-  const [facId,setFacId] = useState("");
-  const [positionId,setPositionId] = useState("");
-  const [input , setInput] = useState({
-    facultyId:""
+  const [facId, setFacId] = useState("");
+  const [positionId, setPositionId] = useState("");
+  const [view, setView] = useState(false);
+  const [input, setInput] = useState({
+    facultyId: ""
   })
- 
+
   function handleInputs(e) {
     const { name, value } = e.target;
     setInput((prevInput) => ({
@@ -24,7 +25,7 @@ export default function AssigningPositionToFacultyMember() {
       facultyId: facId,
       faculty_pos: facultyPosition,
       position_assi_id: input.facultyId,
-      faculty_admin:user.faculty
+      faculty_admin: user.faculty
     };
     console.log(data)
     axios.post(url, data).then((res) => {
@@ -56,34 +57,69 @@ export default function AssigningPositionToFacultyMember() {
     setFacId(e.target.options[e.target.selectedIndex].getAttribute("data"));
   }
 
-  function setPositionFun(e){
+  function setPositionFun(e) {
     setFacultyPosition(e.target.value);
-    setPositionId(e.target.options[e.target.selectedIndex].getAttribute("data"))
+    setPositionId(e.target.options[e.target.selectedIndex].getAttribute("data"));
   }
-
+function viewFun(){
+setView(!view)
+}
   return (
-    <div className='course-creation-wrapper'>
+    <>
+    <div>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+    {view && <button onClick={viewFun}>View</button>}
+    {!view && <button onClick={viewFun}>View</button>}
+    </div>
+    {!view && <div className='user-details-wrapper'>
+        <table>
+            <tr>
+                <th>S.No</th>
+                <th>Faculty Member</th>
+                <th>Faculty Position</th>
+                <th>Senirioty ID</th>
+            </tr>
+            {/* {
+              viewArchive.map((data,index)=>{
+                return (
+                  <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{data.tender_ref_no}</td>
+                  <td>{data.description}</td>
+                  <td>{data.startdate}</td>
+                  <td>{data.enddate}</td>
+                  <td>{data.corrigendum[0].corrigendum}</td>
+                  
+              </tr>
+                )
+              })
+            } */}
+           
+        </table>
+        </div>}
+      {view && <div className='course-creation-wrapper'>
 
-    <h3  style={{margin:"20px auto"}}>Assigning Positions to Faculty Members</h3>
-  <select onChange={setFacultyMemberFun}>
-    <option>Select Faculty Member</option>
-    {
-      faculty.map((data,index)=>{
-       return data.faculty === user.faculty  ?  <option key={index} value={data.first_name} data={data.faculty_id}>{data.first_name}</option> : ""
-      })
-    }
-  </select>
-  <select onChange={(e)=>setPositionFun(e)}>
-    <option>Select Faculty Position</option>
-    {
-      viewPosition.map((data,index)=>{
-        return <option value={data.faculty_pos} key={index} >{data.faculty_pos}</option>
-      })
-    }
-  </select>
-  <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId"/>
-  <button value={"Submit"} onClick={handlePositionAssigning}>Submit</button>
-</div>
+        <h3 style={{ margin: "20px auto" }}>Assigning Positions to Faculty Members</h3>
+        <select onChange={setFacultyMemberFun}>
+          <option>Select Faculty Member</option>
+          {
+            faculty.map((data, index) => {
+              return data.faculty === user.faculty ? <option key={index} value={data.first_name} data={data.faculty_id}>{data.first_name}</option> : ""
+            })
+          }
+        </select>
+        <select onChange={(e) => setPositionFun(e)}>
+          <option>Select Faculty Position</option>
+          {
+            viewPosition.map((data, index) => {
+              return <option value={data.faculty_pos} key={index} >{data.faculty_pos}</option>
+            })
+          }
+        </select>
+        <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId" />
+        <button value={"Submit"} onClick={handlePositionAssigning}>Submit</button>
+      </div>}
+    </div>
+    </>
   )
-
 }

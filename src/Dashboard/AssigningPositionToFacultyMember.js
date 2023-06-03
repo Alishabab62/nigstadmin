@@ -7,8 +7,9 @@ export default function AssigningPositionToFacultyMember() {
   const [user, setUser] = useState("");
   const [viewPosition, setPosition] = useState([]);
   const [facId, setFacId] = useState("");
-  const [positionId, setPositionId] = useState("");
+  // const [positionId, setPositionId] = useState("");
   const [view, setView] = useState(false);
+  const [viewData,setViewData] = useState([])
   const [input, setInput] = useState({
     facultyId: ""
   })
@@ -20,7 +21,7 @@ export default function AssigningPositionToFacultyMember() {
     }));
   }
   function handlePositionAssigning(e) {
-    const url = "http://ec2-65-2-161-9.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
     const data = {
       facultyId: facId,
       faculty_pos: facultyPosition,
@@ -51,7 +52,21 @@ export default function AssigningPositionToFacultyMember() {
     });
     let user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
+    getAssignedPosition();
+    // eslint-disable-next-line
   }, []);
+
+function getAssignedPosition(){
+  console.log(user.faculty)
+  const url =  `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_position/${user.faculty}`;
+  axios.get(url).then((res)=>{
+    setViewData(res.data.facultyPositions);
+    console.log(res)
+  }).catch((error)=>{
+    console.log(error)
+  })
+}
+
 
   function setFacultyMemberFun(e) {
     setFacId(e.target.options[e.target.selectedIndex].getAttribute("data"));
@@ -59,7 +74,6 @@ export default function AssigningPositionToFacultyMember() {
 
   function setPositionFun(e) {
     setFacultyPosition(e.target.value);
-    setPositionId(e.target.options[e.target.selectedIndex].getAttribute("data"));
   }
 function viewFun(){
 setView(!view)
@@ -68,10 +82,10 @@ setView(!view)
     <>
     <div>
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-    {view && <button onClick={viewFun}>View</button>}
     {!view && <button onClick={viewFun}>View</button>}
+    {view && <button onClick={viewFun}>Create</button>}
     </div>
-    {!view && <div className='user-details-wrapper'>
+    {view && <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -79,25 +93,22 @@ setView(!view)
                 <th>Faculty Position</th>
                 <th>Senirioty ID</th>
             </tr>
-            {/* {
-              viewArchive.map((data,index)=>{
+            {
+              viewData.map((data,index)=>{
                 return (
                   <tr key={index}>
                   <td>{index+1}</td>
-                  <td>{data.tender_ref_no}</td>
-                  <td>{data.description}</td>
-                  <td>{data.startdate}</td>
-                  <td>{data.enddate}</td>
-                  <td>{data.corrigendum[0].corrigendum}</td>
-                  
+                  <td>{data.first_name}{data.middle_name}{data.last_name}</td>
+                  <td>{data.faculty_id}</td>
+                  <td>{data.faculty_pos}</td>  
               </tr>
                 )
               })
-            } */}
+            }
            
         </table>
         </div>}
-      {view && <div className='course-creation-wrapper'>
+      {!view && <div className='course-creation-wrapper'>
 
         <h3 style={{ margin: "20px auto" }}>Assigning Positions to Faculty Members</h3>
         <select onChange={setFacultyMemberFun}>

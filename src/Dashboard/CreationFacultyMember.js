@@ -10,7 +10,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function CreationFacultyMember() {
-  const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
   const [facultyView, setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -30,7 +29,6 @@ export default function CreationFacultyMember() {
     designation: "",
   });
   const [gender, setGender] = useState("");
-  const [facultyInput, setFacultyInput] = useState("");
   const [login, setLogin] = useState("");
   const [user, setUser] = useState("");
   const dobRef = useRef(null);
@@ -43,14 +41,6 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(() => {
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_show";
-    axios.get(url).then((res) => {
-
-      setFaculty(res.data)
-    }).catch((error) => {
-      console.log(error)
-    })
-
     facultyViewFun();
     let user = JSON.parse(localStorage.getItem("user"));
     setUser(user)
@@ -82,7 +72,7 @@ export default function CreationFacultyMember() {
       education: `${input.education}`,
       designation: `${input.designation}`,
       loginAccess: `${login}`,
-      faculty: `${facultyInput}`,
+      faculty: `${user.faculty}`,
     }
     axios.post(url, data).then((res) => {
       facultyViewFun()
@@ -291,14 +281,7 @@ export default function CreationFacultyMember() {
                 <option value={"female"}>Female</option>
                 <option value={"other"}>Other</option>
               </select>
-              <select onChange={(e) => (setFacultyInput(e.target.value))}>
-                <option >Select Faculty</option>
-                {
-                  faculty.map((data) => {
-                    return <option key={data.id} value={data.name}>{data.name}</option>
-                  })
-                }
-              </select>
+              <input disabled value={user.faculty} style={{backgroundColor:"white"}}></input>
             </div>
             <div className="grid2-container">
               <Inputs type={"email"} placeholder={"Enter email"} name={"email"} fun={handleInputs} />
@@ -308,8 +291,6 @@ export default function CreationFacultyMember() {
               <input type='text' placeholder='Enter Highest Qualification' name={"education"} onChange={handleInputs}></input>
               <input type='text' placeholder='Enter Designation' name={"designation"} onChange={handleInputs}></input>
             </div><br />
-            {/* <Inputs type={"password"} placeholder={"Enter Password"} name={"password"} fun={handleInputs}/> */}
-
             <div style={{ display: "flex", alignItems: "center" }}>
               <p style={{ marginRight: "1rem" }}>Login Access</p>
               <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>

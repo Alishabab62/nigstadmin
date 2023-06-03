@@ -94,7 +94,7 @@ export default function AnnouncementCreation() {
                                 <th>S.No</th>
                                 <th>Created At</th>
                                 <th>Title</th>
-                                <th>Description</th>
+                                <th style={{maxWidth:"50px"}}>Description</th>
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>PDF</th>
@@ -107,11 +107,11 @@ export default function AnnouncementCreation() {
                                             <td>{index + 1}</td>
                                             <td>{data.created_at}</td>
                                             <td>{data.title}</td>
-                                            <td >{data.description}</td>
+                                            <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
                                             <td>{data.url}</td>
-                                            <td>{data.status ? "True" :"False"}</td>
+                                            <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
                                             <td><AiFillFilePdf style={{fontSize:"30px",color:"red"}}/></td>
-                                            <td><button data={data.id} onClick={changeAnnouncementStatus}>Edit</button></td>
+                                            <td><button data={data.a_id} onClick={changeAnnouncementStatus}>Edit</button></td>
                                         </tr>
                                     )
                                 })

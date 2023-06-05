@@ -21,6 +21,7 @@ export default function FacultyAdmin() {
         setCreationFacultyMember(true);
         setCourseCreation(false);
         setAssigningPosition(false);
+        setCourseReport(false);
         setCourseScheduling(false);
         setCourseReport(false);
     }
@@ -28,6 +29,7 @@ export default function FacultyAdmin() {
         setAssigningPosition(true);
         setCreationFacultyMember(false);
         setCourseCreation(false);
+        setCourseReport(false);
         setCourseScheduling(false);
         setCourseReport(false);
     }
@@ -35,6 +37,7 @@ export default function FacultyAdmin() {
         setCourseCreation(true);
         setCreationFacultyMember(false);
         setAssigningPosition(false);
+        setCourseReport(false);
         setCourseScheduling(false);
         setCourseReport(false);
     }

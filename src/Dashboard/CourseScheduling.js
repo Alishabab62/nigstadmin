@@ -281,7 +281,7 @@ export default function CourseScheduling() {
               {editData.courseStatus === "scheduled" ? <option value='running'>Running</option> : ""}
               {editData.courseStatus === "scheduled" ? <option value='postponed'>Postponed</option> : ""}
               {editData.courseStatus === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
-              {editData.courseStatus === "running" ? <option value='complete'>Complete</option> : ""}
+              {editData.courseStatus === "running" ? <option value='completed'>Complete</option> : ""}
               {editData.courseStatus === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
             </select>
             <input type='text' value={editData.courseId} disabled></input>

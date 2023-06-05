@@ -186,7 +186,6 @@ export default function DepartmentCourseAssignment() {
             <th>S.No</th>
             <th>Organization Name</th>
             <th>Course Assigning Id</th>
-            <th>Description</th>
           </tr>
           {
             viewCourse.map((data, index) => {
@@ -195,7 +194,6 @@ export default function DepartmentCourseAssignment() {
                   <td>{index + 1}</td>
                   <td>{data.organization_name}</td>
                   <td>{data.course_id}</td>
-                  <td>{data.des}</td>
                 </tr>
               )
             })

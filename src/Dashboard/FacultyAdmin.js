@@ -23,6 +23,7 @@ export default function FacultyAdmin() {
         setAssigningPosition(false);
         setCourseReport(false);
         setCourseScheduling(false);
+        setCourseReport(false);
     }
     function assigningPositionFun() {
         setAssigningPosition(true);
@@ -30,6 +31,7 @@ export default function FacultyAdmin() {
         setCourseCreation(false);
         setCourseReport(false);
         setCourseScheduling(false);
+        setCourseReport(false);
     }
     function courseCreationFun() {
         setCourseCreation(true);
@@ -37,6 +39,7 @@ export default function FacultyAdmin() {
         setAssigningPosition(false);
         setCourseReport(false);
         setCourseScheduling(false);
+        setCourseReport(false);
     }
     function courseSchedulingFun() {
         setCourseScheduling(true);
@@ -63,8 +66,8 @@ export default function FacultyAdmin() {
     return (
         <div className='flex justify-between main-page-header'>
             <div className='side-bar border-r-2 side-bar-wrapper'>
-                <div className=' text-center border-b-2 mb-8'>
-                    <h3 className='text-lg   text-white font-bold '>Welcome Faculty {user.faculty}</h3>
+                <div className=' text-center mb-0'>
+                    <h3 className='text-lg text-white font-bold '>Welcome Faculty {user.faculty}</h3>
                 </div> 
                 <div>
                     <ul className=' text-white cursor-pointer '>

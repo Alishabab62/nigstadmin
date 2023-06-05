@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
+import BouncyButton from "../components/Button";
 import axios from "axios";
 import { Alert, CircularProgress } from "@mui/material";
 const countryCodes = require("country-codes-list");
@@ -488,10 +488,12 @@ export default function DepartmentCreation() {
           <option value={"Private Organization"}>Private Organization</option>
           <option value={"International Organization"}>International Organization</option>
         </select>
-        <Button value={"Apply"} fun={viewOrganization} />
-        <Button value={"Create Organization"} fun={handleCreationForm} />
+
+        <BouncyButton value={"Apply"} fun={viewOrganization}/>
+        <BouncyButton value={"Create Organization"} fun={handleCreationForm} />
+
       </div> : ""}
-      <div className="filter-btn">{!filter ? <Button value={"View Organization"} fun={handleFilter} /> : ""}</div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}className="filter-btn">{!filter ? <BouncyButton value={"View Organization"} fun={handleFilter} /> : ""}</div>
 
       {filter ? <div className='user-details-wrapper'>
         <table>
@@ -711,8 +713,9 @@ export default function DepartmentCreation() {
             value={inputs.contact}
           />
         </div>
-        <Button value={"Submit"} fun={handleDepartmentCreation} />
-        </form>
+
+        <BouncyButton style={{height:"100px"}} value={"Submit"} fun={handleDepartmentCreation} />
+
       </div> : ""}
     </div>
   );

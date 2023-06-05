@@ -170,80 +170,80 @@ export default function CourseScheduling() {
 
             <div className='user-details-wrapper'>
 
-              <table>
-                <thead>
-                  <tr>
-                    <th colSpan="11" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
-                  </tr>
-
-                  <tr>
-                    <th>S.No</th>
-                    <th>Course Title</th>
-                    <th>Course Id</th>
-                    <th>Date Commencement</th>
-                    <th>Date Completion</th>
-                    <th>Course Capacity</th>
-                    <th>Course Fee</th>
-                    <th>Batch No.</th>
-                    <th>Course Status</th>
-                    <th>Running Date</th>
-                    <th>Scheduling Date</th>
-                    <th>Edit</th>
-                  </tr>
-                </thead>
-                <tbody id='scheduling'>
-                  {
-                    viewScheduledCourse.map((data, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{data.title}</td>
-                          <td>{data.courseid}</td>
-                          <td>{data.datecomencement}</td>
-                          <td>{data.datecompletion}</td>
-                          <td>{data.coursecapacity}</td>
-                          <td>{data.fee}</td>
-                          <td>{data.batch}</td>
-                          <td>{data.status}</td>
-                          <td>{data.runningdate}</td>
-                          <td>{data.schedulingdate}</td>
-                          <td onClick={handleEditForm} style={{ cursor: "pointer" }}>Edit</td>
-                        </tr>
-                      )
-                    })
-                  }
-                </tbody>
-              </table>
-            </div>
-          </div> : ""
-      }
-      {
-        viewForm ?
-          <div className='course-creation-wrapper'>
-            <h3>Course Scheduling</h3>
-            <select onChange={(e) => setCourseName(e.target.value)}>
-              <option>Select Course</option>
-              {
-                viewData.map((data, index) => {
-                  return <option value={data.title} key={index}>{data.title}</option>
-                })
-              }
-            </select>
-            {
-              tempArray.length !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
-            }
-            {
-              tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
-            }
-            {
-              tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
-            }
-            {
-              tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
-            }
-            {
-              tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
-            }
+    <table>
+      <thead>
+        <tr>
+        <th colSpan="12" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
+        </tr>
+      
+        <tr>
+            <th>S.No</th>
+            <th>Course Title</th>
+            <th>Course Id</th>
+            <th>Date Commencement</th>
+            <th>Date Completion</th>
+            <th>Course Capacity</th>
+            <th>Course Fee</th>
+            <th>Batch No.</th>
+            <th>Course Status</th>
+            <th>Running Date</th>
+            <th>Scheduling Date</th>
+            <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody id='scheduling'>
+        {
+          viewScheduledCourse.map((data,index)=>{
+            return (
+              <tr key={index}>
+                <td>{index+1}</td>
+                <td>{data.title}</td>
+                <td>{data.courseid}</td>
+                <td>{data.datecomencement}</td>
+                <td>{data.datecompletion}</td>
+                <td>{data.coursecapacity}</td>
+                <td>{data.fee}</td>
+                <td>{data.batch}</td>
+                <td>{data.status}</td>
+                <td>{data.runningdate}</td>
+                <td>{data.schedulingdate}</td>
+                <td onClick={handleCourseEditForm} style={{cursor:"pointer"}}>Edit</td>
+              </tr>
+            )
+          })
+        }
+          </tbody>
+    </table>
+    </div>
+    </div>  : ""
+  }
+   {
+    viewForm ? 
+    <div className='course-creation-wrapper'>
+        <h3>Course Scheduling</h3>
+        <select onChange={(e)=>setCourseName(e.target.value)}>
+           <option>Select Course</option> 
+          {
+            viewData.map((data,index)=>{
+              return <option value={data.title} key={index}>{data.title}</option>
+            })
+          }
+        </select>
+          {
+          tempArray.length  !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
+          }
+        {
+          tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
+        }
+         {
+          tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
+        }
+        {
+          tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
+        }
+         {
+          tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
+        }
 
             <div className='grid2-container' >
 

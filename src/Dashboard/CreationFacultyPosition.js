@@ -111,9 +111,12 @@ export default function CreationFacultyPosition() {
       />
       <Button value={"Submit"} fun={handleFacultyCreation} />
     </div>
-    <div style={{height:"500px" , overflowY:"scroll" , marginTop:"80px"}}>
+    <div style={{width:"600px",maxWidth:"600" , overflowY:"scroll" , marginTop:"80px"}}>
     <table className="faculty-position-table">
-      <tr>
+    <tr>
+                    <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>FACULTIE POSITIONS</th>
+                  </tr>
+      <tr style={{ backgroundColor: "#ffcb00" }}>
         <th>S.No</th>
         <th>Position Id.</th>
         <th>Position</th>

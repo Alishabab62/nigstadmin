@@ -207,7 +207,7 @@ export default function CourseScheduling() {
                 <td>{data.status}</td>
                 <td>{data.runningdate}</td>
                 <td>{data.schedulingdate}</td>
-                <td onClick={handleCourseEditFrom} style={{cursor:"pointer"}}>Edit</td>
+                <td onClick={handleCourseEditForm} style={{cursor:"pointer"}}>Edit</td>
               </tr>
             )
           })
@@ -222,7 +222,7 @@ export default function CourseScheduling() {
     <div className='course-creation-wrapper'>
         <h3>Course Scheduling</h3>
         <select onChange={(e)=>setCourseName(e.target.value)}>
-           <option>Select Course</option>
+           <option>Select Course</option> 
           {
             viewData.map((data,index)=>{
               return <option value={data.title} key={index}>{data.title}</option>

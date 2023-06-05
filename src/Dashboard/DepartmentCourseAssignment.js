@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
+import BouncyButton from "../components/Button";
 import { Alert} from '@mui/material';
 import axios from 'axios';
 
@@ -177,9 +177,9 @@ export default function DepartmentCourseAssignment() {
       {filter ? <div className='filter-wrapper-department'>
         <Inputs placeholder={"Search Organization"} />
         <Inputs placeholder={"Search Course Schedule Id"} />
-        <Button value={"Apply"} />
+        <BouncyButton value={"Apply"} />
       </div> : ""}
-      <div className="filter-btn">{!filter ? <Button value={"View Assigned Courses"} fun={handleFilter} /> : ""}</div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Assigned Courses"} fun={handleFilter} /> : ""}</div>
       {filter ? <div className='user-details-wrapper'>
         <table>
           <tr >
@@ -207,13 +207,13 @@ export default function DepartmentCourseAssignment() {
        {failAlert1 ? <Alert severity='error'>No course found</Alert> : ""}
         <h3>Department Course Assignment</h3>
       <form>
-            <select onChange={(e) => setOrgName(e.target.value)}>
+            <select style={{width:"100%",marginBottom:"9px"}} onChange={(e) => setOrgName(e.target.value)}>
               <option>Select Organization </option>
               {orgView.map((data, index) => {
                 return <option value={data.organization} key={index}>{data.organization}</option>
               })}
             </select>
-            <select onChange={(e) => setCategory(e.target.value)}>
+            <select style={{width:"100%"}}  onChange={(e) => setCategory(e.target.value)}>
               <option value={"select"}>Select Course Category</option>
               <option value={"basic"}>Basic Course</option>
               <option value={"advance"}>Advance Course</option>
@@ -255,9 +255,9 @@ export default function DepartmentCourseAssignment() {
               </div> : ""
             }
             <input type="text" placeholder="Description" name="description" onChange={handleInputs} />
-            {firstStep &&   <button onClick={handleCourseCodeAndNo}>Submit</button>}
-            {secondStep && <button onClick={handleSecondStepCourseId}>Confirm</button>}
-            {thirdStep  && <button onClick={handleFinalSubmit}>Submit</button>}
+            {firstStep &&   <BouncyButton style={{width:"100%"}}  onClick={handleCourseCodeAndNo}>Submit</BouncyButton>}
+            {secondStep && <BouncyButton  onClick={handleSecondStepCourseId}>Confirm</BouncyButton>}
+            {thirdStep  && <BouncyButton  onClick={handleFinalSubmit}>Sumit</BouncyButton>}
           </form>
       </div>
       }

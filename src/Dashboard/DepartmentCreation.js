@@ -219,12 +219,12 @@ export default function DepartmentCreation() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
-  const [duplicateOrg , setDuplicateOrg] = useState(false);
-  const [duplicateEmail , setDuplicateEmail] = useState(false);
-  const [duplicatePhone , setDuplicatePhone] = useState(false);
-  const [organizationView , setOrganisationView] = useState([]);
-  const [typeFilter , setTypeFilter] = useState("");
-  const [categoryFilter,setCategoryFilter] = useState("")
+  const [duplicateOrg, setDuplicateOrg] = useState(false);
+  const [duplicateEmail, setDuplicateEmail] = useState(false);
+  const [duplicatePhone, setDuplicatePhone] = useState(false);
+  const [organizationView, setOrganisationView] = useState([]);
+  const [typeFilter, setTypeFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("")
   const [inputs, setInputs] = useState({
     organization: "",
     email: "",
@@ -263,14 +263,14 @@ export default function DepartmentCreation() {
     viewOrganization();
   }, []);
 
-  function viewOrganization(){
+  function viewOrganization() {
     const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
-    axios.get(urlView).then((res)=>{
+    axios.get(urlView).then((res) => {
       setOrganisationView(res.data.reverse());
 
-    }).catch((error)=>{
+    }).catch((error) => {
       console.log(error)
-      if(error.response.data.message === "No matching records found."){
+      if (error.response.data.message === "No matching records found.") {
         setOrganisationView([])
       }
     })
@@ -284,7 +284,8 @@ export default function DepartmentCreation() {
     }));
   }
 
-  function handleDepartmentCreation() {
+  function handleDepartmentCreation(e) {
+    e.preventDefault()
     if (inputs.organization !== "" && OrganisationType !== undefined && (categoryOfOrganisation !== undefined || otherOrganizationValue !== undefined)) {
       setCircularResponse(true);
       const data = {
@@ -296,9 +297,6 @@ export default function DepartmentCreation() {
         department: OrganisationType === "PSU – Central Government" || OrganisationType === "Central Government Organization" ? department !== "" ? `${department}` : "" : "",
         category: OrganisationType === "Other" ? `${otherOrganizationValue}` ? otherOrganizationValue === "Add new" ? inputs.category : `${otherOrganizationValue}` : "" : `${OrganisationType}`,
       };
-      console.log(
-        data
-      );
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/d";
       axios
         .post(url, data)
@@ -308,30 +306,36 @@ export default function DepartmentCreation() {
           setTimeout(() => {
             setSuccessAlert(false)
           }, 5000);
-          console.log(res);
+          setInputs({
+            organization: "",
+            email: "",
+            contact: "",
+            category: "",
+          })
+          document.getElementById("form").reset()
         })
         .catch((error) => {
           setCircularResponse(false);
-         
-          if(error.response.data.message === "Duplicate organization found"){
+
+          if (error.response.data.message === "Duplicate organization found") {
             setDuplicateOrg(true);
             setTimeout(() => {
               setDuplicateOrg(false)
             }, 5000);
           }
-          else if(error.response.data.message === "Duplicate email found"){
+          else if (error.response.data.message === "Duplicate email found") {
             setDuplicateEmail(true);
             setTimeout(() => {
               setDuplicateEmail(false)
             }, 5000);
           }
-          else if(error.response.data.message === "Duplicate phone found"){
+          else if (error.response.data.message === "Duplicate phone found") {
             setDuplicatePhone(true);
             setTimeout(() => {
               setDuplicatePhone(false)
             }, 5000);
           }
-          else{
+          else {
             setFailAlert(true)
             setTimeout(() => {
               setFailAlert(false)
@@ -460,8 +464,8 @@ export default function DepartmentCreation() {
   return (
     <div>
       {filter ? <div className='filter-wrapper-department'>
-        <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs} />
-        <select onChange={(e)=>setTypeFilter(e.target.value)}>
+        <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs}/>
+        <select onChange={(e) => setTypeFilter(e.target.value)}>
           <option>Select Organization</option>
           <option value={"PSU – Central Government"}>
             PSU – Central Government
@@ -477,14 +481,14 @@ export default function DepartmentCreation() {
           <option value={"Private"}>Private</option>
           <option value={"Other"}>Other</option>
         </select>
-        <select onChange={(e)=>setCategoryFilter(e.target.value)}>
+        <select onChange={(e) => setCategoryFilter(e.target.value)}>
           <option>Select Category</option>
           <option value={"Departmental"}>Departmental</option>
           <option value={"Extra-Departmental"}>Extra-Departmental</option>
           <option value={"Private Organization"}>Private Organization</option>
           <option value={"International Organization"}>International Organization</option>
         </select>
-        <Button value={"Apply"} fun={viewOrganization}/>
+        <Button value={"Apply"} fun={viewOrganization} />
         <Button value={"Create Organization"} fun={handleCreationForm} />
       </div> : ""}
       <div className="filter-btn">{!filter ? <Button value={"View Organization"} fun={handleFilter} /> : ""}</div>
@@ -498,15 +502,15 @@ export default function DepartmentCreation() {
             <th>Category of Organization</th>
           </tr>
           {
-            
-            organizationView.map((data,index)=>{
-              return(
+
+            organizationView.map((data, index) => {
+              return (
                 <tr>
-                <td>{index+1}</td>
-                <td>{data.organization}</td>
-                <td>{data.type}</td>
-                <td>{data.category}</td>
-              </tr>
+                  <td>{index + 1}</td>
+                  <td>{data.organization}</td>
+                  <td>{data.type}</td>
+                  <td>{data.category}</td>
+                </tr>
               )
             })
           }
@@ -516,7 +520,6 @@ export default function DepartmentCreation() {
       <div style={{ textAlign: "center", marginTop: "50px" }} className="department-view-btn-wrapper">
 
       </div>
-      {/* {!responseCircular ? alert("Do You want to leave") : ""} */}
       {!filter ? <div className="department-creation-wrapper">
         {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
@@ -545,12 +548,14 @@ export default function DepartmentCreation() {
         ) : (
           ""
         )}
+        <form id="form">
         <h3>Organization Creation</h3>
-        <Inputs
+        <input
           type={"text"}
           placeholder={"Organization Name"}
           name={"organization"}
-          fun={handleInputs}
+          onChange={handleInputs}
+          value={inputs.organization}
         />
         <select onChange={(e) => { setOrganisationType(e.target.value) }} className='demo' ref={typeRef}>
           <option defaultValue={"PSU-STATE"} >Select Type of Organisation</option>
@@ -678,6 +683,7 @@ export default function DepartmentCreation() {
             name={"category"}
             fun={handleInputs}
             type={"text"}
+            value={inputs.category}
           />
         ) : (
           ""
@@ -688,6 +694,7 @@ export default function DepartmentCreation() {
           placeholder={"Email of Organization"}
           name={"email"}
           fun={handleInputs}
+          value={inputs.email}
         />
 
         <div style={{ display: "flex" }} >
@@ -701,9 +708,11 @@ export default function DepartmentCreation() {
             placeholder={"Contact No"}
             name={"contact"}
             fun={handleInputs}
+            value={inputs.contact}
           />
         </div>
         <Button value={"Submit"} fun={handleDepartmentCreation} />
+        </form>
       </div> : ""}
     </div>
   );

@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function AssigningPositionToFacultyMember() {
   const [faculty, setFaculty] = useState([]);
   const [facultyPosition, setFacultyPosition] = useState("");
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({});
   const [viewPosition, setPosition] = useState([]);
   const [facId, setFacId] = useState("");
   // const [positionId, setPositionId] = useState("");
@@ -21,47 +21,47 @@ export default function AssigningPositionToFacultyMember() {
     }));
   }
   function handlePositionAssigning(e) {
+    let userLocal = JSON.parse(localStorage.getItem("user"));
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
     const data = {
       facultyId: facId,
       faculty_pos: facultyPosition,
       position_assi_id: input.facultyId,
-      faculty_admin: user.faculty
+      faculty_admin: userLocal.faculty
     };
-    console.log(data)
     axios.post(url, data).then((res) => {
-      console.log(res);
+      getAssignedPosition();
     }).catch((error) => {
       console.log(error);
     });
   }
 
   useEffect(() => {
-    const urlFaculty = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view";
+    let userLocal = JSON.parse(localStorage.getItem("user"));
+    const urlFaculty = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${userLocal.faculty}`;
     axios.get(urlFaculty).then((res) => {
       setFaculty(res.data.data);
-      console.log(res.data);
     }).catch((error) => {
       console.log(error);
     });
+
     const positionUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/send";
     axios.get(positionUrl).then((res) => {
       setPosition(res.data.position);
     }).catch((error) => {
       console.log(error);
     });
-    let user = JSON.parse(localStorage.getItem("user"));
-    setUser(user);
+
+    
     getAssignedPosition();
     // eslint-disable-next-line
   }, []);
 
 function getAssignedPosition(){
-  console.log(user.faculty)
-  const url =  `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_position/${user.faculty}`;
+  let userLocal = JSON.parse(localStorage.getItem("user"));
+  const url =  `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_position/${userLocal.faculty}`;
   axios.get(url).then((res)=>{
     setViewData(res.data.facultyPositions);
-    console.log(res)
   }).catch((error)=>{
     console.log(error)
   })
@@ -91,7 +91,7 @@ setView(!view)
                 <th>S.No</th>
                 <th>Faculty Member</th>
                 <th>Faculty Position</th>
-                <th>Senirioty ID</th>
+                <th>Faculty ID</th>
             </tr>
             {
               viewData.map((data,index)=>{
@@ -99,8 +99,8 @@ setView(!view)
                   <tr key={index}>
                   <td>{index+1}</td>
                   <td>{data.first_name}{data.middle_name}{data.last_name}</td>
-                  <td>{data.faculty_id}</td>
                   <td>{data.faculty_pos}</td>  
+                  <td>{data.faculty_id}</td>
               </tr>
                 )
               })
@@ -115,7 +115,7 @@ setView(!view)
           <option>Select Faculty Member</option>
           {
             faculty.map((data, index) => {
-              return data.faculty === user.faculty ? <option key={index} value={data.first_name} data={data.faculty_id}>{data.first_name}</option> : ""
+              return <option key={index} value={data.firstname} data={data.facultyid}>{data.firstname}</option> 
             })
           }
         </select>

@@ -90,7 +90,6 @@ useEffect(()=>{
   tenderViewFun()
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view_archive";
   axios.get(url).then((res)=>{
-    console.log(res.data.data)
     setViewArchive(res.data.data)
   }).catch((error)=>{
     console.log(error)
@@ -190,6 +189,22 @@ const handleClickOpen = (e) => {
 const handleClose = () => {
   setOpen(false);
 };
+
+function corrigendumPDFView(corrigendumID){
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corri_pdf/${corrigendumID}`;
+  axios.get(url, { responseType: "blob" }).then((res) => {
+    const objectUrl = URL.createObjectURL(res.data);
+    const newWindow = window.open();
+    newWindow.document.title = "PDF"
+    if (!newWindow) {
+      alert('Pop-up blocked. Please allow pop-ups for this website.');
+    } else {
+      newWindow.document.body.innerHTML = "<embed width='100%' height='100%' src='" + objectUrl + "' type='application/pdf'></embed>";
+    }
+  }).catch((error) => {
+    console.log(error);
+  });
+}
   return (
     <div style={{display:"flex",flexDirection:"column"}}>
       {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
@@ -221,8 +236,31 @@ const handleClose = () => {
                   <td>{data.description}</td>
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
-                  <td>{data.corrigenda[0].corrigendum}</td>
-                  <td  style={{cursor:"pointer"}} ><button style={{background:"none"}} data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
+                  <td>
+{ data.corrigenda.length >=1 ?
+          <table>
+            <tbody>
+              <tr>
+                <th>S.No</th>
+                <th>Created At</th>
+                <th>ID</th>
+                <th>Corregendom</th>
+                <th>PDF</th>
+              </tr>
+              {data.corrigenda.map((corrigendum, index) => (
+                <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{corrigendum.created_at}</td>
+                  <td>{corrigendum.corrigendumID}</td>
+                  <td>{corrigendum.corrigendum}</td>
+                  <td><AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={(e)=>corrigendumPDFView(corrigendum.corrigendumID)}/></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+             : "" }
+        </td>
+                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )

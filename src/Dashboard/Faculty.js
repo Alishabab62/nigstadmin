@@ -7,7 +7,7 @@ import FacultyReportSubmission from './FacultyReportSubmission';
 
 
 export default function Faculty() {
- const [courseReport , setCourseReport] = useState(false);
+ const [courseReport , setCourseReport] = useState(true);
  const [forgotPassword , setForgotPassword] = useState(false);
 
  function courseReportFun(){

@@ -10,7 +10,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function CreationFacultyMember() {
-  const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
   const [facultyView, setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -30,7 +29,6 @@ export default function CreationFacultyMember() {
     designation: "",
   });
   const [gender, setGender] = useState("");
-  const [facultyInput, setFacultyInput] = useState("");
   const [login, setLogin] = useState("");
   const [user, setUser] = useState("");
   const dobRef = useRef(null);
@@ -43,14 +41,6 @@ export default function CreationFacultyMember() {
   }
 
   useEffect(() => {
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_show";
-    axios.get(url).then((res) => {
-
-      setFaculty(res.data)
-    }).catch((error) => {
-      console.log(error)
-    })
-
     facultyViewFun();
     let user = JSON.parse(localStorage.getItem("user"));
     setUser(user)
@@ -82,7 +72,7 @@ export default function CreationFacultyMember() {
       education: `${input.education}`,
       designation: `${input.designation}`,
       loginAccess: `${login}`,
-      faculty: `${facultyInput}`,
+      faculty: `${user.faculty}`,
     }
     axios.post(url, data).then((res) => {
       facultyViewFun()
@@ -178,6 +168,7 @@ export default function CreationFacultyMember() {
         {
           viewFrame ? <button className='toggle_btn' onClick={viewData}>Create Faculty</button> : <button className='toggle_btn' onClick={viewData}>View Created Faculty</button>
         }
+
       </div>
 
       {
@@ -268,6 +259,7 @@ export default function CreationFacultyMember() {
                   }
                 </tbody>
               </table>
+
             </div>
           </div> : ""
       }

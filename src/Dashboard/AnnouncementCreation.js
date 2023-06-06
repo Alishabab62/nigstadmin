@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai';
 
 export default function AnnouncementCreation() {
-    const [viewForm, setViewForm] = useState(false);
-    const [viewAnnUI, setViewAnnUI] = useState(true);
+    const [viewForm, setViewForm] = useState(true);
+    const [viewAnnUI, setViewAnnUI] = useState(false);
     const [viewArchive,setViewArchive] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [failAlert, setFailAlert] = useState(false);
@@ -154,7 +154,6 @@ function viewAnnouncementPDF(data){
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>PDF</th>
-                                <th>Change Status</th>
                                 <th>Archive Ann.</th>
                             </tr>
                             {
@@ -166,9 +165,8 @@ function viewAnnouncementPDF(data){
                                             <td>{data.title}</td>
                                             <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
                                             <td>{data.url}</td>
-                                            <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
+                                            <td>{data.status ? <button>Hide</button> : <button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</button>}</td>
                                             <td><AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/></td>
-                                            <td><button  onClick={()=>changeAnnouncementStatus(data.aid)}>Change Status</button></td>
                                             <td><button  onClick={()=>archiveAnnouncement(data.aid)}>Archive Ann.</button></td>
                                         </tr>
                                     )
@@ -178,7 +176,7 @@ function viewAnnouncementPDF(data){
                     </div>
                 }
 
-{
+                {
                     viewArchive && <div className='user-details-wrapper'>
                         <table>
                             <tr>
@@ -189,7 +187,6 @@ function viewAnnouncementPDF(data){
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>PDF</th>
-                                <th>Change Status</th>
                             </tr>
                             {
                                 viewArchiveAnnouncementUI.map((data, index) => {
@@ -202,7 +199,6 @@ function viewAnnouncementPDF(data){
                                             <td>{data.url}</td>
                                             <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
                                             <td><AiFillFilePdf style={{fontSize:"30px",color:"red"}}/></td>
-                                            <td><button>Change Status</button></td>
                                         </tr>
                                     )
                                 })

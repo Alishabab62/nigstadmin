@@ -29,7 +29,7 @@ export default function CreationFacultyMember() {
     designation: "",
   });
   const [gender, setGender] = useState("");
-  const [login, setLogin] = useState("");
+  const [login, setLogin] = useState(false);
   const [user, setUser] = useState("");
   const dobRef = useRef(null);
 

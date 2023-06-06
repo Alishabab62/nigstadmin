@@ -47,11 +47,11 @@ export default function CreationFacultyMember() {
   }, [])
 
   function facultyViewFun() {
-    const urlView = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
+    let user = JSON.parse(localStorage.getItem("user"));
+    const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${user.faculty}`
     axios.get(urlView).then((res) => {
-
-      console.log(res)
-      setFacultyView(res.data.data.reverse())
+      console.log(res.data.data)
+      setFacultyView(res.data.data.reverse());
     }).catch((error) => {
       console.log(error);
     })
@@ -193,69 +193,74 @@ export default function CreationFacultyMember() {
                       <th>Email</th>
                       <th>Faculty</th>
                       <th>Designation</th>
-                      <th>Gender</th>
                       <th>Edu.</th>
                       <th>Admin Verification</th>
                     </tr>
                   </thead>
                   <tbody id='faculties'>
-                    {
-                      facultyView.map((data, index) => {
-                        return data.faculty === user.faculty ?
-                          (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>{data.faculty_id}</td>
-                              <td>{data.created_on_date_time}</td>
-                              <td>{data.first_name}</td>
-                              <td>{data.middle_name}</td>
-                              <td>{data.last_name}</td>
-                              <td>{data.phone}</td>
-                              <td>{data.email}</td>
-                              <td>{data.faculty}</td>
-                              <td>{data.designation}</td>
-                              <td>{data.gender}</td>
-                              <td>{data.education}</td>
-                              <td>
-                                {data.admin_verified ? (
-                                  <button
-                                    data={data.email}
-                                    onClick={handleClickOpen}
-                                    style={{
-                                      backgroundColor: "green",
-                                      borderRadius: "50%",
-                                      height: "30px",
-                                      width: "30px",
-                                      color: "green",
-                                      border: "none",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    <i className="fas fa-check" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-                                  </button>
-                                ) : (
-                                  <button
-                                    data={data.email}
-                                    onClick={handleClickOpen}
-                                    style={{
-                                      backgroundColor: "red",
-                                      borderRadius: "50%",
-                                      height: "30px",
-                                      width: "30px",
-                                      color: "red",
-                                      border: "none",
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    <i className="fas fa-times" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-                                  </button>
-                                )}
-                              </td>
+                  {
+  facultyView.map((data, index) => {
+    return (
+      <tr>
+        {/* Render the table cells */}
+        <td>{index + 1}</td>
+        <td>{data.facultyid}</td>
+        <td>{data.created_on_date_time}</td>
+        <td>{data.firstname}</td>
+        <td>{data.middlename}</td>
+        <td>{data.lastname}</td>
+        <td>{data.mobileno}</td>
+        <td>{data.email}</td>
+        <td>{data.faculty}</td>
+        <td>{data.designation}</td>
+        <td>{data.education}</td>
+        <td>
+          {/* Render a button based on the 'admin_verified' value */}
+          {data.admin_verified ? (
+            <button
+              data={data.email}
+              onClick={handleClickOpen}
+              style={{
+                backgroundColor: "green",
+                borderRadius: "50%",
+                height: "30px",
+                width: "30px",
+                color: "green",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <i
+                className="fas fa-check"
+                style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
+              ></i>
+            </button>
+          ) : (
+            <button
+              data={data.email}
+              onClick={handleClickOpen}
+              style={{
+                backgroundColor: "red",
+                borderRadius: "50%",
+                height: "30px",
+                width: "30px",
+                color: "red",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              <i
+                className="fas fa-times"
+                style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
+              ></i>
+            </button>
+          )}
+        </td>
+      </tr>
+    );
+  })
+}
 
-                            </tr>
-                          ) : ""
-                      })
-                    }
                   </tbody>
                 </table>
               </div>

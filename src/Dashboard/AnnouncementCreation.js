@@ -4,10 +4,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai';
 
 export default function AnnouncementCreation() {
-    const [view, setView] = useState(false);
+    const [viewForm, setViewForm] = useState(false);
+    const [viewAnnUI, setViewAnnUI] = useState(true);
+    const [viewArchive,setViewArchive] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
     const [failAlert, setFailAlert] = useState(false);
     const [viewAnn, setViewAnn] = useState([]);
+    const [viewArchiveAnnouncementUI,setViewArchiveAnnouncementUI] = useState([]);
     const [input, setInput] = useState({
         title: "",
         des: "",
@@ -17,10 +20,23 @@ export default function AnnouncementCreation() {
 
     useEffect(() => {
         viewAnnouncement();
+        viewArchiveAnnouncement();
     }, []);
 
-    function viewFun() {
-        setView(!view)
+    function viewUIFun() {
+        setViewAnnUI(true);
+        setViewForm(false);
+        setViewArchive(false);
+    }
+    function viewFormFun() {
+        setViewForm(true);
+        setViewAnnUI(false);
+        setViewArchive(false);
+    }
+    function viewArchiveAnn() {
+        setViewArchive(true);
+        setViewAnnUI(false);
+        setViewForm(false);
     }
 
     function handleInput(e) {
@@ -69,10 +85,10 @@ export default function AnnouncementCreation() {
         })
     }
 
-    function changeAnnouncementStatus(e){
+    function changeAnnouncementStatus(id){
         const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/announcement/edit`;
         const data = {
-            id:`${e.target.getAttribute("data")}`
+            id:`${id}`
         }
         axios.patch(url,data).then((res)=>{
             console.log(res)
@@ -80,15 +96,55 @@ export default function AnnouncementCreation() {
             console.log(error)
         })
     }
+
+    function archiveAnnouncement(id){
+        console.log(id)
+        const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/archive_ann";
+        const data={
+            aid:`${id}`
+        }
+        axios.patch(url,data).then((res)=>{
+            console.log(res)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
+function viewArchiveAnnouncement(){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/show_archive_admin";
+    axios.get(url).then((res)=>{
+        console.log(res)
+        setViewArchiveAnnouncementUI(res.data)
+    }).catch((error)=>{
+        console.log(error)
+    })
+}
+
+function viewAnnouncementPDF(data){
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/view_ann/${data}`;
+  axios.get(url, { responseType: "blob" }).then((res) => {
+    const objectUrl = URL.createObjectURL(res.data);
+    const newWindow = window.open();
+    if (!newWindow) {
+      alert('Pop-up blocked. Please allow pop-ups for this website.');
+    } else {
+      newWindow.document.body.innerHTML = "<embed width='100%' height='100%' src='" + objectUrl + "' type='application/pdf'></embed>";
+    }
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
     return (
         <>
             <div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                    {!view && <button onClick={viewFun}>View Announcement</button>}
-                    {view && <button onClick={viewFun}>Create Announcement</button>}
+                     <button onClick={viewUIFun}>View Announcement</button>
+                     <button onClick={viewFormFun}>Create Announcement</button>
+                    <button onClick={viewArchiveAnn}>View Archive Announcement</button>
                 </div>
                 {
-                    view && <div className='user-details-wrapper'>
+                    viewAnnUI && <div className='user-details-wrapper'>
                         <table>
                             <tr>
                                 <th>S.No</th>
@@ -98,20 +154,55 @@ export default function AnnouncementCreation() {
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>PDF</th>
-                                <th>Edit</th>
+                                <th>Change Status</th>
+                                <th>Archive Ann.</th>
                             </tr>
                             {
                                 viewAnn.map((data, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{data.created_at}</td>
+                                            <td>{data.createdat}</td>
+                                            <td>{data.title}</td>
+                                            <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
+                                            <td>{data.url}</td>
+                                            <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
+                                            <td><AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/></td>
+                                            <td><button  onClick={changeAnnouncementStatus(data.aid)}>Change Status</button></td>
+                                            <td><button  onClick={archiveAnnouncement(data.aid)}>Archive Ann.</button></td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </table>
+                    </div>
+                }
+
+{
+                    viewArchive && <div className='user-details-wrapper'>
+                        <table>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Created At</th>
+                                <th>Title</th>
+                                <th style={{maxWidth:"50px"}}>Description</th>
+                                <th>URL</th>
+                                <th>Status</th>
+                                <th>PDF</th>
+                                <th>Change Status</th>
+                            </tr>
+                            {
+                                viewArchiveAnnouncementUI.map((data, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{index + 1}</td>
+                                            <td>{data.createdat}</td>
                                             <td>{data.title}</td>
                                             <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
                                             <td>{data.url}</td>
                                             <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
                                             <td><AiFillFilePdf style={{fontSize:"30px",color:"red"}}/></td>
-                                            <td><button data={data.a_id} onClick={changeAnnouncementStatus}>Edit</button></td>
+                                            <td><button>Change Status</button></td>
                                         </tr>
                                     )
                                 })
@@ -120,7 +211,7 @@ export default function AnnouncementCreation() {
                     </div>
                 }
                 {
-                    !view && <div className='course-creation-wrapper'>
+                    viewForm  && <div className='course-creation-wrapper'>
                         {successAlert && <Alert severity="success">Announcement Created Successfully</Alert>}
                         {failAlert && <Alert severity="error">Something went wrong</Alert>}
                         <h3 style={{ margin: "20px auto" }}>Announcement Creation Form</h3>

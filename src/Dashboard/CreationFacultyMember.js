@@ -49,11 +49,11 @@ export default function CreationFacultyMember() {
   }, [])
 
   function facultyViewFun() {
-    const urlView = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_view"
+    let user = JSON.parse(localStorage.getItem("user"));
+    const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${user.faculty}`
     axios.get(urlView).then((res) => {
-
-      console.log(res)
-      setFacultyView(res.data.data.reverse())
+      console.log(res.data.data)
+      setFacultyView(res.data.data.reverse());
     }).catch((error) => {
       console.log(error);
     })
@@ -97,7 +97,7 @@ export default function CreationFacultyMember() {
 
 
   function setFalseLoginAccess(e) {
-    console.log("false")
+
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/access";
     const data = {
       email: `${userEmail}`,
@@ -170,7 +170,6 @@ export default function CreationFacultyMember() {
         {
           viewFrame ? <button className='toggle_btn' onClick={viewData}>Create Faculty</button> : <button className='toggle_btn' onClick={viewData}>View Created Faculty</button>
         }
-
       </div>
 
       {
@@ -196,7 +195,6 @@ export default function CreationFacultyMember() {
                     <th>Email</th>
                     <th>Faculty</th>
                     <th>Designation</th>
-                    <th>Gender</th>
                     <th>Edu.</th>
                     <th>Admin Verification</th>
                   </tr>
@@ -204,64 +202,69 @@ export default function CreationFacultyMember() {
                 <tbody id='faculties'>
                   {
                     facultyView.map((data, index) => {
-                      return data.faculty === user.faculty ?
-                        (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{data.faculty_id}</td>
-                            <td>{data.created_on_date_time}</td>
-                            <td>{data.first_name}</td>
-                            <td>{data.middle_name}</td>
-                            <td>{data.last_name}</td>
-                            <td>{data.phone}</td>
-                            <td>{data.email}</td>
-                            <td>{data.faculty}</td>
-                            <td>{data.designation}</td>
-                            <td>{data.gender}</td>
-                            <td>{data.education}</td>
-                            <td>
-                              {data.admin_verified ? (
-                                <button
-                                  data={data.email}
-                                  onClick={handleClickOpen}
-                                  style={{
-                                    backgroundColor: "green",
-                                    borderRadius: "50%",
-                                    height: "30px",
-                                    width: "30px",
-                                    color: "green",
-                                    border: "none",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  <i className="fas fa-check" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-                                </button>
-                              ) : (
-                                <button
-                                  data={data.email}
-                                  onClick={handleClickOpen}
-                                  style={{
-                                    backgroundColor: "red",
-                                    borderRadius: "50%",
-                                    height: "30px",
-                                    width: "30px",
-                                    color: "red",
-                                    border: "none",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  <i className="fas fa-times" style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}></i>
-                                </button>
-                              )}
-                            </td>
-
-                          </tr>
-                        ) : ""
+                      return (
+                        <tr>
+                          {/* Render the table cells */}
+                          <td>{index + 1}</td>
+                          <td>{data.facultyid}</td>
+                          <td>{data.created_on_date_time}</td>
+                          <td>{data.firstname}</td>
+                          <td>{data.middlename}</td>
+                          <td>{data.lastname}</td>
+                          <td>{data.mobileno}</td>
+                          <td>{data.email}</td>
+                          <td>{data.faculty}</td>
+                          <td>{data.designation}</td>
+                          <td>{data.education}</td>
+                          <td>
+                            {/* Render a button based on the 'admin_verified' value */}
+                            {data.admin_verified ? (
+                              <button
+                                data={data.email}
+                                onClick={handleClickOpen}
+                                style={{
+                                  backgroundColor: "green",
+                                  borderRadius: "50%",
+                                  height: "30px",
+                                  width: "30px",
+                                  color: "green",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <i
+                                  className="fas fa-check"
+                                  style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
+                                ></i>
+                              </button>
+                            ) : (
+                              <button
+                                data={data.email}
+                                onClick={handleClickOpen}
+                                style={{
+                                  backgroundColor: "red",
+                                  borderRadius: "50%",
+                                  height: "30px",
+                                  width: "30px",
+                                  color: "red",
+                                  border: "none",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <i
+                                  className="fas fa-times"
+                                  style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
+                                ></i>
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
                     })
                   }
+
                 </tbody>
               </table>
-
             </div>
           </div> : ""
       }
@@ -285,14 +288,7 @@ export default function CreationFacultyMember() {
               <option value={"female"}>Female</option>
               <option value={"other"}>Other</option>
             </select>
-            <select onChange={(e) => (setFacultyInput(e.target.value))}>
-              <option >Select Faculty</option>
-              {
-                faculty.map((data) => {
-                  return <option key={data.id} value={data.name}>{data.name}</option>
-                })
-              }
-            </select>
+            <input disabled value={user.faculty} style={{ backgroundColor: "white" }}></input>
           </div>
           <div className="grid2-container">
             <Inputs type={"email"} placeholder={"Enter email"} name={"email"} fun={handleInputs} />
@@ -302,8 +298,6 @@ export default function CreationFacultyMember() {
             <input type='text' placeholder='Enter Highest Qualification' name={"education"} onChange={handleInputs}></input>
             <input type='text' placeholder='Enter Designation' name={"designation"} onChange={handleInputs}></input>
           </div><br />
-          {/* <Inputs type={"password"} placeholder={"Enter Password"} name={"password"} fun={handleInputs}/> */}
-
           <div style={{ display: "flex", alignItems: "center" }}>
             <p style={{ marginRight: "1rem" }}>Login Access</p>
             <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>

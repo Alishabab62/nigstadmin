@@ -71,7 +71,6 @@ function archiveFun(){
 //  }
 function viewPDF(e) {
   const tenderId = e.target.getAttribute("data");
-  console.log(tenderId)
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);

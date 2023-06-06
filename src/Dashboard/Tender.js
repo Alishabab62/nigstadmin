@@ -196,7 +196,7 @@ const handleClose = () => {
       {
       formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
         <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
-        <button className='openform' onClick={toggleCorrigendum}>Create New Corregendom</button>
+        <button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}>Create New Corregendom</button>
         <button className='openform' onClick={archiveFun}>View Archive Tender</button>
       </div> : ""
       }
@@ -222,7 +222,7 @@ const handleClose = () => {
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>{data.corrigenda[0].corrigendum}</td>
-                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
+                  <td  style={{cursor:"pointer"}} ><button style={{background:"none"}} data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )

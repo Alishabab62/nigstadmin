@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function CreationFacultyMember() {
+  const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
   const [facultyView, setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -29,6 +30,7 @@ export default function CreationFacultyMember() {
     designation: "",
   });
   const [gender, setGender] = useState("");
+  const [facultyInput, setFacultyInput] = useState("");
   const [login, setLogin] = useState("");
   const [user, setUser] = useState("");
   const dobRef = useRef(null);

@@ -715,8 +715,9 @@ export default function DepartmentCreation() {
         </div>
 
         <BouncyButton style={{height:"100px"}} value={"Submit"} fun={handleDepartmentCreation} />
-
+</form>
       </div> : ""}
     </div>
+  
   );
 }

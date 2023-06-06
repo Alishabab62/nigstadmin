@@ -56,6 +56,7 @@ export default function AnnouncementCreation() {
             pdf: pdf.current.files[0]
         }
         axios.post(url, data).then((res) => {
+            viewAnnouncement();
             setSuccessAlert(true);
             setInput({
                 title: "",
@@ -78,7 +79,6 @@ export default function AnnouncementCreation() {
     function viewAnnouncement() {
         const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/announcement/view";
         axios.get(url).then((res) => {
-            console.log(res);
             setViewAnn(res.data.data);
         }).catch((error) => {
             console.log(error)
@@ -104,7 +104,8 @@ export default function AnnouncementCreation() {
             aid:`${id}`
         }
         axios.patch(url,data).then((res)=>{
-            console.log(res)
+            viewAnnouncement();
+            viewArchiveAnnouncement();
         }).catch((error)=>{
             console.log(error)
         })
@@ -113,7 +114,6 @@ export default function AnnouncementCreation() {
 function viewArchiveAnnouncement(){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/show_archive_admin";
     axios.get(url).then((res)=>{
-        console.log(res)
         setViewArchiveAnnouncementUI(res.data)
     }).catch((error)=>{
         console.log(error)
@@ -168,8 +168,8 @@ function viewAnnouncementPDF(data){
                                             <td>{data.url}</td>
                                             <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
                                             <td><AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/></td>
-                                            <td><button  onClick={changeAnnouncementStatus(data.aid)}>Change Status</button></td>
-                                            <td><button  onClick={archiveAnnouncement(data.aid)}>Archive Ann.</button></td>
+                                            <td><button  onClick={()=>changeAnnouncementStatus(data.aid)}>Change Status</button></td>
+                                            <td><button  onClick={()=>archiveAnnouncement(data.aid)}>Archive Ann.</button></td>
                                         </tr>
                                     )
                                 })

@@ -221,7 +221,7 @@ export default function CreationFacultyMember() {
                         <tr>
                           <td>{index + 1}</td>
                           <td>{data.facultyid}</td>
-                          <td>{data.created_on_date_time}</td>
+                          <td>{data.created_at}</td>
                           <td>{data.firstname}</td>
                           <td>{data.middlename}</td>
                           <td>{data.lastname}</td>

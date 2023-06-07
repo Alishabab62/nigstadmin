@@ -1,39 +1,68 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { Alert, CircularProgress } from "@mui/material";
+
 
 export default function AssigningPositionToFacultyMember() {
   const [faculty, setFaculty] = useState([]);
   const [facultyPosition, setFacultyPosition] = useState("");
-  const [user, setUser] = useState({});
   const [viewPosition, setPosition] = useState([]);
   const [facId, setFacId] = useState("");
-  // const [positionId, setPositionId] = useState("");
   const [view, setView] = useState(false);
-  const [viewData,setViewData] = useState([])
+  const [viewData, setViewData] = useState([]);
+  const [responseCircular, setCircularResponse] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [noDataToShow, setNodataToShow] = useState(false);
+  const [createForm, setCreateFrom] = useState(true);
   const [input, setInput] = useState({
     facultyId: ""
   })
-
+  const buttonRef = useRef();
   function handleInputs(e) {
     const { name, value } = e.target;
     setInput((prevInput) => ({
       ...prevInput, [name]: value
     }));
   }
-  function handlePositionAssigning(e) {
-    let userLocal = JSON.parse(localStorage.getItem("user"));
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
-    const data = {
-      facultyId: facId,
-      faculty_pos: facultyPosition,
-      position_assi_id: input.facultyId,
-      faculty_admin: userLocal.faculty
-    };
-    axios.post(url, data).then((res) => {
-      getAssignedPosition();
-    }).catch((error) => {
-      console.log(error);
-    });
+
+  function handlePositionAssigning() {
+    if (facId !== "" && facultyPosition !== "" && input.facultyId !== "") {
+      setCircularResponse(true);
+      buttonRef.current.disabled = true;
+      let userLocal = JSON.parse(localStorage.getItem("user"));
+      const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/possition_assi";
+      const data = {
+        facultyId: facId,
+        faculty_pos: facultyPosition,
+        position_assi_id: input.facultyId,
+        faculty_admin: userLocal.faculty
+      };
+      axios.post(url, data).then((res) => {
+        getAssignedPosition();
+        setCircularResponse(false);
+        setSuccessAlert(true);
+        buttonRef.current.disabled = false;
+        setTimeout(() => {
+          setSuccessAlert(false);
+        }, 5000);
+        document.getElementById("form").reset();
+      }).catch((error) => {
+        setCircularResponse(false);
+        buttonRef.current.disabled = false;
+        setErrorAlert(true);
+        setTimeout(() => {
+          setErrorAlert(false);
+        }, 5000);
+      });
+    }
+    else {
+      setEmptyFieldAlert(true);
+      setTimeout(() => {
+        setEmptyFieldAlert(false);
+      }, 5000);
+    }
   }
 
   useEffect(() => {
@@ -42,30 +71,32 @@ export default function AssigningPositionToFacultyMember() {
     axios.get(urlFaculty).then((res) => {
       setFaculty(res.data.data);
     }).catch((error) => {
-      console.log(error);
+      
     });
 
     const positionUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/send";
     axios.get(positionUrl).then((res) => {
       setPosition(res.data.position);
     }).catch((error) => {
-      console.log(error);
+     
     });
 
-    
+    // {"message":""}
     getAssignedPosition();
     // eslint-disable-next-line
   }, []);
 
-function getAssignedPosition(){
-  let userLocal = JSON.parse(localStorage.getItem("user"));
-  const url =  `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_position/${userLocal.faculty}`;
-  axios.get(url).then((res)=>{
-    setViewData(res.data.facultyPositions);
-  }).catch((error)=>{
-    console.log(error)
-  })
-}
+  function getAssignedPosition() {
+    let userLocal = JSON.parse(localStorage.getItem("user"));
+    const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/faculty_position/${userLocal.faculty}`;
+    axios.get(url).then((res) => {
+      setViewData(res.data.facultyPositions);
+    }).catch((error) => {
+      if(error.response.data.message === "No Record Exists!"){
+        setNodataToShow(true);
+      }
+    })
+  }
 
 
   function setFacultyMemberFun(e) {
@@ -75,62 +106,95 @@ function getAssignedPosition(){
   function setPositionFun(e) {
     setFacultyPosition(e.target.value);
   }
-function viewFun(){
-setView(!view)
-}
+  function viewForm() {
+    setView(false);
+    setCreateFrom(true);
+  }
+  function viewDataFun(){
+    setView(true);
+    setCreateFrom(false);
+  }
   return (
     <>
-    <div>
-    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-    {!view && <button onClick={viewFun}>View</button>}
-    {view && <button onClick={viewFun}>Create</button>}
-    </div>
-    {view && <div className='user-details-wrapper'>
-        <table>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          {createForm && <button onClick={viewDataFun}>View</button>}
+          {view && <button onClick={viewForm}>Create</button>}
+        </div>
+        {(view && !noDataToShow) &&  <div className='user-details-wrapper'>
+          <table>
             <tr>
-                <th>S.No</th>
-                <th>Faculty Member</th>
-                <th>Faculty Position</th>
-                <th>Faculty ID</th>
+              <th>S.No</th>
+              <th>Faculty Member</th>
+              <th>Faculty Position</th>
+              <th>Faculty ID</th>
             </tr>
             {
-              viewData.map((data,index)=>{
+              viewData.map((data, index) => {
                 return (
                   <tr key={index}>
-                  <td>{index+1}</td>
-                  <td>{data.first_name}{data.middle_name}{data.last_name}</td>
-                  <td>{data.faculty_pos}</td>  
-                  <td>{data.faculty_id}</td>
-              </tr>
+                    <td>{index + 1}</td>
+                    <td>{data.first_name}{data.middle_name}{data.last_name}</td>
+                    <td>{data.faculty_pos}</td>
+                    <td>{data.faculty_id}</td>
+                  </tr>
                 )
               })
             }
-           
-        </table>
-        </div>}
-      {!view && <div className='course-creation-wrapper'>
 
-        <h3 style={{ margin: "20px auto" }}>Assigning Positions to Faculty Members</h3>
-        <select onChange={setFacultyMemberFun}>
-          <option>Select Faculty Member</option>
-          {
-            faculty.map((data, index) => {
-              return <option key={index} value={data.firstname} data={data.facultyid}>{data.firstname}</option> 
-            })
-          }
-        </select>
-        <select onChange={(e) => setPositionFun(e)}>
-          <option>Select Faculty Position</option>
-          {
-            viewPosition.map((data, index) => {
-              return <option value={data.faculty_pos} key={index} >{data.faculty_pos}</option>
-            })
-          }
-        </select>
-        <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId" />
-        <button value={"Submit"} onClick={handlePositionAssigning}>Submit</button>
-      </div>}
-    </div>
+          </table>
+        </div>}
+        {
+         ( noDataToShow && view) &&
+          <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+        }
+        {createForm  && <div className='course-creation-wrapper'>
+
+          <h3 style={{ margin: "20px auto" }}>Assigning Positions to Faculty Members</h3>
+          {responseCircular && (
+            <div
+              style={{
+                width: "29%",
+                height: "30%",
+                left: "33%",
+                backgroundColor: "rgb(211,211,211)",
+                borderRadius: "10px",
+                top: "100px",
+                position: "absolute",
+                padding: "10px 20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress style={{ height: "50px", width: "50px" }} />
+            </div>
+          )}
+          {successAlert && <Alert severity='success'>Position Assigned Successfully</Alert>}
+          {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
+          {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
+          <form id='form' style={{ display: "flex", flexDirection: 'column' }}>
+            <select onChange={setFacultyMemberFun}>
+              <option>Select Faculty Member</option>
+              {
+                faculty.map((data, index) => {
+                  return <option key={index} value={data.firstname} data={data.facultyid}>{data.firstname}</option>
+                })
+              }
+            </select>
+            <select onChange={(e) => setPositionFun(e)}>
+              <option>Select Faculty Position</option>
+              {
+                viewPosition.map((data, index) => {
+                  return <option value={data.faculty_pos} key={index} >{data.faculty_pos}</option>
+                })
+              }
+            </select>
+            <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId" />
+            <button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef}>Submit</button>
+          </form>
+        </div>}
+      </div>
     </>
   )
 }

@@ -254,7 +254,9 @@ export default function DepartmentCreation() {
     setCountryCodeObject(myCountryCodesObject);
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/othercategory";
     axios.get(url).then((res) => {
-      setOtherDropdown(res.data.organizations)
+      if(!res.data.message === "Nothing to show or not created!."){
+        setOtherDropdown(res.data.organizations)
+      }
 
     }).catch((error) => {
 
@@ -267,9 +269,7 @@ export default function DepartmentCreation() {
     const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
     axios.get(urlView).then((res) => {
       setOrganisationView(res.data.reverse());
-
     }).catch((error) => {
-      console.log(error)
       if (error.response.data.message === "No matching records found.") {
         setOrganisationView([])
       }
@@ -295,7 +295,7 @@ export default function DepartmentCreation() {
         ministry: OrganisationType === "Other" ? "" : OrganisationType === "State Government Organization" ? `${stateValue}` : OrganisationType === "PSU – State Government" ? `${stateValue}` : OrganisationType === "PSU – Central Government" ? `${ministryDepartmentValue}` : OrganisationType === "Central Government Organization" ? `${ministryDepartmentValue}` : "",
         type: `${OrganisationType}`,
         department: OrganisationType === "PSU – Central Government" || OrganisationType === "Central Government Organization" ? department !== "" ? `${department}` : "" : "",
-        category: OrganisationType === "Other" ? `${otherOrganizationValue}` ? otherOrganizationValue === "Add new" ? inputs.category : `${otherOrganizationValue}` : "" : `${OrganisationType}`,
+        category: OrganisationType === "Other" ? `${otherOrganizationValue}` ? otherOrganizationValue === "Add new" ? inputs.category : `${otherOrganizationValue}` : "" : `${categoryOfOrganisation}`,
       };
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/d";
       axios
@@ -413,21 +413,15 @@ export default function DepartmentCreation() {
   function ministryDisplayHideFun() {
     setMinistryDisplay(false);
   }
+
   useEffect(() => {
     if (otherOrganizationValue === "Add new") {
-      addNewOtherCategoryFunShow();
-    } else {
-      addNewOtherCategoryFunHide();
+      setDisplayInputOther(true)
+    } else{
+      setDisplayInputOther(false)
     }
-
   }, [otherOrganizationValue]);
 
-  function addNewOtherCategoryFunShow() {
-    setDisplayInputOther(true);
-  }
-  function addNewOtherCategoryFunHide() {
-    setDisplayInputOther(false);
-  }
 
   useEffect(() => {
     if (OrganisationType !== undefined) {
@@ -665,19 +659,19 @@ export default function DepartmentCreation() {
           ""
         )}
 
-        {displayCategoryOther ? (
+        {displayCategoryOther && 
           <select onChange={(e) => setOtherOrganizationValue(e.target.value)} ref={otherCatRef}>
+            <option>Select Other Organisation</option>
             {
-              otherDropdown.map((item) => {
+             otherDropdown.map((item) => {
                 return <option key={item.category} value={item.category}>{item.category}</option>
               })
             }
             <option value={"Add new"}>Add new</option>
           </select>
-        ) : (
-          ""
-        )}
-        {displayInputOther ? (
+        }
+
+        {displayInputOther && 
           <Inputs
             placeholder={"Enter Category"}
             name={"category"}
@@ -685,9 +679,7 @@ export default function DepartmentCreation() {
             type={"text"}
             value={inputs.category}
           />
-        ) : (
-          ""
-        )}
+         }
 
         <Inputs
           type={"text"}
@@ -711,7 +703,6 @@ export default function DepartmentCreation() {
             value={inputs.contact}
           />
         </div>
-
         <BouncyButton style={{height:"100px"}} value={"Submit"} fun={handleDepartmentCreation} />
 </form>
       </div> : ""}

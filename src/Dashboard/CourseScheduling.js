@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { getAllISOCodes } from 'iso-country-currency';
+import { Alert, CircularProgress } from '@mui/material';
 
 export default function CourseScheduling() {
 
-  const completionDate = useRef();
-  const commencementDate = useRef();
-  const runningDate = useRef();
+  const completionDate = useRef(null);
+  const commencementDate = useRef(null);
+  const runningDate = useRef(null);
   const courseId = useRef();
   const feeRef = useRef();
   const [input, setInput] = useState({
@@ -21,15 +22,17 @@ export default function CourseScheduling() {
   const [viewForm, setViewForm] = useState(true);
   const [viewScheduledCourse, setScheduledCourse] = useState([]);
   const [editForm, setEditForm] = useState(false);
-  const [newCommencementDate, setNewCommencementDate] = useState("");
-  const [newRunningDate, setNewRunningDate] = useState("");
-  const [newCompletionDate, setNewCompletionDate] = useState("");
-  const [newStatus, setNewStatus] = useState("")
-  const [editData, setEditData] = useState({
-    courseStatus: "",
-    courseBatch: "",
-    courseId: ""
-  });
+  const [newCommencementDate, setNewCommencementDate] = useState(null);
+  const [newRunningDate, setNewRunningDate] = useState(null);
+  const [newCompletionDate, setNewCompletionDate] = useState(null);
+  const [newStatus, setNewStatus] = useState("");
+  const [noDataToShow, setNoDataToShow] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [successAlert, setSuccessAlert] = useState(false);
+  const [errorAlert, setErrorAlert] = useState(false);
+  const [responseCircular, setCircularResponse] = useState(false);
+  const buttonRef = useRef();
+  const [editData, setEditData] = useState({});
   const [viewFrame, setFrame] = useState(false);
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -38,7 +41,7 @@ export default function CourseScheduling() {
     }));
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setCurrency(getAllISOCodes());
     let data = JSON.parse(localStorage.getItem("user"));
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
@@ -48,33 +51,58 @@ export default function CourseScheduling() {
       console.log(error)
     })
 
-    const viewDataUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/view_scheduled";
+    const viewDataUrl = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/view_scheduled_by_faculty/${data.faculty}`;
     axios.get(viewDataUrl).then((res) => {
-      setScheduledCourse(res.data.data);
+      setScheduledCourse(res.data.courses);
+      // console.log(res.data.courses)
     }).catch((error) => {
-      console.log(error);
+      console.log();
+      if (error.response.data.message === "No Courses Found!.") {
+        setNoDataToShow(true);
+      }
     })
   }, [])
 
-  function handleCourseScheduling() {
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/scheduler";
-    const data = {
-      courseName: `${courseName}`,
-      fees: `${input.fee}`,
-      dateCommencement: `${commencementDate.current.value}`,
-      dateCompletion: `${completionDate.current.value}`,
-      courseCapacity: `${input.courseCapacity}`,
-      runningDate: `${runningDate.current.value}`,
-      currency: `${inputCurrency}`,
-      courseID: `${courseId.current.innerText}`
+  function handleCourseScheduling(e) {
+    e.preventDefault();
+    console.log(commencementDate.current.value)
+    if(courseName && input.fee && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!=="" && inputCurrency && courseId.current){
+      setCircularResponse(true);
+      buttonRef.current.disabled = true;
+      const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/scheduler";
+      const data = {
+        courseName: `${courseName}`,
+        fees: `${input.fee}`,
+        dateCommencement: `${commencementDate.current.value}`,
+        dateCompletion: `${completionDate.current.value}`,
+        courseCapacity: `${input.courseCapacity}`,
+        runningDate: `${runningDate.current.value}`,
+        currency: `${inputCurrency}`,
+        courseID: `${courseId.current.innerText}`
+      }
+      axios.post(url, data).then((res) => {
+        setCircularResponse(false);
+        setSuccessAlert(true);
+        document.getElementById("form").reset();
+        buttonRef.current.disabled = false;
+        setTimeout(() => {
+          setSuccessAlert(false);
+        }, 5000);
+      }).catch((error) => {
+        setCircularResponse(false)
+        console.log(error);
+        setErrorAlert(true);
+        setTimeout(() => {
+          setErrorAlert(false);
+        }, 5000);
+      })
     }
-    console.log(data)
-    axios.post(url, data).then((res) => {
-      console.log(res)
-
-    }).catch((error) => {
-      console.log(error)
-    })
+    else{
+      setEmptyFieldAlert(true);
+      setTimeout(() => {
+        setEmptyFieldAlert(false)
+      }, 5000);
+    }
 
   }
 
@@ -88,26 +116,24 @@ export default function CourseScheduling() {
   }, [courseName]);
 
   function changeView() {
-    setViewForm(false);
-    setFrame(true)
-    // setViewDataUI(true);
+    setViewForm(!viewForm);
+    setFrame(!viewFrame)
     setEditForm(false)
   }
 
-  function handleCourseEditForm(event) {
-    event.preventDefault();
-    console.log(editData)
+  function handleCourseEditForm(dataCourse) {
+    setEditForm(true);
+    setFrame(false)
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
     const data = {
-      status: editData.courseStatus,
-      batch: editData.courseBatch,
-      courseID: editData.courseId,
+      status: dataCourse.courseStatus,
+      batch: dataCourse.courseBatch,
+      courseID: dataCourse.courseId,
       newStatus: newStatus,
       newRunningDate: newRunningDate,
       newComencementDate: newCommencementDate,
       newCompletionDate: newCompletionDate,
     };
-    console.log(data);
     axios
       .patch(url, data)
       .then((res) => {
@@ -118,14 +144,10 @@ export default function CourseScheduling() {
       });
   }
 
-  function handleEditForm(event) {
+  function handleEditFormShow(data) {
     setEditForm(true)
     setFrame(false)
-    const courseStatus = event.target.parentElement.children[8].innerText;
-    const courseBatch = event.target.parentElement.children[7].innerText;
-    const courseId = event.target.parentElement.children[2].innerText;
-    const dataEdit = { courseStatus, courseBatch, courseId };
-    setEditData(dataEdit);
+    setEditData(data);
   }
 
 
@@ -156,7 +178,7 @@ export default function CourseScheduling() {
 
 
   return (
-    <div style={{display:"flex" , flexDirection:"column"}}> 
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
@@ -164,86 +186,117 @@ export default function CourseScheduling() {
         }
       </div>
       {
-        viewFrame ?
+        (viewFrame && !noDataToShow) ?
           <div>
             <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
 
             <div className='user-details-wrapper'>
 
-    <table>
-      <thead>
-        <tr>
-        <th colSpan="12" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
-        </tr>
-      
-        <tr>
-            <th>S.No</th>
-            <th>Course Title</th>
-            <th>Course Id</th>
-            <th>Date Commencement</th>
-            <th>Date Completion</th>
-            <th>Course Capacity</th>
-            <th>Course Fee</th>
-            <th>Batch No.</th>
-            <th>Course Status</th>
-            <th>Running Date</th>
-            <th>Scheduling Date</th>
-            <th>Edit</th>
-        </tr>
-        </thead>
-        <tbody id='scheduling'>
-        {
-          viewScheduledCourse.map((data,index)=>{
-            return (
-              <tr key={index}>
-                <td>{index+1}</td>
-                <td>{data.title}</td>
-                <td>{data.courseid}</td>
-                <td>{data.datecomencement}</td>
-                <td>{data.datecompletion}</td>
-                <td>{data.coursecapacity}</td>
-                <td>{data.fee}</td>
-                <td>{data.batch}</td>
-                <td>{data.status}</td>
-                <td>{data.runningdate}</td>
-                <td>{data.schedulingdate}</td>
-                <td onClick={handleCourseEditForm} style={{cursor:"pointer"}}>Edit</td>
-              </tr>
-            )
-          })
-        }
-          </tbody>
-    </table>
-    </div>
-    </div>  : ""
-  }
-   {
-    viewForm ? 
-    <div className='course-creation-wrapper'>
-        <h3>Course Scheduling</h3>
-        <select onChange={(e)=>setCourseName(e.target.value)}>
-           <option>Select Course</option> 
-          {
-            viewData.map((data,index)=>{
-              return <option value={data.title} key={index}>{data.title}</option>
-            })
-          }
-        </select>
-          {
-          tempArray.length  !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
-          }
-        {
-          tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
-        }
-         {
-          tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
-        }
-        {
-          tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
-        }
-         {
-          tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
-        }
+              <table>
+                <thead>
+                  <tr>
+                    <th colSpan="12" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>SCHEDULED COURSES</th>
+                  </tr>
+
+                  <tr>
+                    <th>S.No</th>
+                    <th>Course Title</th>
+                    <th>Course Id</th>
+                    <th>Date Commencement</th>
+                    <th>Date Completion</th>
+                    <th>Course Capacity</th>
+                    <th>Course Fee</th>
+                    <th>Batch No.</th>
+                    <th>Course Status</th>
+                    <th>Running Date</th>
+                    <th>Scheduling Date</th>
+                    <th>Edit</th>
+                  </tr>
+                </thead>
+    
+                <tbody id='scheduling'>
+                  {
+                    viewScheduledCourse.map((data, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{data.title}</td>
+                          <td>{data.courseid}</td>
+                          <td>{data.datecomencement}</td>
+                          <td>{data.datecompletion}</td>
+                          <td>{data.coursecapacity}</td>
+                          <td>{data.fee}</td>
+                          <td>{data.batch}</td>
+                          <td>{data.course_status}</td>
+                          <td>{data.runningdate}</td>
+                          <td>{data.schedulingdate}</td>
+                          <td onClick={(data)=>handleEditFormShow(data)} style={{ cursor: "pointer" }}>Edit</td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div> : ""
+      }
+
+      {
+        (noDataToShow && viewFrame) &&
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+
+
+      {
+        viewForm ?
+          <div className='course-creation-wrapper'>
+            <h3>Course Scheduling</h3>
+            {responseCircular && (
+              <div
+                style={{
+                  width: "29%",
+                  height: "30%",
+                  left: "33%",
+                  backgroundColor: "rgb(211,211,211)",
+                  borderRadius: "10px",
+                  top: "130px",
+                  position: "absolute",
+                  padding: "10px 20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress style={{ height: "50px", width: "50px" }} />
+              </div>
+            )}
+            {successAlert && <Alert severity='success'>Course Scheduled Successfully</Alert>}
+            {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
+            {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
+            <form id='form' style={{display:"flex",flexDirection:"column"}}>
+            <select onChange={(e) => setCourseName(e.target.value)}>
+              <option>Select Course</option>
+              {
+                viewData.map((data, index) => {
+                  return <option value={data.title} key={index}>{data.title}</option>
+                })
+              }
+            </select>
+            {
+              tempArray.length !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
+            }
+            {
+              tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
+            }
+            {
+              tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
+            }
+            {
+              tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
+            }
+            {
+              tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
+            }
 
             <div className='grid2-container' >
 
@@ -264,7 +317,8 @@ export default function CourseScheduling() {
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
             <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
 
-            <button onClick={handleCourseScheduling}>Submit</button>
+            <button onClick={handleCourseScheduling} ref={buttonRef}>Submit</button>
+            </form>
           </div> : ""
       }
       {

@@ -13,7 +13,7 @@ import AnnouncementCreation from "./AnnouncementCreation";
 
 
 export default function NIGSTAdmin() {
-  const [departmentCreation, setDepartmentCreation] = useState(false);
+  const [departmentCreation, setDepartmentCreation] = useState(true);
   const [facultyPositionCreation, setFacultyPositionCreation] = useState(false);
   // const [courseCategory, setCourseCategory] = useState(false);
   const [users, setUsers] = useState(false);

@@ -254,8 +254,10 @@ export default function DepartmentCourseAssignment() {
             }
             <input type="text" placeholder="Description" name="description" onChange={handleInputs} />
             {firstStep &&   <BouncyButton style={{width:"100%"}}  onClick={handleCourseCodeAndNo}>Submit</BouncyButton>}
-            {secondStep && <BouncyButton  onClick={handleSecondStepCourseId}>Confirm</BouncyButton>}
-            {thirdStep  && <BouncyButton  onClick={handleFinalSubmit}>Submit</BouncyButton>}
+
+            {secondStep && <BouncyButton style={{width:"100%"}}  onClick={handleSecondStepCourseId}>Confirm</BouncyButton>}
+            {thirdStep  && <BouncyButton style={{width:"100%"}}  onClick={handleFinalSubmit}>Sumit</BouncyButton>}
+
           </form>
       </div>
       }

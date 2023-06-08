@@ -210,7 +210,7 @@ function corrigendumPDFView(corrigendumID){
       {
       formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
         <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
-        <button className='openform' onClick={toggleCorrigendum}>Create New Corregendom</button>
+        <button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}>Create New Corregendom</button>
         <button className='openform' onClick={archiveFun}>View Archive Tender</button>
       </div> : ""
       }

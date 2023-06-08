@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function CreationFacultyMember() {
+  const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
   const [facultyView, setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);

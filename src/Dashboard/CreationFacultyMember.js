@@ -110,6 +110,7 @@ export default function CreationFacultyMember() {
 
   function viewData() {
     setViewFrame(!viewFrame);
+    facultyViewFun();
   }
 
 

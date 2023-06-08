@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Inputs from "../components/Inputs";
 
 import axios from 'axios';
-import { Alert } from '@mui/material';
+import { Alert,CircularProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,8 +18,8 @@ export default function CreationFacultyMember() {
   const [open, setOpen] = React.useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userStatus, setUserStatus] = useState("");
-
-  // const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [responseCircular, setCircularResponse] = useState(false);
+  const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [input, setInput] = useState({
     f_name: "",
     l_name: "",
@@ -29,11 +29,12 @@ export default function CreationFacultyMember() {
     education: "",
     designation: "",
   });
-  const [gender, setGender] = useState("");
-  const [facultyInput, setFacultyInput] = useState("");
-  const [login, setLogin] = useState("");
+  const [gender, setGender] = useState(null);
+  const [login, setLogin] = useState(false);
   const [user, setUser] = useState("");
+  const [emptyDataUI,setDataEmptyUI] = useState(true);
   const dobRef = useRef(null);
+  const buttonRef = useRef();
 
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -55,40 +56,57 @@ export default function CreationFacultyMember() {
       console.log(res.data.data)
       setFacultyView(res.data.data.reverse());
     }).catch((error) => {
-      console.log(error);
+      if(error.response.data.message === "Nothing to Show."){
+        setDataEmptyUI(false);
+      }
     })
   }
 
 
-  function handleCreationMembers() {
-
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
-    const data = {
-      first_name: `${input.f_name}`,
-      middle_name: `${input.m_name}`,
-      last_name: `${input.l_name}`,
-      dob: `${dobRef.current.value}`,
-      phone: `${input.phone}`,
-      email: `${input.email}`,
-      gender: `${gender}`,
-      education: `${input.education}`,
-      designation: `${input.designation}`,
-      loginAccess: `${login}`,
-      faculty: `${user.faculty}`,
+  function handleCreationMembers(e) {
+    e.preventDefault();
+    if(input.f_name !== "" && dobRef.current !== null && input.phone!== "" && input.email !== "" && gender !== null && input.education !== "" && input.designation !== "") {
+      setCircularResponse(true);
+      buttonRef.current.disabled = true;
+      const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
+      const data = {
+        first_name: `${input.f_name}`,
+        middle_name: `${input.m_name}`,
+        last_name: `${input.l_name}`,
+        dob: `${dobRef.current.value}`,
+        phone: `${input.phone}`,
+        email: `${input.email}`,
+        gender: `${gender}`,
+        education: `${input.education}`,
+        designation: `${input.designation}`,
+        loginAccess: `${login}`,
+        faculty: `${user.faculty}`,
+      }
+      axios.post(url, data).then((res) => {
+        document.getElementById('form').reset();
+        facultyViewFun();
+        setSuccessAlert(true);
+        setCircularResponse(false);
+      buttonRef.current.disabled = false;
+        setTimeout(() => {
+          setSuccessAlert(false)
+        }, 5000);
+      }).catch((error) => {
+        setFailAlert(true);
+        setCircularResponse(false);
+        buttonRef.current.disabled = false;
+        setTimeout(() => {
+          setFailAlert(false)
+        }, 5000);
+      })
     }
-    axios.post(url, data).then((res) => {
-      facultyViewFun()
-      setSuccessAlert(true)
+    else{
+      setEmptyFieldAlert(true);
       setTimeout(() => {
-        setSuccessAlert(false)
+        setEmptyFieldAlert(false)
       }, 5000);
-    }).catch((error) => {
-      setFailAlert(true)
-      setTimeout(() => {
-        setFailAlert(false)
-      }, 5000);
-      console.log(error);
-    })
+    }
+   
   }
 
   function viewData() {
@@ -173,12 +191,10 @@ export default function CreationFacultyMember() {
       </div>
 
       {
-        viewFrame ?
+        viewFrame && emptyDataUI ?
           <div>
             <input type="text" id="SearchInput" placeholder="Search Faculties" value={searchData} onChange={handleInputChange1} />
-
             <div className='user-details-wrapper'>
-
               <table>
                 <thead>
                   <tr>
@@ -204,10 +220,9 @@ export default function CreationFacultyMember() {
                     facultyView.map((data, index) => {
                       return (
                         <tr>
-                          {/* Render the table cells */}
                           <td>{index + 1}</td>
                           <td>{data.facultyid}</td>
-                          <td>{data.created_on_date_time}</td>
+                          <td>{data.created_at}</td>
                           <td>{data.firstname}</td>
                           <td>{data.middlename}</td>
                           <td>{data.lastname}</td>
@@ -217,7 +232,6 @@ export default function CreationFacultyMember() {
                           <td>{data.designation}</td>
                           <td>{data.education}</td>
                           <td>
-                            {/* Render a button based on the 'admin_verified' value */}
                             {data.admin_verified ? (
                               <button
                                 data={data.email}
@@ -262,18 +276,42 @@ export default function CreationFacultyMember() {
                       );
                     })
                   }
-
                 </tbody>
               </table>
             </div>
           </div> : ""
       }
       {
+       (viewFrame && !emptyDataUI ) && 
+        <div style={{width:"100%",textAlign:"center" , fontSize:"30px",marginTop:"200px"}}>No data to show</div>
+      
+      }
+      {
         !viewFrame ? <div className="faculty-member-creation-wrapper">
+           {responseCircular && (
+          <div
+            style={{
+              width: "29%",
+              height: "30%",
+              left: "33%",
+              backgroundColor: "rgb(211,211,211)",
+              borderRadius: "10px",
+              top: "125px",
+              position: "absolute",
+              padding: "10px 20px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress style={{ height: "50px", width: "50px" }} />
+          </div>
+        ) }
           <h3 style={{ margin: "20px auto" }}>Creation Faculty Member</h3>
           {successAlert ? <Alert severity="success" style={{ marginBottom: "10px" }}>Faculty Created Successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{ marginBottom: "10px" }}>Something Went Wrong Please try again later</Alert> : ""}
-          {/* {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""} */}
+          {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
+          <form id='form'>
           <div className="grid-container">
             <input type="text" placeholder="First Name" name="f_name" onChange={handleInputs} />
             <input type="text" placeholder="Middle Name" name="m_name" onChange={handleInputs} />
@@ -281,14 +319,13 @@ export default function CreationFacultyMember() {
           </div>
           <div className="grid-container">
             <input type='text' onFocus={() => { dobRef.current.type = 'date' }} onBlur={() => { dobRef.current.type = 'text' }} placeholder="Date of Birth" ref={dobRef} />
-
             <select onChange={(e) => (setGender(e.target.value))}>
               <option>Select Gender</option>
               <option value={"male"}>Male</option>
               <option value={"female"}>Female</option>
               <option value={"other"}>Other</option>
             </select>
-            <input disabled value={user.faculty} style={{ backgroundColor: "white" }}></input>
+            <input disabled value={user.faculty} style={{ backgroundColor: "white" ,color:"grey"}}></input>
           </div>
           <div className="grid2-container">
             <Inputs type={"email"} placeholder={"Enter email"} name={"email"} fun={handleInputs} />
@@ -303,7 +340,8 @@ export default function CreationFacultyMember() {
             <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>
             <input type="radio" value="false" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
           </div>
-          <button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers}>Submit</button>
+          <button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers} ref={buttonRef}>Submit</button>
+          </form>
         </div> : ""
       }
       <Dialog

@@ -529,7 +529,7 @@ export default function DepartmentCreation() {
         {duplicateOrg ? <Alert severity="error">Organisation Already Exists</Alert> : ""}
         {duplicateEmail ? <Alert severity="error">Email Already Exists</Alert> : ""}
         {duplicatePhone ? <Alert severity="error">Phone Already Exists</Alert> : ""}
-        {responseCircular ? (
+        {responseCircular && (
           <div
             style={{
               width: "29%",
@@ -547,9 +547,7 @@ export default function DepartmentCreation() {
           >
             <CircularProgress style={{ height: "50px", width: "50px" }} />
           </div>
-        ) : (
-          ""
-        )}
+        ) }
         <form id="form">
         <h3>Organization Creation</h3>
         <input

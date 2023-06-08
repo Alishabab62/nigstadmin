@@ -118,7 +118,7 @@ function handleAdminVer(){
                   <td>{user.organization}</td>
                   <td>{user.gender}</td>
                   {user.mobile_verified ? <td>True</td> : <td>False</td> }
-                  {user.email_verified ? <td><button style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} ></button></td> : <td><button style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}></button></td>}
+                  {user.email_verified ? <td>True</td> : <td>False</td>}
                   {user.admin_verified ? <td><button data={user.email} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td> : <td><button data={user.email} style={{ height:"40px" , width:"40px" , backgroundColor:"red" , color:"red" , borderRadius:"50%"}}onClick={handleClickOpen}></button></td>}
                  </tr>
                 )

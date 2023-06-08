@@ -84,7 +84,7 @@ export default function DepartmentCourseAssignment() {
   }, [category]);
 
   function handleFilter() {
-    setFilter(true)
+    setFilter(!filter)
   }
 
 
@@ -179,7 +179,7 @@ export default function DepartmentCourseAssignment() {
         <Inputs placeholder={"Search Course Schedule Id"} />
         <BouncyButton value={"Apply"} />
       </div> : ""}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Assigned Courses"} fun={handleFilter} /> : ""}</div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Assigned Courses"} fun={handleFilter} /> : <BouncyButton value={"View Form"} fun={handleFilter} />}</div>
       {filter ? <div className='user-details-wrapper'>
         <table>
           <tr >
@@ -254,8 +254,10 @@ export default function DepartmentCourseAssignment() {
             }
             <input type="text" placeholder="Description" name="description" onChange={handleInputs} />
             {firstStep &&   <BouncyButton style={{width:"100%"}}  onClick={handleCourseCodeAndNo}>Submit</BouncyButton>}
+
             {secondStep && <BouncyButton style={{width:"100%"}}  onClick={handleSecondStepCourseId}>Confirm</BouncyButton>}
             {thirdStep  && <BouncyButton style={{width:"100%"}}  onClick={handleFinalSubmit}>Sumit</BouncyButton>}
+
           </form>
       </div>
       }

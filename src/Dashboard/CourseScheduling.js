@@ -54,9 +54,7 @@ export default function CourseScheduling() {
     const viewDataUrl = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/view_scheduled_by_faculty/${data.faculty}`;
     axios.get(viewDataUrl).then((res) => {
       setScheduledCourse(res.data.courses);
-      // console.log(res.data.courses)
     }).catch((error) => {
-      console.log();
       if (error.response.data.message === "No Courses Found!.") {
         setNoDataToShow(true);
       }

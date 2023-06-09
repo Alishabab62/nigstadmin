@@ -151,7 +151,7 @@ export default function NIGSTAdmin() {
               Tender
             </li>}
             {
-              announcement ? <li style={{background:"#ffcb00"}} onClick={announcementFun}>
+              announcement ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={announcementFun}>
               Announcement
             </li> : <li className="p-3 " onClick={announcementFun}>
               Announcement

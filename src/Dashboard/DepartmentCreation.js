@@ -551,6 +551,7 @@ export default function DepartmentCreation() {
           onChange={handleInputs}
           value={inputs.organization}
         />
+        <div className='grid2-container'>
         <select onChange={(e) => { setOrganisationType(e.target.value) }} className='demo' ref={typeRef}>
           <option defaultValue={"PSU-STATE"} >Select Type of Organisation</option>
           <option value={"PSU – Central Government"}>
@@ -604,8 +605,9 @@ export default function DepartmentCreation() {
         ) : (
           ""
         )}
+        </div>
         {ministryDisplay ? (
-          <select
+          <select className="w-full"
             onChange={(e) => {
               setMinisterDepartmentsValue(e.target.value);
               setDepartment();
@@ -626,7 +628,7 @@ export default function DepartmentCreation() {
         {ministryDisplay ? (
           ministryDepartments[ministryDepartmentValue] ? (
             ministryDepartments[ministryDepartmentValue] !== "" ? (
-              <select onChange={(e) => setDepartment(e.target.value)} ref={depRef}>
+              <select className="w-full" onChange={(e) => setDepartment(e.target.value)} ref={depRef}>
                 {ministryDepartments[ministryDepartmentValue].map((data) => {
                   return (
                     <option value={data} key={data}>
@@ -646,7 +648,7 @@ export default function DepartmentCreation() {
         )}
 
         {state ? (
-          <select onChange={(e) => setStateValue(e.target.value)} ref={stateRef}>
+          <select className="w-full" onChange={(e) => setStateValue(e.target.value)} ref={stateRef}>
             {statesAndUnionTerritories.map((data, index) => {
               return (
                 <option key={index} value={data}>
@@ -660,7 +662,7 @@ export default function DepartmentCreation() {
         )}
 
         {displayCategoryOther && 
-          <select onChange={(e) => setOtherOrganizationValue(e.target.value)} ref={otherCatRef}>
+          <select  className="w-full" onChange={(e) => setOtherOrganizationValue(e.target.value)} ref={otherCatRef}>
             <option>Select Other Organisation</option>
             {
              otherDropdown.map((item) => {

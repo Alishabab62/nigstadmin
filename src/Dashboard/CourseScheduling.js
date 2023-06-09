@@ -124,9 +124,9 @@ export default function CourseScheduling() {
     setFrame(false)
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
     const data = {
-      status: editData.courseStatus,
-      batch: editData.courseBatch,
-      courseID: editData.courseId,
+      status: editData.course_status,
+      batch: editData.batch,
+      courseID: editData.courseid,
       newStatus: newStatus,
       newRunningDate: newRunningDate,
       newComencementDate: newCommencementDate,
@@ -143,7 +143,7 @@ export default function CourseScheduling() {
   }
 
   function handleEditFormShow(data) {
-    console.log(data)
+    console.log(data);
     setEditForm(true)
     setFrame(false);
     setCreationForm(false);

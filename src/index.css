@@ -16,6 +16,11 @@
     color: white;
     padding: 15px;
 }
+.main-page-header ul li:hover{
+    list-style-type: none;
+    color: #ffcb00;
+    padding: 15px;
+}
 header{
     display: flex;
     justify-content: space-evenly;

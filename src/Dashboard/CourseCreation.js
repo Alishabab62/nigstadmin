@@ -120,7 +120,6 @@ export default function CourseCreation() {
 
   function handleCourseCreation(e) {
     e.preventDefault();
-    console.log("Hello")
     if(category && input.title && code && number && faculty && courseDurDays && courseDurWeeks && courseFee && courseMode && input.des){
       buttonRef.current.disabled = true; 
       setCircularResponse(true);
@@ -318,22 +317,26 @@ export default function CourseCreation() {
           <Inputs type={"text"} placeholder={"Enter course title"} name={"title"} fun={handleInputs} />
           <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs} />
           <div className='grid2-container'>
+            <div>
+              <span>Select Weeks</span>
             <select onChange={(e) => setCourseDurWeeks(e.target.value)}>
-              <option>Select Weeks</option>
               {
                 weeks.map((data) => {
                   return <option key={data}>{data}</option>
                 })
               }
             </select>
+              </div>
+            <div>
+              <span>Select Days</span>
             <select onChange={(e) => setCourseDurDays(e.target.value)}>
-              <option>Select Days</option>
               {
                 days.map((data) => {
                   return <option key={data}>{data}</option>
                 })
               }
             </select>
+            </div>
           </div>
           <select onChange={(e) => setFacultyId(e.target.value)}>
             <option>Select Course Officer</option>

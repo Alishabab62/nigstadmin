@@ -19,14 +19,15 @@ export default function CourseScheduling() {
   const [inputCurrency, setInputCurrency] = useState("");
   const [viewData, setViewData] = useState([]);
   const [tempArray, setTempArray] = useState([]);
-  const [viewForm, setViewForm] = useState(true);
-  const [viewScheduledCourse, setScheduledCourse] = useState([]);
+  const [viewCreation, setCreationForm] = useState(true);
   const [editForm, setEditForm] = useState(false);
+  const [noDataToShow, setNoDataToShow] = useState(false);
+  const [viewFrameButton,setViewFrameButton] = useState(false);
+  const [viewScheduledCourse, setScheduledCourse] = useState([]);
   const [newCommencementDate, setNewCommencementDate] = useState(null);
   const [newRunningDate, setNewRunningDate] = useState(null);
   const [newCompletionDate, setNewCompletionDate] = useState(null);
   const [newStatus, setNewStatus] = useState("");
-  const [noDataToShow, setNoDataToShow] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
@@ -34,6 +35,7 @@ export default function CourseScheduling() {
   const buttonRef = useRef();
   const [editData, setEditData] = useState({});
   const [viewFrame, setFrame] = useState(false);
+
   function handleInputs(e) {
     const { name, value } = e.target;
     setInput((prevInput) => ({
@@ -47,6 +49,7 @@ export default function CourseScheduling() {
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res) => {
       setViewData(res.data.course)
+      // console.log(res.data.course);
     }).catch((error) => {
       console.log(error)
     })
@@ -57,13 +60,13 @@ export default function CourseScheduling() {
     }).catch((error) => {
       if (error.response.data.message === "No Courses Found!.") {
         setNoDataToShow(true);
+        setFrame(false);
       }
     })
   }, [])
 
   function handleCourseScheduling(e) {
     e.preventDefault();
-    console.log(commencementDate.current.value)
     if(courseName && input.fee && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!=="" && inputCurrency && courseId.current){
       setCircularResponse(true);
       buttonRef.current.disabled = true;
@@ -113,20 +116,17 @@ export default function CourseScheduling() {
     });
   }, [courseName]);
 
-  function changeView() {
-    setViewForm(!viewForm);
-    setFrame(!viewFrame)
-    setEditForm(false)
-  }
 
-  function handleCourseEditForm(dataCourse) {
+
+  function handleCourseEditForm(e) {
+    e.preventDefault();
     setEditForm(true);
     setFrame(false)
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
     const data = {
-      status: dataCourse.courseStatus,
-      batch: dataCourse.courseBatch,
-      courseID: dataCourse.courseId,
+      status: editData.courseStatus,
+      batch: editData.courseBatch,
+      courseID: editData.courseId,
       newStatus: newStatus,
       newRunningDate: newRunningDate,
       newComencementDate: newCommencementDate,
@@ -143,12 +143,25 @@ export default function CourseScheduling() {
   }
 
   function handleEditFormShow(data) {
+    console.log(data)
     setEditForm(true)
-    setFrame(false)
+    setFrame(false);
+    setCreationForm(false);
     setEditData(data);
   }
+function viewFormSchedule(){
+  setViewFrameButton(!viewFrameButton)
+  setFrame(true);
+  setCreationForm(false);
+  setEditForm(false)
+}
 
-
+function viewCourse(){
+  setViewFrameButton(!viewFrameButton)
+  setFrame(false);
+  setCreationForm(true);
+  setEditForm(false)
+}
   const [searchData, setSearchData] = useState("");
 
   const handleInputChange1 = (event) => {
@@ -180,11 +193,11 @@ export default function CourseScheduling() {
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
-          viewFrame ? <button className='toggle_btn' onClick={changeView}>Schedule Course</button> : <button className='toggle_btn' onClick={changeView}>View Scheduled Course</button>
+          viewFrameButton ? <button className='toggle_btn' onClick={viewCourse}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
         }
       </div>
       {
-        (viewFrame && !noDataToShow) ?
+        (viewFrame) ?
           <div>
             <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
 
@@ -228,7 +241,7 @@ export default function CourseScheduling() {
                           <td>{data.course_status}</td>
                           <td>{data.runningdate}</td>
                           <td>{data.schedulingdate}</td>
-                          <td onClick={(data)=>handleEditFormShow(data)} style={{ cursor: "pointer" }}>Edit</td>
+                          <td onClick={()=>handleEditFormShow(data)} style={{ cursor: "pointer" }}>Edit</td>
                         </tr>
                       )
                     })
@@ -240,13 +253,13 @@ export default function CourseScheduling() {
       }
 
       {
-        (noDataToShow && viewFrame) &&
+        noDataToShow && 
         <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
       }
 
 
       {
-        viewForm ?
+        viewCreation ?
           <div className='course-creation-wrapper'>
             <h3>Course Scheduling</h3>
             {responseCircular && (
@@ -326,15 +339,15 @@ export default function CourseScheduling() {
           <form>
             <select onChange={(e) => setNewStatus(e.target.value)}>
               <option>Select Status</option>
-              {editData.courseStatus === "created" ? <option value='scheduled'>Schedule</option> : ""}
-              {editData.courseStatus === "created" ? <option value='running'>Running</option> : ""}
-              {editData.courseStatus === "created" ? <option value='postponed'>Postponed</option> : ""}
-              {editData.courseStatus === "created" ? <option value='canceled'>Cancelled</option> : ""}
-              {editData.courseStatus === "scheduled" ? <option value='running'>Running</option> : ""}
-              {editData.courseStatus === "scheduled" ? <option value='postponed'>Postponed</option> : ""}
-              {editData.courseStatus === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
-              {editData.courseStatus === "running" ? <option value='completed'>Complete</option> : ""}
-              {editData.courseStatus === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
+              {editData.course_status === "created" ? <option value='scheduled'>Schedule</option> : ""}
+              {editData.course_status === "created" ? <option value='running'>Running</option> : ""}
+              {editData.course_status === "created" ? <option value='postponed'>Postponed</option> : ""}
+              {editData.course_status === "created" ? <option value='canceled'>Cancelled</option> : ""}
+              {editData.course_status === "scheduled" ? <option value='running'>Running</option> : ""}
+              {editData.course_status === "scheduled" ? <option value='postponed'>Postponed</option> : ""}
+              {editData.course_status === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
+              {editData.course_status === "running" ? <option value='completed'>Complete</option> : ""}
+              {editData.course_status === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
             </select>
             <input type='text' value={editData.courseId} disabled></input>
             <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input>

@@ -10,7 +10,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 
 export default function CreationFacultyMember() {
-  const [faculty, setFaculty] = useState([]);
   const [viewFrame, setViewFrame] = useState(false);
   const [facultyView, setFacultyView] = useState([]);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -20,6 +19,7 @@ export default function CreationFacultyMember() {
   const [userStatus, setUserStatus] = useState("");
   const [responseCircular, setCircularResponse] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [invalidEmailPhone , setInvalidEmailPhone] = useState(false);
   const [input, setInput] = useState({
     f_name: "",
     l_name: "",
@@ -53,7 +53,6 @@ export default function CreationFacultyMember() {
     let user = JSON.parse(localStorage.getItem("user"));
     const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/faculty_member_faculty/${user.faculty}`
     axios.get(urlView).then((res) => {
-      console.log(res.data.data)
       setFacultyView(res.data.data.reverse());
     }).catch((error) => {
       if(error.response.data.message === "Nothing to Show."){
@@ -65,7 +64,13 @@ export default function CreationFacultyMember() {
 
   function handleCreationMembers(e) {
     e.preventDefault();
-    if(input.f_name !== "" && dobRef.current !== null && input.phone!== "" && input.email !== "" && gender !== null && input.education !== "" && input.designation !== "") {
+    if((input.email && input.phone) && !input.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
+      setInvalidEmailPhone(true);
+      setTimeout(() => {
+        setInvalidEmailPhone(false);
+      }, 5000);
+    }
+   else if(input.f_name !== "" && dobRef.current !== null && input.phone!== "" && input.email !== "" && gender !== null && input.education !== "" && input.designation !== "") {
       setCircularResponse(true);
       buttonRef.current.disabled = true;
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
@@ -312,6 +317,7 @@ export default function CreationFacultyMember() {
           {successAlert ? <Alert severity="success" style={{ marginBottom: "10px" }}>Faculty Created Successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{ marginBottom: "10px" }}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
+          {invalidEmailPhone ? <Alert severity="error" style={{marginBottom:"10px"}}>Invalid Email and Phone</Alert> : ""}
           <form id='form'>
           <div className="grid-container">
             <input type="text" placeholder="First Name" name="f_name" onChange={handleInputs} />

@@ -4,10 +4,10 @@ import { AiFillFilePdf } from 'react-icons/ai';
 
 export default function CourseReportToFaculty() {
   const [data, setData] = useState([]);
+  const [noDataToShow,setNoDataToShow] = useState(false)
 
 
   function handlePDFView(data) {
-
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/report/view/${data}`;
     axios.get(url, { responseType: "blob" }).then((res) => {
       const objectUrl = URL.createObjectURL(res.data);
@@ -20,7 +20,7 @@ export default function CourseReportToFaculty() {
         newWindow.document.title = "PDF";
       }
     }).catch((error) => {
-      console.log(error);
+      
     });
   }
 
@@ -30,11 +30,18 @@ export default function CourseReportToFaculty() {
     axios.get(url).then((res) => {
       setData(res.data.reports);
     }).catch((error) => {
-      console.log(error)
+      if(error.response.data.message==="No Reports Found!."){
+        setNoDataToShow(true);
+      }
     });
   }, [])
   return (
-    <div className='user-details-wrapper'>
+    <>
+    {
+       noDataToShow && <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+       }
+    
+   {!noDataToShow &&  <div className='user-details-wrapper'>
       <table>
         <tbody>
           <tr>
@@ -59,6 +66,7 @@ export default function CourseReportToFaculty() {
           })}
         </tbody>
       </table>
-    </div>
+    </div>}
+  </>
   )
 }

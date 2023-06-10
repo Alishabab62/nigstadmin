@@ -68,23 +68,39 @@ function handleAdminVer(){
   }) 
 }
 
+const [searchData, setSearchData] = useState("");
+
+const handleInputChange1 = (event) => {
+  setSearchData(event.target.value);
+  const input = event.target.value.toLowerCase();
+  const rows = document.querySelectorAll("#Organization tr");
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+    let shouldHide = true;
+    cells.forEach((cell) => {
+      if (cell.textContent.toLowerCase().includes(input)) {
+        shouldHide = false;
+      }
+    });
+    if (shouldHide) {
+      row.classList.add("hidden");
+    } else {
+      row.classList.remove("hidden");
+    }
+  });
+};
+
 
   return (
     <div className='user-verification w-full'>
-      <div className='filter-wrapper'>
-        <div>
-       <span>By Email</span> <Inputs type={"text"} placeholder={"Search by Email"}  name={"email"} fun={handleInputs}/>
-        </div>
-        <div>
-       <span>By Organization</span> <Inputs type={"text"} placeholder={"Search by Organization"} name={"orgName"} fun={handleInputs}/>
-        </div>
-       <select onChange={(e)=>setVerificationFilterValue(e.target.value)}> 
+      <div  className='filter-wrapper'>
+       <select style={{border:"1px solid black", width:"225px"}} onChange={(e)=>setVerificationFilterValue(e.target.value)}> 
         <option>Select by Verification Status</option> 
         <option value={""}>All Student</option>
         <option value={"true"}>All verified Student</option>
         <option value={"false"}>All non-verified Student</option>
        </select>
-       <div>
+       <div style={{marginTop:"5px"}}>
        <span>From Date</span> <Inputs type={"date"} ref1={startDateRef}/>
        </div>
        <div>
@@ -92,9 +108,13 @@ function handleAdminVer(){
        </div>
        <button onClick={filter}>Apply</button>
       </div>   
+      <div><input type="text" id="SearchInput" placeholder="Search New Users " value={searchData} onChange={handleInputChange1} /></div>
       <div className='user-details-wrapper'>
         <table>
-          <tbody>
+          
+          <tr>
+            <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>Users</th>
+          </tr>
             <tr>
                 <th>S.No</th>
                 <th>Created At</th>
@@ -107,6 +127,7 @@ function handleAdminVer(){
                 <th>Email Verification</th>
                 <th>NIGST Verification</th>
             </tr>
+            <tbody>
               {data.map((user,index)=>{
                 return(
                   <tr key={index}>

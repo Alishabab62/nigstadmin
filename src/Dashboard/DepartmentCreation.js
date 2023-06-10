@@ -254,7 +254,7 @@ export default function DepartmentCreation() {
     setCountryCodeObject(myCountryCodesObject);
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/othercategory";
     axios.get(url).then((res) => {
-      if(!res.data.message === "Nothing to show or not created!."){
+      if (!res.data.message === "Nothing to show or not created!.") {
         setOtherDropdown(res.data.organizations)
       }
 
@@ -265,16 +265,28 @@ export default function DepartmentCreation() {
     viewOrganization();
   }, []);
 
-  function viewOrganization() {
+  const viewOrganization = () => {
     const urlView = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/organizationfilter?type=${typeFilter}&category=${categoryFilter}`;
-    axios.get(urlView).then((res) => {
-      setOrganisationView(res.data.reverse());
-    }).catch((error) => {
-      if (error.response.data.message === "No matching records found.") {
-        setOrganisationView([])
-      }
-    })
-  }
+    axios
+      .get(urlView)
+      .then((res) => {
+        setOrganisationView(res.data.reverse());
+        // Reset the filters
+        setTypeFilter('');
+        setCategoryFilter('');
+      })
+      .catch((error) => {
+        if (error.response.data.message === "No matching records found.") {
+          setOrganisationView([]);
+          // Reset the filters
+          setTypeFilter('');
+          setCategoryFilter('');
+        }
+      });
+  };
+
+
+
 
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -417,7 +429,7 @@ export default function DepartmentCreation() {
   useEffect(() => {
     if (otherOrganizationValue === "Add new") {
       setDisplayInputOther(true)
-    } else{
+    } else {
       setDisplayInputOther(false)
     }
   }, [otherOrganizationValue]);
@@ -455,48 +467,68 @@ export default function DepartmentCreation() {
   if (!responseCircular) {
     // confirm("shs")
   }
+  const [searchData, setSearchData] = useState("");
+
+  const handleInputChange1 = (event) => {
+    setSearchData(event.target.value);
+    const input = event.target.value.toLowerCase();
+    const rows = document.querySelectorAll("#Organization tr");
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      let shouldHide = true;
+      cells.forEach((cell) => {
+        if (cell.textContent.toLowerCase().includes(input)) {
+          shouldHide = false;
+        }
+      });
+      if (shouldHide) {
+        row.classList.add("hidden");
+      } else {
+        row.classList.remove("hidden");
+      }
+    });
+  };
   return (
     <div>
       {filter ? <div className='filter-wrapper-department'>
-        <Inputs type={"text"} placeholder={"Search Organization"} name={"filterOrganization"} fun={handleInputs}/>
-        <select onChange={(e) => setTypeFilter(e.target.value)}>
-          <option>Select Organization</option>
-          <option value={"PSU – Central Government"}>
-            PSU – Central Government
-          </option>
-          <option value={"Central Government Organization"}>
-            Central Government Organization{" "}
-          </option>
-          <option value={"PSU – State Government"}>PSU – State Government</option>
-          <option value={"State Government Organization"}>
-            State Government Organization{" "}
-          </option>
-          <option value={"International"}>International</option>
-          <option value={"Private"}>Private</option>
-          <option value={"Other"}>Other</option>
+        <select onChange={(e) => setTypeFilter(e.target.value)} value={typeFilter}>
+          <option value="">Select Organization Type</option>
+          <option value="PSU – Central Government">PSU – Central Government</option>
+          <option value="Central Government Organization">Central Government Organization</option>
+          <option value="PSU – State Government">PSU – State Government</option>
+          <option value="State Government Organization">State Government Organization</option>
+          <option value="International">International</option>
+          <option value="Private">Private</option>
+          <option value="Other">Other</option>
         </select>
-        <select onChange={(e) => setCategoryFilter(e.target.value)}>
-          <option>Select Category</option>
-          <option value={"Departmental"}>Departmental</option>
-          <option value={"Extra-Departmental"}>Extra-Departmental</option>
-          <option value={"Private Organization"}>Private Organization</option>
-          <option value={"International Organization"}>International Organization</option>
+        <select onChange={(e) => setCategoryFilter(e.target.value)} value={categoryFilter}>
+          <option value="">Select Category</option>
+          <option value="Departmental">Departmental</option>
+          <option value="Extra-Departmental">Extra-Departmental</option>
+          <option value="Private Organization">Private Organization</option>
+          <option value="International Organization">International Organization</option>
         </select>
 
-        <BouncyButton value={"Apply"} fun={viewOrganization}/>
+        <BouncyButton value={"Apply"} fun={viewOrganization} />
         <BouncyButton value={"Create Organization"} fun={handleCreationForm} />
-
       </div> : ""}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}className="filter-btn">{!filter ? <BouncyButton value={"View Organization"} fun={handleFilter} /> : ""}</div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Organization"} fun={handleFilter} /> : ""}</div>
 
-      {filter ? <div className='user-details-wrapper'>
-        <table>
+      {filter ? 
+     <div> <div><input type="text" id="SearchInput" placeholder="Search Organization Name" value={searchData} onChange={handleInputChange1} /></div>
+      <div className='user-details-wrapper'>
+      
+        <table >
+          <tr>
+            <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>ORGANISATIONS</th>
+          </tr>
           <tr>
             <th>S.No</th>
             <th>Organization Name</th>
             <th>Organization Type</th>
             <th>Category of Organization</th>
           </tr>
+          <tbody id="Organization">
           {
 
             organizationView.map((data, index) => {
@@ -510,8 +542,9 @@ export default function DepartmentCreation() {
               )
             })
           }
+          </tbody>
         </table>
-      </div> : ""}
+      </div> </div>: ""}
 
       <div style={{ textAlign: "center", marginTop: "50px" }} className="department-view-btn-wrapper">
 
@@ -541,174 +574,174 @@ export default function DepartmentCreation() {
           >
             <CircularProgress style={{ height: "50px", width: "50px" }} />
           </div>
-        ) }
+        )}
         <form id="form">
-        <h3>Organization Creation</h3>
-        <input
-          type={"text"}
-          placeholder={"Organization Name"}
-          name={"organization"}
-          onChange={handleInputs}
-          value={inputs.organization}
-        />
-        <div className='grid2-container'>
-        <select onChange={(e) => { setOrganisationType(e.target.value) }} className='demo' ref={typeRef}>
-          <option defaultValue={"PSU-STATE"} >Select Type of Organisation</option>
-          <option value={"PSU – Central Government"}>
-            PSU – Central Government
-          </option>
-          <option value={"Central Government Organization"}>
-            Central Government Organization{" "}
-          </option>
-          <option value={"PSU – State Government"}>PSU – State Government</option>
-          <option value={"State Government Organization"}>
-            State Government Organization{" "}
-          </option>
-          <option value={"International"}>International</option>
-          <option value={"Private"}>Private</option>
-          <option value={"Other"}>Other</option>
-        </select>
-
-        {!displayCategoryOther ? (
-          <select onChange={(e) => setCategoryOfOrganisation(e.target.value)} ref={catRef}>
-            <option defaultValue={"Departmental"}>
-              Select Category Of Organization
-            </option>
-            {displayCategoryStateCenter ? (
-              <option value={"Departmental"}>Departmental</option>
-            ) : (
-              ""
-            )}
-            {displayCategoryStateCenter ? (
-              <option value={"Extra-Departmental"}>Extra-Departmental</option>
-            ) : (
-              ""
-            )}
-            {displayCategoryPrivate ? (
-              <option value={"Private Organization"}>Private Organization</option>
-            ) : (
-              ""
-            )}
-            {displayCategoryPrivate ? (
-              <option value={"Private Individual"}>Private Individual</option>
-            ) : (
-              ""
-            )}
-            {displayCategoryInternational ? (
-              <option value={"International Organization"}>
-                International Organization{" "}
+          <h3>Organization Creation</h3>
+          <input
+            type={"text"}
+            placeholder={"Organization Name"}
+            name={"organization"}
+            onChange={handleInputs}
+            value={inputs.organization}
+          />
+          <div className='grid2-container'>
+            <select onChange={(e) => { setOrganisationType(e.target.value) }} className='demo' ref={typeRef}>
+              <option defaultValue={"PSU-STATE"} >Select Type of Organisation</option>
+              <option value={"PSU – Central Government"}>
+                PSU – Central Government
               </option>
+              <option value={"Central Government Organization"}>
+                Central Government Organization{" "}
+              </option>
+              <option value={"PSU – State Government"}>PSU – State Government</option>
+              <option value={"State Government Organization"}>
+                State Government Organization{" "}
+              </option>
+              <option value={"International"}>International</option>
+              <option value={"Private"}>Private</option>
+              <option value={"Other"}>Other</option>
+            </select>
+
+            {!displayCategoryOther ? (
+              <select onChange={(e) => setCategoryOfOrganisation(e.target.value)} ref={catRef}>
+                <option defaultValue={"Departmental"}>
+                  Select Category Of Organization
+                </option>
+                {displayCategoryStateCenter ? (
+                  <option value={"Departmental"}>Departmental</option>
+                ) : (
+                  ""
+                )}
+                {displayCategoryStateCenter ? (
+                  <option value={"Extra-Departmental"}>Extra-Departmental</option>
+                ) : (
+                  ""
+                )}
+                {displayCategoryPrivate ? (
+                  <option value={"Private Organization"}>Private Organization</option>
+                ) : (
+                  ""
+                )}
+                {displayCategoryPrivate ? (
+                  <option value={"Private Individual"}>Private Individual</option>
+                ) : (
+                  ""
+                )}
+                {displayCategoryInternational ? (
+                  <option value={"International Organization"}>
+                    International Organization{" "}
+                  </option>
+                ) : (
+                  ""
+                )}
+              </select>
             ) : (
               ""
             )}
-          </select>
-        ) : (
-          ""
-        )}
-        </div>
-        {ministryDisplay ? (
-          <select className="w-full"
-            onChange={(e) => {
-              setMinisterDepartmentsValue(e.target.value);
-              setDepartment();
-            }}
-            ref={minRef}
-          >
-            {ministryDepartment.map((data) => {
-              return (
-                <option value={data} key={data}>
-                  {data}
-                </option>
-              );
-            })}
-          </select>
-        ) : (
-          ""
-        )}
-        {ministryDisplay ? (
-          ministryDepartments[ministryDepartmentValue] ? (
-            ministryDepartments[ministryDepartmentValue] !== "" ? (
-              <select className="w-full" onChange={(e) => setDepartment(e.target.value)} ref={depRef}>
-                {ministryDepartments[ministryDepartmentValue].map((data) => {
-                  return (
-                    <option value={data} key={data}>
-                      {data}
-                    </option>
-                  );
-                })}
-              </select>
+          </div>
+          {ministryDisplay ? (
+            <select className="w-full"
+              onChange={(e) => {
+                setMinisterDepartmentsValue(e.target.value);
+                setDepartment();
+              }}
+              ref={minRef}
+            >
+              {ministryDepartment.map((data) => {
+                return (
+                  <option value={data} key={data}>
+                    {data}
+                  </option>
+                );
+              })}
+            </select>
+          ) : (
+            ""
+          )}
+          {ministryDisplay ? (
+            ministryDepartments[ministryDepartmentValue] ? (
+              ministryDepartments[ministryDepartmentValue] !== "" ? (
+                <select className="w-full" onChange={(e) => setDepartment(e.target.value)} ref={depRef}>
+                  {ministryDepartments[ministryDepartmentValue].map((data) => {
+                    return (
+                      <option value={data} key={data}>
+                        {data}
+                      </option>
+                    );
+                  })}
+                </select>
+              ) : (
+                ""
+              )
             ) : (
               ""
             )
           ) : (
             ""
-          )
-        ) : (
-          ""
-        )}
+          )}
 
-        {state ? (
-          <select className="w-full" onChange={(e) => setStateValue(e.target.value)} ref={stateRef}>
-            {statesAndUnionTerritories.map((data, index) => {
-              return (
-                <option key={index} value={data}>
-                  {data}
-                </option>
-              );
-            })}
-          </select>
-        ) : (
-          ""
-        )}
+          {state ? (
+            <select className="w-full" onChange={(e) => setStateValue(e.target.value)} ref={stateRef}>
+              {statesAndUnionTerritories.map((data, index) => {
+                return (
+                  <option key={index} value={data}>
+                    {data}
+                  </option>
+                );
+              })}
+            </select>
+          ) : (
+            ""
+          )}
 
-        {displayCategoryOther && 
-          <select  className="w-full" onChange={(e) => setOtherOrganizationValue(e.target.value)} ref={otherCatRef}>
-            <option>Select Other Organisation</option>
-            {
-             otherDropdown.map((item) => {
-                return <option key={item.category} value={item.category}>{item.category}</option>
-              })
-            }
-            <option value={"Add new"}>Add new</option>
-          </select>
-        }
+          {displayCategoryOther &&
+            <select className="w-full" onChange={(e) => setOtherOrganizationValue(e.target.value)} ref={otherCatRef}>
+              <option>Select Other Organisation</option>
+              {
+                otherDropdown.map((item) => {
+                  return <option key={item.category} value={item.category}>{item.category}</option>
+                })
+              }
+              <option value={"Add new"}>Add new</option>
+            </select>
+          }
 
-        {displayInputOther && 
-          <Inputs
-            placeholder={"Enter Category"}
-            name={"category"}
-            fun={handleInputs}
-            type={"text"}
-            value={inputs.category}
-          />
-         }
+          {displayInputOther &&
+            <Inputs
+              placeholder={"Enter Category"}
+              name={"category"}
+              fun={handleInputs}
+              type={"text"}
+              value={inputs.category}
+            />
+          }
 
-        <Inputs
-          type={"text"}
-          placeholder={"Email of Organization"}
-          name={"email"}
-          fun={handleInputs}
-          value={inputs.email}
-        />
-
-        <div style={{ display: "flex" }} >
-          <select style={{ marginRight: "5px", width: "135px" }} ref={countryCodeRef}>
-            {countryCode.map((data, index) => {
-              return <option key={index}>{countryCodeObject[data]}</option>;
-            })}
-          </select>
           <Inputs
             type={"text"}
-            placeholder={"Contact No"}
-            name={"contact"}
+            placeholder={"Email of Organization"}
+            name={"email"}
             fun={handleInputs}
-            value={inputs.contact}
+            value={inputs.email}
           />
-        </div>
-        <BouncyButton style={{height:"100px"}} value={"Submit"} fun={handleDepartmentCreation} />
-</form>
+
+          <div style={{ display: "flex" }} >
+            <select style={{ marginRight: "5px", width: "135px" }} ref={countryCodeRef}>
+              {countryCode.map((data, index) => {
+                return <option key={index}>{countryCodeObject[data]}</option>;
+              })}
+            </select>
+            <Inputs
+              type={"text"}
+              placeholder={"Contact No"}
+              name={"contact"}
+              fun={handleInputs}
+              value={inputs.contact}
+            />
+          </div>
+          <BouncyButton style={{ height: "100px" }} value={"Submit"} fun={handleDepartmentCreation} />
+        </form>
       </div> : ""}
     </div>
-  
+
   );
 }

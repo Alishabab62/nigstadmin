@@ -52,8 +52,8 @@ export default function CourseCreation() {
   const [number, setNumber] = useState("");
   const [userData, setUserData] = useState("");
   const [facultyId, setFacultyId] = useState("");
-  const [courseDurDays, setCourseDurDays] = useState("");
-  const [courseDurWeeks, setCourseDurWeeks] = useState("");
+  const [courseDurDays, setCourseDurDays] = useState(0);
+  const [courseDurWeeks, setCourseDurWeeks] = useState(0);
   const [courseFee, setCourseFee] = useState("");
   const [courseMode, setCourseMode] = useState("");
   const [viewData, setViewData] = useState([]);
@@ -120,7 +120,7 @@ export default function CourseCreation() {
 
   function handleCourseCreation(e) {
     e.preventDefault();
-    if(category && input.title && code && number && faculty && courseDurDays && courseDurWeeks && courseFee && courseMode && input.des){
+    if(category && input.title && code && number && faculty  && courseFee && courseMode && input.des){
       buttonRef.current.disabled = true; 
       setCircularResponse(true);
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/creation";
@@ -322,7 +322,7 @@ export default function CourseCreation() {
             <select onChange={(e) => setCourseDurWeeks(e.target.value)}>
               {
                 weeks.map((data) => {
-                  return <option key={data}>{data}</option>
+                  return <option key={data} value={data}>{data}</option>
                 })
               }
             </select>
@@ -332,7 +332,7 @@ export default function CourseCreation() {
             <select onChange={(e) => setCourseDurDays(e.target.value)}>
               {
                 days.map((data) => {
-                  return <option key={data}>{data}</option>
+                  return <option key={data} value={data}>{data}</option>
                 })
               }
             </select>

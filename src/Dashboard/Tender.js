@@ -69,9 +69,8 @@ function archiveFun(){
 //   setFilter(true)
 //   setShowTenders(false)
 //  }
-function viewPDF(e) {
-  const tenderId = e.target.getAttribute("data");
-  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
+function viewPDF(id) {
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${id}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -259,7 +258,7 @@ function corrigendumPDFView(corrigendumID){
           </table>
              : "" }
         </td>
-                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
+                  <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )

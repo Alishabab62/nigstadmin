@@ -24,7 +24,6 @@ export default function NewUserVerification() {
   const handleClickOpen = (e) => {
     setOpen(true);
     setUserEmail(e.target.getAttribute("data"));
-    e.target.style.backgroundColor = "#FFCCCB"
   };
 
   const handleClose = () => {

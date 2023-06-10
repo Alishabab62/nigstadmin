@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.56d89fd8.css",
-    "main.js": "/static/js/main.337458ec.js",
+    "main.css": "/static/css/main.d99061f8.css",
+    "main.js": "/static/js/main.8a648eaf.js",
     "static/media/NIGST LOGO Small.svg": "/static/media/NIGST LOGO Small.b404a4a59247d747c2959354f6709be4.svg",
     "static/media/logo.png": "/static/media/logo.7ea794240685501c7026.png",
     "index.html": "/index.html",
-    "main.56d89fd8.css.map": "/static/css/main.56d89fd8.css.map",
-    "main.337458ec.js.map": "/static/js/main.337458ec.js.map"
+    "main.d99061f8.css.map": "/static/css/main.d99061f8.css.map",
+    "main.8a648eaf.js.map": "/static/js/main.8a648eaf.js.map"
   },
   "entrypoints": [
-    "static/css/main.56d89fd8.css",
-    "static/js/main.337458ec.js"
+    "static/css/main.d99061f8.css",
+    "static/js/main.8a648eaf.js"
   ]
 }

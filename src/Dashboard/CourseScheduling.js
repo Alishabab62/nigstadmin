@@ -139,7 +139,7 @@ export default function CourseScheduling() {
       })
       .catch((error) => {
         console.log(error);
-      });
+      });  
   }
 
   function handleEditFormShow(data) {

@@ -22,6 +22,7 @@ function Tender() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [dateCheck,setDateCheck] = useState(false)
   const [viewTender , setViewTender] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [tenderNo , setTenderNo] = useState("");
@@ -111,7 +112,14 @@ function handleInputs(e){
 }
 
 function handleSubmit(e) {
-  if(file.current.files[0] !== undefined){
+  if(startDate.current.value > endDate.current.value){
+    setDateCheck(true);
+    setTimeout(() => {
+      setDateCheck(false)
+    }, 5000);
+    return
+  }
+  if(file.current.files[0] !== undefined && input.title && input.description && startDate.current.value && endDate.current.value && input.ref ){
     e.preventDefault();
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
@@ -141,7 +149,6 @@ function handleSubmit(e) {
 
 function handleCorrigendum(e){
   e.preventDefault()
-  console.log(tenderValue)
   const formData = new FormData();
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
@@ -306,6 +313,7 @@ function corrigendumPDFView(corrigendumID){
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
+          {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           <button className='close-btn' onClick={closeTenderForm}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
@@ -352,7 +360,7 @@ function corrigendumPDFView(corrigendumID){
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do You want to change the status of user
+          Do you want to archive the tender
           </DialogContentText>
         </DialogContent>
         <DialogActions>

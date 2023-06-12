@@ -49,11 +49,16 @@ export default function CourseScheduling() {
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res) => {
       setViewData(res.data.course)
-      // console.log(res.data.course);
+      viewCourse();
     }).catch((error) => {
       console.log(error)
     })
 
+  
+  }, [])
+
+  function viewCourse(){
+    let data = JSON.parse(localStorage.getItem("user"));
     const viewDataUrl = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/view_scheduled_by_faculty/${data.faculty}`;
     axios.get(viewDataUrl).then((res) => {
       setScheduledCourse(res.data.courses);
@@ -63,7 +68,7 @@ export default function CourseScheduling() {
         setFrame(false);
       }
     })
-  }, [])
+  }
 
   function handleCourseScheduling(e) {
     e.preventDefault();
@@ -82,6 +87,7 @@ export default function CourseScheduling() {
         courseID: `${courseId.current.innerText}`
       }
       axios.post(url, data).then((res) => {
+        viewCourse();
         setCircularResponse(false);
         setSuccessAlert(true);
         document.getElementById("form").reset();
@@ -156,7 +162,7 @@ function viewFormSchedule(){
   setEditForm(false)
 }
 
-function viewCourse(){
+function viewCourseFun(){
   setViewFrameButton(!viewFrameButton)
   setFrame(false);
   setCreationForm(true);
@@ -193,11 +199,11 @@ function viewCourse(){
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
-          viewFrameButton ? <button className='toggle_btn' onClick={viewCourse}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
+          viewFrameButton ? <button className='toggle_btn' onClick={viewCourseFun}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
         }
       </div>
       {
-        (viewFrame) ?
+        (viewFrame && !noDataToShow) ?
           <div>
             <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
 
@@ -253,7 +259,7 @@ function viewCourse(){
       }
 
       {
-        noDataToShow && 
+       ( noDataToShow && viewFrame) && 
         <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
       }
 
@@ -294,22 +300,23 @@ function viewCourse(){
               }
             </select>
             {
-              tempArray.length !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
+              // tempArray.length !== 0 ?( <div ref={courseId}><span>Course ID :   </span>{tempArray.course_id}</div>) : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Course ID - </span><input value={tempArray.course_id} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"15%",backgroundColor:"white",height:"60%"}}>Description  - </span><input value={tempArray.description} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Duration - </span><input value={tempArray.duration} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"18%",backgroundColor:"white",height:"60%"}}>Course Code - </span><input value={tempArray.course_code} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"18%",backgroundColor:"white",height:"60%"}}>Course No - </span><input value={tempArray.course_no} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
 
-            <div className='grid2-container' >
+            { tempArray.course_type !== "free" ?  <div className='grid2-container' >
 
               <select onChange={(e) => setInputCurrency(e.target.value)}>
                 <option>Select currency</option>
@@ -322,7 +329,7 @@ function viewCourse(){
               </select>
 
               <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} ></input>
-            </div>
+            </div> : ""}
             <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Commencement' ref={commencementDate}></input>
             <input type='text' onFocus={() => { completionDate.current.type = 'date' }} onBlur={() => { completionDate.current.type = 'text' }} placeholder='Date of Completion' ref={completionDate}></input>
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>

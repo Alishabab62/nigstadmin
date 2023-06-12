@@ -35,6 +35,7 @@ export default function CourseScheduling() {
   const buttonRef = useRef();
   const [editData, setEditData] = useState({});
   const [viewFrame, setFrame] = useState(false);
+  const [invalidEntry,setInvalidEntry] = useState(false);
 
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -72,7 +73,16 @@ export default function CourseScheduling() {
 
   function handleCourseScheduling(e) {
     e.preventDefault();
-    if(courseName && input.fee && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!=="" && inputCurrency && courseId.current){
+    console.log(tempArray)
+    
+    if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)){
+      setInvalidEntry(true);
+      setTimeout(() => {
+        setInvalidEntry(false);
+      }, 5000);
+      return;
+    }
+    if(courseName && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!==""  && courseId.current.value){
       setCircularResponse(true);
       buttonRef.current.disabled = true;
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/scheduler";
@@ -84,7 +94,7 @@ export default function CourseScheduling() {
         courseCapacity: `${input.courseCapacity}`,
         runningDate: `${runningDate.current.value}`,
         currency: `${inputCurrency}`,
-        courseID: `${courseId.current.innerText}`
+        courseID: `${courseId.current.value}`
       }
       axios.post(url, data).then((res) => {
         viewCourse();
@@ -290,6 +300,7 @@ function viewCourseFun(){
             {successAlert && <Alert severity='success'>Course Scheduled Successfully</Alert>}
             {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
             {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
+            {invalidEntry && <Alert severity='error'>Invalid Entry</Alert>}
             <form id='form' style={{display:"flex",flexDirection:"column"}}>
             <select onChange={(e) => setCourseName(e.target.value)}>
               <option>Select Course</option>
@@ -300,8 +311,7 @@ function viewCourseFun(){
               }
             </select>
             {
-              // tempArray.length !== 0 ?( <div ref={courseId}><span>Course ID :   </span>{tempArray.course_id}</div>) : ""
-              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Course ID - </span><input value={tempArray.course_id} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Course ID - </span><input ref={courseId} value={tempArray.course_id} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
               tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"15%",backgroundColor:"white",height:"60%"}}>Description  - </span><input value={tempArray.description} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
@@ -357,9 +367,9 @@ function viewCourseFun(){
               {editData.course_status === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
             </select>
             <input type='text' value={editData.courseId} disabled></input>
-            <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input>
-            <input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input>
-            <input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input>
+            {(editData.course_status === "postponed" && newStatus === "created") ? <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input> : ""}
+            {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input> : ""}
+            {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input> : ""}
             <button onClick={handleCourseEditForm}>Submit</button>
           </form> </div>
       }

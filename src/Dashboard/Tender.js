@@ -29,6 +29,7 @@ function Tender() {
   const [tenderArchiveSuccess,setTenderArchiveSuccess] = useState(false);
   const [viewArchiveTender,setViewArchiveTender] = useState(false);
   const [viewArchive,setViewArchive] = useState([]);
+  const [noDataToShow, setNoDataToShow] = useState(false);
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -86,21 +87,32 @@ function viewPDF(id) {
 }
 
 useEffect(()=>{
-  tenderViewFun()
+  tenderViewFun();
+  viewArchiveTenderUI();
+},[])
+
+
+function viewArchiveTenderUI(){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view_archive";
   axios.get(url).then((res)=>{
-    setViewArchive(res.data.data)
+    console.log(res.data.message)
+    return res.data.message !== "Nothing to show!" ?  setViewArchive(res.data.tender) : setNoDataToShow(true);
   }).catch((error)=>{
-    console.log(error)
+    if(error.response.data.message === "Nothing to show!"){
+      setNoDataToShow(true)
+    }
   })
-},[])
+}
+
 
 function tenderViewFun(){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
-    console.log(error)
+    if(error.response.data.message === "Nothing to show."){
+      setNoDataToShow(true);
+    }
   })
 }
 function handleInputs(e){
@@ -112,15 +124,15 @@ function handleInputs(e){
 }
 
 function handleSubmit(e) {
+  e.preventDefault();
   if(startDate.current.value > endDate.current.value){
     setDateCheck(true);
     setTimeout(() => {
       setDateCheck(false)
     }, 5000);
-    return
+    return;
   }
   if(file.current.files[0] !== undefined && input.title && input.description && startDate.current.value && endDate.current.value && input.ref ){
-    e.preventDefault();
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
@@ -169,6 +181,7 @@ function handleCorrigendum(e){
 
 function handleArchive(e){
   setOpen(false);
+  viewArchiveTenderUI();
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/archive";
   const data = {
     tender_number:`${tenderNo}`
@@ -220,7 +233,7 @@ function corrigendumPDFView(corrigendumID){
         <button className='openform' onClick={archiveFun}>View Archive Tender</button>
       </div> : ""
       }
-      {filter ? <div className='user-details-wrapper'>
+      {(viewTender.length>=1 && filter) ? <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -274,7 +287,11 @@ function corrigendumPDFView(corrigendumID){
            
         </table>
         </div> : "" }
-        {viewArchiveTender ? <div className='user-details-wrapper'>
+        {
+       (( viewTender.length === 0 && filter) || (noDataToShow && viewArchiveTender)) && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+        {(viewArchiveTender && !noDataToShow) ? <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -283,8 +300,6 @@ function corrigendumPDFView(corrigendumID){
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Corregendom</th>
-                {/* <th>File</th> */}
-                {/* <th>Move to Archive</th> */}
             </tr>
             {
               viewArchive.map((data,index)=>{
@@ -296,8 +311,6 @@ function corrigendumPDFView(corrigendumID){
                   <td>{data.startdate}</td>
                   <td>{data.enddate}</td>
                   <td>{data.corrigendum[0].corrigendum}</td>
-                  {/* <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td> */}
-                  {/* <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td> */}
               </tr>
                 )
               })
@@ -347,7 +360,7 @@ function corrigendumPDFView(corrigendumID){
             <label for="corrigendum">Corrigendum:</label>
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed (Optional))</span></div>
             <button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</button>
           </form>
         </div>

@@ -49,13 +49,13 @@ export default function AnnouncementCreation() {
     function createAnnouncement(e) {
         e.preventDefault();
         const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/announcement/create";
-        const data = {
-            title: `${input.title}`,
-            description: `${input.des}`,
-            url: `${input.url}`,
-            pdf: pdf.current.files[0]
-        }
-        axios.post(url, data).then((res) => {
+        const formData = new FormData();
+        formData.append("title",input.title);
+        formData.append("description",input.des);
+        formData.append("url",input.url);
+        formData.append("pdf", pdf.current.files[0]);
+
+        axios.post(url, formData).then((res) => {
             viewAnnouncement();
             setSuccessAlert(true);
             setInput({
@@ -98,7 +98,6 @@ export default function AnnouncementCreation() {
     }
 
     function archiveAnnouncement(id){
-        console.log(id)
         const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/archive_ann";
         const data={
             aid:`${id}`
@@ -166,7 +165,8 @@ function viewAnnouncementPDF(data){
                                             <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
                                             <td>{data.url}</td>
                                             <td>{data.status ? <button>Hide</button> : <button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</button>}</td>
-                                            <td><AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/></td>
+                                            <td>{data.pdf_path !==null ?  <AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/> : ""}</td>
+                                           
                                             <td><button  onClick={()=>archiveAnnouncement(data.aid)}>Archive Ann.</button></td>
                                         </tr>
                                     )

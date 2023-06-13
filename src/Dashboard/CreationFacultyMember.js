@@ -64,11 +64,12 @@ export default function CreationFacultyMember() {
 
   function handleCreationMembers(e) {
     e.preventDefault();
-    if((input.email && input.phone) && !input.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)){
+    if((input.email && input.phone) && !input.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) && !input.phone.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)){
       setInvalidEmailPhone(true);
       setTimeout(() => {
         setInvalidEmailPhone(false);
       }, 5000);
+      return;
     }
    else if(input.f_name !== "" && dobRef.current !== null && input.phone!== "" && input.email !== "" && gender !== null && input.education !== "" && input.designation !== "") {
       setCircularResponse(true);
@@ -97,12 +98,14 @@ export default function CreationFacultyMember() {
           setSuccessAlert(false)
         }, 5000);
       }).catch((error) => {
-        setFailAlert(true);
         setCircularResponse(false);
+        if(error.response.data.error === "Faculty already exists"){
+          setFailAlert(true);
+          setTimeout(() => {
+            setFailAlert(false)
+          }, 5000);
+        }
         buttonRef.current.disabled = false;
-        setTimeout(() => {
-          setFailAlert(false)
-        }, 5000);
       })
     }
     else{
@@ -315,7 +318,7 @@ export default function CreationFacultyMember() {
         ) }
           <h3 style={{ margin: "20px auto" }}>Creation Faculty Member</h3>
           {successAlert ? <Alert severity="success" style={{ marginBottom: "10px" }}>Faculty Created Successfully</Alert> : ""}
-          {failAlert ? <Alert severity="error" style={{ marginBottom: "10px" }}>Something Went Wrong Please try again later</Alert> : ""}
+          {failAlert ? <Alert severity="error" style={{ marginBottom: "10px" }}>Faculty already exists</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {invalidEmailPhone ? <Alert severity="error" style={{marginBottom:"10px"}}>Invalid Email and Phone</Alert> : ""}
           <form id='form'>

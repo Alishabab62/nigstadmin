@@ -22,12 +22,14 @@ function Tender() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [dateCheck,setDateCheck] = useState(false)
   const [viewTender , setViewTender] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [tenderNo , setTenderNo] = useState("");
   const [tenderArchiveSuccess,setTenderArchiveSuccess] = useState(false);
   const [viewArchiveTender,setViewArchiveTender] = useState(false);
   const [viewArchive,setViewArchive] = useState([]);
+  const [noDataToShow, setNoDataToShow] = useState(false);
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -69,9 +71,8 @@ function archiveFun(){
 //   setFilter(true)
 //   setShowTenders(false)
 //  }
-function viewPDF(e) {
-  const tenderId = e.target.getAttribute("data");
-  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${tenderId}`;
+function viewPDF(id) {
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${id}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -86,21 +87,32 @@ function viewPDF(e) {
 }
 
 useEffect(()=>{
-  tenderViewFun()
+  tenderViewFun();
+  viewArchiveTenderUI();
+},[])
+
+
+function viewArchiveTenderUI(){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view_archive";
   axios.get(url).then((res)=>{
-    setViewArchive(res.data.data)
+    console.log(res.data.message)
+    return res.data.message !== "Nothing to show!" ?  setViewArchive(res.data.tender) : setNoDataToShow(true);
   }).catch((error)=>{
-    console.log(error)
+    if(error.response.data.message === "Nothing to show!"){
+      setNoDataToShow(true)
+    }
   })
-},[])
+}
+
 
 function tenderViewFun(){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view";
   axios.get(url).then((res)=>{
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
-    console.log(error)
+    if(error.response.data.message === "Nothing to show."){
+      setNoDataToShow(true);
+    }
   })
 }
 function handleInputs(e){
@@ -112,8 +124,15 @@ function handleInputs(e){
 }
 
 function handleSubmit(e) {
-  if(file.current.files[0] !== undefined){
-    e.preventDefault();
+  e.preventDefault();
+  if(startDate.current.value > endDate.current.value){
+    setDateCheck(true);
+    setTimeout(() => {
+      setDateCheck(false)
+    }, 5000);
+    return;
+  }
+  if(file.current.files[0] !== undefined && input.title && input.description && startDate.current.value && endDate.current.value && input.ref ){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
@@ -142,7 +161,6 @@ function handleSubmit(e) {
 
 function handleCorrigendum(e){
   e.preventDefault()
-  console.log(tenderValue)
   const formData = new FormData();
   formData.append("corrigendum", input.corrigendum);
   formData.append("tender_number", tenderValue);
@@ -163,6 +181,7 @@ function handleCorrigendum(e){
 
 function handleArchive(e){
   setOpen(false);
+  viewArchiveTenderUI();
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/archive";
   const data = {
     tender_number:`${tenderNo}`
@@ -214,7 +233,7 @@ function corrigendumPDFView(corrigendumID){
         <button className='openform' onClick={archiveFun}>View Archive Tender</button>
       </div> : ""
       }
-      {filter ? <div className='user-details-wrapper'>
+      {(viewTender.length>=1 && filter) ? <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -259,7 +278,7 @@ function corrigendumPDFView(corrigendumID){
           </table>
              : "" }
         </td>
-                  <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td>
+                  <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )
@@ -268,7 +287,11 @@ function corrigendumPDFView(corrigendumID){
            
         </table>
         </div> : "" }
-        {viewArchiveTender ? <div className='user-details-wrapper'>
+        {
+       (( viewTender.length === 0 && filter) || (noDataToShow && viewArchiveTender)) && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+        {(viewArchiveTender && !noDataToShow) ? <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -277,8 +300,6 @@ function corrigendumPDFView(corrigendumID){
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Corregendom</th>
-                {/* <th>File</th> */}
-                {/* <th>Move to Archive</th> */}
             </tr>
             {
               viewArchive.map((data,index)=>{
@@ -290,8 +311,6 @@ function corrigendumPDFView(corrigendumID){
                   <td>{data.startdate}</td>
                   <td>{data.enddate}</td>
                   <td>{data.corrigendum[0].corrigendum}</td>
-                  {/* <td  style={{cursor:"pointer"}} ><button data={data.tender_ref_no} onClick={viewPDF}><AiFillFilePdf style={{color:"red"}}  data={data.tender_ref_no} onClick={viewPDF}/></button></td> */}
-                  {/* <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td> */}
               </tr>
                 )
               })
@@ -307,6 +326,7 @@ function corrigendumPDFView(corrigendumID){
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
+          {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           <button className='close-btn' onClick={closeTenderForm}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
@@ -340,7 +360,7 @@ function corrigendumPDFView(corrigendumID){
             <label for="corrigendum">Corrigendum:</label>
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed (Optional))</span></div>
             <button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</button>
           </form>
         </div>
@@ -353,7 +373,7 @@ function corrigendumPDFView(corrigendumID){
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do You want to change the status of user
+          Do you want to archive the tender
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -11,7 +11,7 @@ export default function CourseScheduling() {
   const courseId = useRef();
   const feeRef = useRef();
   const [input, setInput] = useState({
-    fee: "",
+    fee: 0,
     courseCapacity: ""
   });
   const [courseName, setCourseName] = useState("");
@@ -35,6 +35,7 @@ export default function CourseScheduling() {
   const buttonRef = useRef();
   const [editData, setEditData] = useState({});
   const [viewFrame, setFrame] = useState(false);
+  const [invalidEntry,setInvalidEntry] = useState(false);
 
   function handleInputs(e) {
     const { name, value } = e.target;
@@ -49,11 +50,16 @@ export default function CourseScheduling() {
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/course_faculty/${data.faculty}`;
     axios.get(url).then((res) => {
       setViewData(res.data.course)
-      // console.log(res.data.course);
+      viewCourse();
     }).catch((error) => {
       console.log(error)
     })
 
+  
+  }, [])
+
+  function viewCourse(){
+    let data = JSON.parse(localStorage.getItem("user"));
     const viewDataUrl = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/view_scheduled_by_faculty/${data.faculty}`;
     axios.get(viewDataUrl).then((res) => {
       setScheduledCourse(res.data.courses);
@@ -63,11 +69,20 @@ export default function CourseScheduling() {
         setFrame(false);
       }
     })
-  }, [])
+  }
 
   function handleCourseScheduling(e) {
     e.preventDefault();
-    if(courseName && input.fee && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!=="" && inputCurrency && courseId.current){
+    console.log(tempArray)
+    
+    if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)){
+      setInvalidEntry(true);
+      setTimeout(() => {
+        setInvalidEntry(false);
+      }, 5000);
+      return;
+    }
+    if(courseName && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!==""  && courseId.current.value){
       setCircularResponse(true);
       buttonRef.current.disabled = true;
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/scheduler";
@@ -79,9 +94,10 @@ export default function CourseScheduling() {
         courseCapacity: `${input.courseCapacity}`,
         runningDate: `${runningDate.current.value}`,
         currency: `${inputCurrency}`,
-        courseID: `${courseId.current.innerText}`
+        courseID: `${courseId.current.value}`
       }
       axios.post(url, data).then((res) => {
+        viewCourse();
         setCircularResponse(false);
         setSuccessAlert(true);
         document.getElementById("form").reset();
@@ -139,7 +155,7 @@ export default function CourseScheduling() {
       })
       .catch((error) => {
         console.log(error);
-      });
+      });  
   }
 
   function handleEditFormShow(data) {
@@ -156,7 +172,7 @@ function viewFormSchedule(){
   setEditForm(false)
 }
 
-function viewCourse(){
+function viewCourseFun(){
   setViewFrameButton(!viewFrameButton)
   setFrame(false);
   setCreationForm(true);
@@ -193,11 +209,11 @@ function viewCourse(){
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
-          viewFrameButton ? <button className='toggle_btn' onClick={viewCourse}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
+          viewFrameButton ? <button className='toggle_btn' onClick={viewCourseFun}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
         }
       </div>
       {
-        (viewFrame) ?
+        (viewFrame && !noDataToShow) ?
           <div>
             <input type="text" id="SearchInput" placeholder="Search Scheduled Courses" value={searchData} onChange={handleInputChange1} />
 
@@ -253,7 +269,7 @@ function viewCourse(){
       }
 
       {
-        noDataToShow && 
+       ( noDataToShow && viewFrame) && 
         <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
       }
 
@@ -284,6 +300,7 @@ function viewCourse(){
             {successAlert && <Alert severity='success'>Course Scheduled Successfully</Alert>}
             {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
             {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
+            {invalidEntry && <Alert severity='error'>Invalid Entry</Alert>}
             <form id='form' style={{display:"flex",flexDirection:"column"}}>
             <select onChange={(e) => setCourseName(e.target.value)}>
               <option>Select Course</option>
@@ -294,22 +311,22 @@ function viewCourse(){
               }
             </select>
             {
-              tempArray.length !== 0 ? <div ref={courseId}>{tempArray.course_id}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Course ID - </span><input ref={courseId} value={tempArray.course_id} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.description}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"15%",backgroundColor:"white",height:"60%"}}>Description  - </span><input value={tempArray.description} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.duration}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"11%",backgroundColor:"white",height:"60%"}}>Duration - </span><input value={tempArray.duration} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.course_code}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"18%",backgroundColor:"white",height:"60%"}}>Course Code - </span><input value={tempArray.course_code} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
             {
-              tempArray.length !== 0 ? <div>{tempArray.course_no}</div> : ""
+              tempArray.length !== 0 ?<div style={{display:"flex",alignItems:"center",width:"100%",backgroundColor:"white",marginBottom:"12px",height:"28px"}}><span style={{width:"18%",backgroundColor:"white",height:"60%"}}>Course No - </span><input value={tempArray.course_no} disabled style={{backgroundColor:"white",width:"89%"}}></input></div> : ""
             }
 
-            <div className='grid2-container' >
+            { tempArray.course_type !== "free" ?  <div className='grid2-container' >
 
               <select onChange={(e) => setInputCurrency(e.target.value)}>
                 <option>Select currency</option>
@@ -322,7 +339,7 @@ function viewCourse(){
               </select>
 
               <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} ></input>
-            </div>
+            </div> : ""}
             <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Commencement' ref={commencementDate}></input>
             <input type='text' onFocus={() => { completionDate.current.type = 'date' }} onBlur={() => { completionDate.current.type = 'text' }} placeholder='Date of Completion' ref={completionDate}></input>
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
@@ -350,9 +367,9 @@ function viewCourse(){
               {editData.course_status === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
             </select>
             <input type='text' value={editData.courseId} disabled></input>
-            <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input>
-            <input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input>
-            <input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input>
+            {(editData.course_status === "postponed" && newStatus === "created") ? <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input> : ""}
+            {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input> : ""}
+            {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input> : ""}
             <button onClick={handleCourseEditForm}>Submit</button>
           </form> </div>
       }

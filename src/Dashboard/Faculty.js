@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Logo from '../images/NIGST LOGO Small.svg'
-import '../CSS/app.css'
-import Button from "../components/Button"
+import '../CSS/app.css';
 import ResetPassword from './ResetPassword';
 import FacultyReportSubmission from './FacultyReportSubmission';
 
@@ -19,9 +18,9 @@ export default function Faculty() {
     setCourseReport(false)
  }
  function logout(){
-    window.location.hash = "/";
+    window.location.hash = '/';
     localStorage.clear("user")
-  }
+ }
   return (
     <div className='flex justify-between main-page-header'>
         <div className='side-bar border-r-2 side-bar-wrapper'> 
@@ -40,7 +39,7 @@ export default function Faculty() {
                 <div>
                     <img src={Logo} alt="logo" className='header-logo-admin-panel'></img>
                 </div>
-                <div style={{position:'absolute',right:'20px'}}><Button value={"Logout"} fun={logout} /> </div>
+                <div><button value={"Logout"}  onClick={logout}>Logout</button> </div>
             </header>
             <div className='min-h-max flex justify-center border-t-2'>
                 {forgotPassword ? <ResetPassword/> : ""}

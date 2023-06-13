@@ -14,6 +14,8 @@ export default function Login() {
   const [loginType , setLoginType] = useState("");
   const [emptyFieldAlert,setEmptyFieldAlert] = useState(false);
   const [errorAlert,setErrorAlert] = useState(false);
+  const [wrongAlert,setWrongAlert] = useState(false);
+  const [userNotAlert,setUserNotAlert] = useState(false);
   const buttonRef = useRef();
 
 
@@ -45,6 +47,22 @@ export default function Login() {
       }
     }).catch((error) => {
       setCircularResponse(false);
+      if(error.response.data.message === "Wrong password."){
+        setWrongAlert(true);
+        setTimeout(() => {
+          setWrongAlert(false);
+        }, 5000);
+        buttonRef.current.disabled = false;
+        return;
+      }
+      if(error.response.data.message === "User Not Exists."){
+        setUserNotAlert(true);
+        setTimeout(() => {
+          setUserNotAlert(false);
+        }, 5000);
+        buttonRef.current.disabled = false;
+        return;
+      }
       setErrorAlert(true);
       setTimeout(() => {
         setErrorAlert(false);
@@ -65,9 +83,25 @@ export default function Login() {
     axios.post(url, data).then((res) => {
       setCircularResponse(false);
       localStorage.setItem("user" , JSON.stringify(res.data))
-    window.location.hash = "/faculty";
+      window.location.hash = "/faculty";
     }).catch((error) => {
       setCircularResponse(false);
+      if(error.response.data.message === "Wrong password."){
+        setWrongAlert(true);
+        setTimeout(() => {
+          setWrongAlert(false);
+        }, 5000);
+        buttonRef.current.disabled = false;
+        return;
+      }
+      if(error.response.data.message === "User Not Exists."){
+        setUserNotAlert(true);
+        setTimeout(() => {
+          setUserNotAlert(false);
+        }, 5000);
+        buttonRef.current.disabled = false;
+        return;
+      }
       setErrorAlert(true);
       setTimeout(() => {
         setErrorAlert(false);
@@ -117,6 +151,8 @@ export default function Login() {
         ) }
       <h3>Login</h3>
       {emptyFieldAlert && <Alert severity='error' style={{marginBottom:"20px"}}>All fields required</Alert> }
+      {wrongAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Wrong Password</Alert> }
+      {userNotAlert && <Alert severity='error' style={{marginBottom:"20px"}}>User Not Exists</Alert> }
       {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Something went wrong</Alert> }
       <Inputs type={"email"} placeholder={"Enter Username"} name={"email"} fun={handleInputs} />
       <Inputs type={"password"} placeholder={"Enter Password"} name={"password"} fun={handleInputs} />

@@ -7,7 +7,7 @@ import Button from "../components/Button";
 import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
-import Logo from '../images/logo.png'
+import Logo from '../images/logo1.png'
 // import CreationFacultysAdmin from "./CreationFacultysAdmin";
 import AnnouncementCreation from "./AnnouncementCreation";
 

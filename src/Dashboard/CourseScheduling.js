@@ -11,7 +11,7 @@ export default function CourseScheduling() {
   const courseId = useRef();
   const feeRef = useRef();
   const [input, setInput] = useState({
-    fee: "",
+    fee: 0,
     courseCapacity: ""
   });
   const [courseName, setCourseName] = useState("");

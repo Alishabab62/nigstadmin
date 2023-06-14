@@ -134,7 +134,7 @@ export default function AssigningPositionToFacultyMember() {
                 return (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{data.first_name}{data.middle_name}{data.last_name}</td>
+                    <td>{data.first_name} {data.middle_name} {data.last_name}</td>
                     <td>{data.faculty_pos}</td>
                     <td>{data.faculty_id}</td>
                   </tr>

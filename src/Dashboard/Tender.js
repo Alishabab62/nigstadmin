@@ -22,6 +22,7 @@ function Tender() {
   const [successAlert, setSuccessAlert] = useState(false);
   const [failAlert, setFailAlert] = useState(false);
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+  const [enterValidAlert, setEnterValidAlert] = useState(false);
   const [dateCheck,setDateCheck] = useState(false)
   const [viewTender , setViewTender] = useState([]);
   const [open, setOpen] = React.useState(false);
@@ -132,6 +133,13 @@ function handleSubmit(e) {
     }, 5000);
     return;
   }
+  if(input.ref.includes('/')){
+    setEnterValidAlert(true);
+    setTimeout(() => {
+      setEnterValidAlert(false);
+    }, 5000);
+    return;
+  }
   if(file.current.files[0] !== undefined && input.title && input.description && startDate.current.value && endDate.current.value && input.ref ){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
@@ -142,7 +150,7 @@ function handleSubmit(e) {
     formData.append("endDate", endDate.current.value);
     formData.append("pdf", file.current.files[0]);
     axios.post(url, formData).then((res) => {
-     tenderViewFun()
+     tenderViewFun();
       setSuccessAlert(true);
       setTimeout(() => {
         setSuccessAlert(false)
@@ -255,7 +263,7 @@ function corrigendumPDFView(corrigendumID){
                   <td>{data.start_date}</td>
                   <td>{data.end_date}</td>
                   <td>
-{ data.corrigenda.length >=1 ?
+        { data.corrigenda[0].corrigendumID !== null ? 
           <table>
             <tbody>
               <tr>
@@ -271,12 +279,12 @@ function corrigendumPDFView(corrigendumID){
                   <td>{corrigendum.created_at}</td>
                   <td>{corrigendum.corrigendumID}</td>
                   <td>{corrigendum.corrigendum}</td>
-                  <td><AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={(e)=>corrigendumPDFView(corrigendum.corrigendumID)}/></td>
+                  <td>{corrigendum.pdf !== null ? <AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={(e)=>corrigendumPDFView(corrigendum.corrigendumID)}/> : ""}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-             : "" }
+            : "" }
         </td>
                   <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
@@ -327,6 +335,7 @@ function corrigendumPDFView(corrigendumID){
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
+          {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
           <button className='close-btn' onClick={closeTenderForm}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>

@@ -243,7 +243,7 @@ export default function CourseCreation() {
                           <td>{data.course_mode}</td>
                           <td>{data.duration}</td>
                           <td>{data.course_type}</td>
-                          <td>{data.course_director.split(" ")[3]}</td>
+                          <td>HOD {data.course_director.split(" ")[3]}</td>
                           <td>{data.course_director.split(" ")[3]}</td>
                           <td>{data.course_officer}</td>
                         </tr>

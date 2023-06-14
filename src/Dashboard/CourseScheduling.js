@@ -357,7 +357,6 @@ function viewCourseFun(){
             <select onChange={(e) => setNewStatus(e.target.value)}>
               <option>Select Status</option>
               {editData.course_status === "created" ? <option value='scheduled'>Schedule</option> : ""}
-              {editData.course_status === "created" ? <option value='running'>Running</option> : ""}
               {editData.course_status === "created" ? <option value='postponed'>Postponed</option> : ""}
               {editData.course_status === "created" ? <option value='canceled'>Cancelled</option> : ""}
               {editData.course_status === "scheduled" ? <option value='running'>Running</option> : ""}
@@ -365,6 +364,7 @@ function viewCourseFun(){
               {editData.course_status === "scheduled" ? <option value='canceled'>Cancelled</option> : ""}
               {editData.course_status === "running" ? <option value='completed'>Complete</option> : ""}
               {editData.course_status === "postponed" ? <option value='canceled'>Cancelled</option> : ""}
+              {editData.course_status === "postponed" ? <option value='created'>Cancelled</option> : ""}
             </select>
             <input type='text' value={editData.courseId} disabled></input>
             {(editData.course_status === "postponed" && newStatus === "created") ? <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input> : ""}

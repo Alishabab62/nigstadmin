@@ -75,7 +75,7 @@ export default function CourseScheduling() {
     e.preventDefault();
     console.log(tempArray)
     
-    if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)){
+    if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/[0-9]/)){
       setInvalidEntry(true);
       setTimeout(() => {
         setInvalidEntry(false);

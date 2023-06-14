@@ -62,6 +62,7 @@ export default function CourseCreation() {
   const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
   const [successAlert, setSuccessAlert] = useState(false);
   const [errorAlert, setErrorAlert] = useState(false);
+  const [courseAlreadyAlert, setCourseAlreadyAlert] = useState(false);
   const [responseCircular, setCircularResponse] = useState(false);
   const buttonRef = useRef();
 
@@ -149,12 +150,19 @@ export default function CourseCreation() {
         buttonRef.current.disabled = false;
         document.getElementById("form").reset();
       }).catch((error) => {
+        setCircularResponse(false);
+        buttonRef.current.disabled = false;
+        if(error.response.data.message){
+          setCourseAlreadyAlert(true);
+          setTimeout(() => {
+            setCourseAlreadyAlert(false);
+          }, 5000);
+          return;
+        }
         setErrorAlert(true);
         setTimeout(() => {
           setErrorAlert(false)
         }, 5000);
-        buttonRef.current.disabled = false;
-        setCircularResponse(false)
       })
     }
     else{
@@ -285,6 +293,7 @@ export default function CourseCreation() {
           {successAlert && <Alert severity='success'>Course Created Successfully</Alert>}
           {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
           {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
+          {courseAlreadyAlert && <Alert severity='error'>Course already exists</Alert>}
           <form id='form' style={{display:"flex",flexDirection:"column"}}>
           <select onChange={(e) => setCategory(e.target.value)}>
             <option value={"select"}>Select Course Category</option>

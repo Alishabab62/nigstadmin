@@ -351,7 +351,7 @@ export default function CourseCreation() {
             <option>Select Course Officer</option>
             {
               faculty.map((data, index) => {
-                return <option key={index} value={data.facultyid}>{data.firstname}{data.middlename}{data.lastname}</option>
+                return <option key={index} value={data.facultyid}>{data.firstname} {data.middlename} {data.lastname}</option>
               })
             }
           </select>

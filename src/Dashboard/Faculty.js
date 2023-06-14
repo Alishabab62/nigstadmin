@@ -24,13 +24,13 @@ export default function Faculty() {
   return (
     <div className='flex justify-between main-page-header'>
         <div className='side-bar border-r-2 side-bar-wrapper'> 
-        <div className=' text-center   border-b-2 mb-8'>
+        <div className=' text-center mb-8'>
         <h3 className='text-lg   text-white font-bold ' style={{textAlign:"center"}}>Welcome Faculty</h3>
         </div>
         <div>
             <ul className=' text-white cursor-pointer '>
-                {courseReport ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={courseReportFun}>Course Report Submission</li> : <li className='p-3 ' onClick={courseReportFun}>Course Report Submission</li>}
-                {forgotPassword ? <li className='p-3 ' style={{background:"#ffcb00"}} onClick={forgotPasswordFun}>Reset Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Reset Password</li> }
+                {courseReport ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={courseReportFun}>Course Report Submission</li> : <li className='p-3 ' onClick={courseReportFun}>Course Report Submission</li>}
+                {forgotPassword ? <li className='p-3 ' style={{ background: "#1b3058",color:"#ffcb00" }} onClick={forgotPasswordFun}>Reset Password</li> : <li className='p-3 ' onClick={forgotPasswordFun}>Reset Password</li> }
             </ul>
         </div>
         </div>

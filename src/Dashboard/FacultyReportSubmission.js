@@ -89,6 +89,7 @@ function handleView(){
   const user = JSON.parse(localStorage.getItem("user"));
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/send_course/${user.faculty}`;
   axios.get(url).then((res)=>{
+    setViewCompletedCourse(res.data.courses);
     console.log(res);
   }).catch((error)=>{
     console.log(error)
@@ -113,7 +114,9 @@ function handleView(){
     <select onChange={(e)=>setScheduleId(e.target.value)}>
       <option>select course</option>
       {
-        
+        viewCompletedCourse.map((data,index)=>{
+          return <option key={index} value={data.schedulerid}>{data.name}</option>
+        })
       }
     </select>
       <input placeholder='Enter Remark' type='text' name='remark' onChange={(e)=>setRemark(e.target.value)}></input>

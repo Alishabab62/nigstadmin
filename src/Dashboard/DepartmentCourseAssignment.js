@@ -180,7 +180,7 @@ export default function DepartmentCourseAssignment() {
         <BouncyButton value={"Apply"} />
       </div> : ""}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Assigned Courses"} fun={handleFilter} /> : <BouncyButton value={"View Form"} fun={handleFilter} />}</div>
-      {filter ? <div className='user-details-wrapper'>
+      {(filter && viewCourse.length>0) ? <div className='user-details-wrapper'>
         <table>
           <tr >
             <th>S.No</th>
@@ -200,6 +200,10 @@ export default function DepartmentCourseAssignment() {
           }
         </table>
       </div> : ""}
+      {
+       (( viewCourse.length === 0 && filter)) && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
       {!filter && <div className='department-creation-wrapper'>
        {failAlert ? <Alert severity='error'>This course id already assigned</Alert> : ""}
        {failAlert1 ? <Alert severity='error'>No course found</Alert> : ""}

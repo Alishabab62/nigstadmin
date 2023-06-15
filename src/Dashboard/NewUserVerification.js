@@ -109,7 +109,7 @@ const handleInputChange1 = (event) => {
       </div>   
       <div><input type="text" id="SearchInput" placeholder="Search New Users " value={searchData} onChange={handleInputChange1} /></div>
       <div className='user-details-wrapper'>
-        <table>
+      {data.length > 0 &&  <table>
           
           <tr>
             <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>Users</th>
@@ -144,7 +144,11 @@ const handleInputChange1 = (event) => {
                 )
               })}
               </tbody>
-        </table>
+        </table>}
+        {
+        data.length === 0  && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
         </div>  
         <Dialog
         open={open}

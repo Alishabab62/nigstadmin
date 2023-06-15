@@ -150,7 +150,7 @@ function handleSubmit(e) {
     formData.append("endDate", endDate.current.value);
     formData.append("pdf", file.current.files[0]);
     axios.post(url, formData).then((res) => {
-     tenderViewFun();
+     tenderViewFun(); 
       setSuccessAlert(true);
       setTimeout(() => {
         setSuccessAlert(false)

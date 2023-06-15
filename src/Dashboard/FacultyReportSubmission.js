@@ -1,4 +1,4 @@
-import { Alert } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai';
@@ -14,13 +14,17 @@ const [data,setData] = useState([])
 const [successAlert, setSuccessAlert] = useState(false);
 const [failAlert, setFailAlert] = useState(false);
 const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
+const [responseCircular, setCircularResponse] = useState(false);
 const pdf = useRef();
 
 
 
 
-function handleReportSubmission(){
+function handleReportSubmission(e){
+  e.preventDefault();
+  setCircularResponse(true);
   if(remark && scheduleId && pdf.current){
+    
     const user = JSON.parse(localStorage.getItem("user"));
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/report/submit";
     const formData = new FormData();
@@ -29,19 +33,24 @@ function handleReportSubmission(){
     formData.append("remarks",remark);
     formData.append("pdf",pdf.current.files[0]);
     formData.append("faculty",user.faculty);
+    console.log(formData);
     axios.post(url,formData).then((res)=>{
+      setCircularResponse(false);
       document.getElementById("form").reset();
-      console.log(res);
       setSuccessAlert(true);
       setTimeout(() => {
         setSuccessAlert(false)
       }, 5000);
     }).catch((error)=>{
-      setFailAlert(true);
+      setCircularResponse(false);
+      if(error.response.data.message === "Report Already Exists!"){
+        setFailAlert(true);
       setTimeout(() => {
         setFailAlert(false);
       }, 5000);
-      console.log(error)
+      return;
+      }
+      
     })
   }
   else{
@@ -106,9 +115,28 @@ function handleView(){
     { 
     view &&
     <div className='department-creation-wrapper'>
+      {responseCircular && (
+          <div
+            style={{
+              width: "29%",
+              height: "30%",
+              left: "33%",
+              backgroundColor: "rgb(211,211,211)",
+              borderRadius: "10px",
+              top: "125px",
+              position: "absolute",
+              padding: "10px 20px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress style={{ height: "50px", width: "50px" }} />
+          </div>
+        ) }
     <h3>Course Report Submission</h3>
     {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
-    {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
+    {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Report Already Exist</Alert> : ""}
     {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
     <form id='id'>
     <select onChange={(e)=>setScheduleId(e.target.value)}>

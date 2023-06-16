@@ -28,7 +28,7 @@ export default function CourseReportToFaculty() {
     const user = JSON.parse(localStorage.getItem("user"));
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/view_by_faculty/${user.faculty}`;
     axios.get(url).then((res) => {
-      setData(res.data.reports);
+      setData(res.data.newReports);
     }).catch((error) => {
       if(error.response.data.message==="No Reports Found!."){
         setNoDataToShow(true);
@@ -47,6 +47,9 @@ export default function CourseReportToFaculty() {
           <tr>
             <th>S.No</th>
             <th>Submission At</th>
+            <th>Course Officer</th>
+            <th>Course Code</th>
+            <th>Course No.</th>
             <th>Faculty</th>
             <th>Schedule ID</th>
             <th>Remark</th>
@@ -56,11 +59,14 @@ export default function CourseReportToFaculty() {
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{user.submission_date}</td>
+                <td>{user.submissiondate}</td>
+                <td>{user.report_submitter}</td>
+                <td>{user.course_code}</td>
+                <td>{user.course_no}</td>
                 <td>{user.faculty}</td>
                 <td>{user.schedule_id}</td>
                 <td>{user.remarks}</td>
-                <td><button> <AiFillFilePdf onClick={() => handlePDFView(user.schedule_id)} style={{ color: "red", fontSize: "30px" }} /></button></td>
+                <td> <AiFillFilePdf onClick={() => handlePDFView(user.schedule_id)} style={{ color: "red", fontSize: "30px" }} /></td>
               </tr>
             )
           })}

@@ -61,8 +61,7 @@ function handleReportSubmission(e){
   }
 }
 
-function handlePDFView(e){
-    const data = e.target.getAttribute("data");
+function handlePDFView(data){
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/report/view/${data}`;
     axios.get(url, { responseType: "blob" }).then((res) => {
       const objectUrl = URL.createObjectURL(res.data);
@@ -88,7 +87,7 @@ function handleView(){
   const user = JSON.parse(localStorage.getItem("user"))
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/view_by_faculty/${user.faculty}`;
   axios.get(url).then((res)=>{
-      setData(res.data.reports)
+      setData(res.data.newReports)
   }).catch((error)=>{
     console.log(error)
   })
@@ -99,7 +98,6 @@ function handleView(){
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/send_course/${user.faculty}`;
   axios.get(url).then((res)=>{
     setViewCompletedCourse(res.data.courses);
-    console.log(res);
   }).catch((error)=>{
     console.log(error)
   })
@@ -140,10 +138,10 @@ function handleView(){
     {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
     <form id='id'>
     <select onChange={(e)=>setScheduleId(e.target.value)}>
-      <option>select course</option>
+      <option>Select Course</option>
       {
         viewCompletedCourse.map((data,index)=>{
-          return <option key={index} value={data.schedulerid}>{data.name}</option>
+          return <option key={index} value={data.schedulerid}>{data.name} (Batch - {data.batch})</option>
         })
       }
     </select>
@@ -158,23 +156,29 @@ function handleView(){
   <table>
     <tbody>
       <tr>
-          <th>S.No</th>
-          <th>Submission At</th>
-          <th>Faculty</th>
-          <th>Schedule ID</th>
-          <th>Remark</th>
-          <th>View PDF</th>
+      <th>S.No</th>
+            <th>Submission At</th>
+            <th>Course Officer</th>
+            <th>Course Code</th>
+            <th>Course No.</th>
+            <th>Faculty</th>
+            <th>Schedule ID</th>
+            <th>Remark</th>
+            <th>View PDF</th>
       </tr>
         {data.map((user,index)=>{
           return(
             <tr key={index}>
-            <td>{index+1}</td>
-            <td>{user.submission_date}</td>
+            <td>{index + 1}</td>
+            <td>{user.submissiondate}</td>
+            <td>{user.report_submitter}</td>
+            <td>{user.course_code}</td>
+            <td>{user.course_no}</td>
             <td>{user.faculty}</td>
             <td>{user.schedule_id}</td>
             <td>{user.remarks}</td>
-            <td><button  onClick={handlePDFView}  data={user.schedule_id}> <AiFillFilePdf style={{color:"red" , fontSize:"30px"}} onClick={handlePDFView} data={user.schedule_id}/></button></td>
-           </tr>
+            <td> <AiFillFilePdf onClick={() => handlePDFView(user.schedule_id)} style={{ color: "red", fontSize: "30px" }} /></td>
+          </tr>
           )
         })}
         </tbody>

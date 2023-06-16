@@ -96,8 +96,7 @@ useEffect(()=>{
 function viewArchiveTenderUI(){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/view_archive";
   axios.get(url).then((res)=>{
-    console.log(res.data.message)
-    return res.data.message !== "Nothing to show!" ?  setViewArchive(res.data.tender) : setNoDataToShow(true);
+  setViewArchive(res.data.data);
   }).catch((error)=>{
     if(error.response.data.message === "Nothing to show!"){
       setNoDataToShow(true)
@@ -113,6 +112,7 @@ function tenderViewFun(){
   }).catch((error)=>{
     if(error.response.data.message === "Nothing to show."){
       setNoDataToShow(true);
+      setViewTender([]);
     }
   })
 }
@@ -195,8 +195,11 @@ function handleArchive(e){
     tender_number:`${tenderNo}`
   }
   axios.patch(url,data).then((res)=>{
+    
     if(res.data.message=== "Tender archived successfully"){
-      setTenderArchiveSuccess(true)
+      setTenderArchiveSuccess(true);
+      viewArchiveTenderUI();
+      tenderViewFun();
     }
     setTimeout(() => {
       setTenderArchiveSuccess(false)
@@ -231,6 +234,25 @@ function corrigendumPDFView(corrigendumID){
     console.log(error);
   });
 }
+
+function archiveCorrigendumPDFView(id){
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corri_pdf/${id}`;
+  axios.get(url, { responseType: "blob" }).then((res) => {
+    const objectUrl = URL.createObjectURL(res.data);
+    const newWindow = window.open();
+    newWindow.document.title = "PDF"
+    if (!newWindow) {
+      alert('Pop-up blocked. Please allow pop-ups for this website.');
+    } else {
+      newWindow.document.body.innerHTML = "<embed width='100%' height='100%' src='" + objectUrl + "' type='application/pdf'></embed>";
+    }
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
+
+
   return (
     <div style={{display:"flex",flexDirection:"column"}}>
       {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
@@ -287,7 +309,7 @@ function corrigendumPDFView(corrigendumID){
             : "" }
         </td>
                   <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
-                  <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} onClick={handleClickOpen}></button></td>
+                  <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"25px" , width:"25px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )
               })
@@ -296,10 +318,10 @@ function corrigendumPDFView(corrigendumID){
         </table>
         </div> : "" }
         {
-       (( viewTender.length === 0 && filter) || (noDataToShow && viewArchiveTender)) && 
+       (( viewTender.length === 0 && filter) || (viewArchive.length  === 0 && viewArchiveTender)) && 
         <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
       }
-        {(viewArchiveTender && !noDataToShow) ? <div className='user-details-wrapper'>
+        {(viewArchiveTender && viewArchive.length > 0) ? <div className='user-details-wrapper'>
         <table>
             <tr>
                 <th>S.No</th>
@@ -318,7 +340,30 @@ function corrigendumPDFView(corrigendumID){
                   <td>{data.description}</td>
                   <td>{data.startdate}</td>
                   <td>{data.enddate}</td>
-                  <td>{data.corrigendum[0].corrigendum}</td>
+                  <td>
+                  { data.corrigendum[0].corrigendumID !== null ? 
+          <table>
+            <tbody>
+              <tr>
+                <th>S.No</th>
+                <th>Created At</th>
+                <th>ID</th>
+                <th>Corregendom</th>
+                <th>PDF</th>
+              </tr>
+              {data.corrigendum.map((corrigendum, index) => (
+                <tr key={index}>
+                  <td>{index+1}</td>
+                  <td>{corrigendum.created_at}</td>
+                  <td>{corrigendum.corrigendumID}</td>
+                  <td>{corrigendum.corrigendum}</td>
+                  <td>{corrigendum.pdf !== null ? <AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={(e)=>archiveCorrigendumPDFView(data.tender_ref_no)}/> : ""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+            : "" }
+                  </td>
               </tr>
                 )
               })

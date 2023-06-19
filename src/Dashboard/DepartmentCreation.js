@@ -553,7 +553,7 @@ export default function DepartmentCreation() {
         {successAlert ? <Alert severity="success">Department Create successfully</Alert> : ""}
         {failAlert ? <Alert severity="error">Something Went Wrong Please try again later</Alert> : ""}
         {emptyFieldAlert ? <Alert severity="error">All fields required</Alert> : ""}
-        {duplicateOrg ? <Alert severity="error">Organisation Already Exists</Alert> : ""}
+        {duplicateOrg ? <Alert severity="error">Duplicate organization found</Alert> : ""}
         {duplicateEmail ? <Alert severity="error">Email Already Exists</Alert> : ""}
         {duplicatePhone ? <Alert severity="error">Phone Already Exists</Alert> : ""}
         {responseCircular && (

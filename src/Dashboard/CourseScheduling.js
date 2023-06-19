@@ -106,8 +106,8 @@ export default function CourseScheduling() {
           setSuccessAlert(false);
         }, 5000);
       }).catch((error) => {
-        setCircularResponse(false)
         console.log(error);
+        setCircularResponse(false)
         setErrorAlert(true);
         setTimeout(() => {
           setErrorAlert(false);
@@ -135,27 +135,45 @@ export default function CourseScheduling() {
 
 
   function handleCourseEditForm(e) {
+    setCircularResponse(true)
     e.preventDefault();
     setEditForm(true);
-    setFrame(false)
-    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
-    const data = {
-      status: editData.course_status,
-      batch: editData.batch,
-      courseID: editData.courseid,
-      newStatus: newStatus,
-      newRunningDate: newRunningDate,
-      newComencementDate: newCommencementDate,
-      newCompletionDate: newCompletionDate,
-    };
-    axios
-      .patch(url, data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });  
+    setFrame(false);
+    if(newStatus){
+      const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/updateSchedule";
+      const data = {
+        status: editData.course_status,
+        batch: editData.batch,
+        courseID: editData.courseid,
+        newStatus: newStatus,
+        newRunningDate: newRunningDate,
+        newComencementDate: newCommencementDate,
+        newCompletionDate: newCompletionDate,
+      };
+      axios
+        .patch(url, data)
+        .then((res) => {
+          viewCourse();
+          setCircularResponse(false)
+          setSuccessAlert(true);
+          setTimeout(() => {
+            setSuccessAlert(false);
+          }, 5000);
+        })
+        .catch((error) => {
+          setCircularResponse(false)
+          setErrorAlert(true);
+          setTimeout(() => {
+            setErrorAlert(false);
+          }, 5000);
+        }); 
+    }
+     else{
+      setEmptyFieldAlert(true);
+      setTimeout(() => {
+        setEmptyFieldAlert(false)
+      }, 5000);
+     }
   }
 
   function handleEditFormShow(data) {
@@ -229,7 +247,7 @@ function viewCourseFun(){
                     <th>S.No</th>
                     <th>Course Title</th>
                     <th>Course Id</th>
-                    <th>Date Commencement</th>
+                    <th>Enrollment Date</th>
                     <th>Date Completion</th>
                     <th>Course Capacity</th>
                     <th>Course Fee</th>
@@ -340,7 +358,7 @@ function viewCourseFun(){
 
               <input type='text' placeholder='Enter Fee' name='fee' onChange={handleInputs} ref={feeRef} ></input>
             </div> : ""}
-            <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Commencement' ref={commencementDate}></input>
+            <input type='text' onFocus={() => { commencementDate.current.type = 'date' }} onBlur={() => { commencementDate.current.type = 'text' }} placeholder='Date Of Enrollment' ref={commencementDate}></input>
             <input type='text' onFocus={() => { completionDate.current.type = 'date' }} onBlur={() => { completionDate.current.type = 'text' }} placeholder='Date of Completion' ref={completionDate}></input>
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
             <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
@@ -352,7 +370,29 @@ function viewCourseFun(){
       {
         editForm &&
         <div className='department-creation-wrapper'>
+            {errorAlert && <Alert severity='error'>Record Not Exists</Alert>}
+            {successAlert && <Alert severity='success'>Successfully Changed</Alert>}
+            {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
           <h3>Update Course Status</h3>
+          {responseCircular && (
+              <div
+                style={{
+                  width: "29%",
+                  height: "30%",
+                  left: "33%",
+                  backgroundColor: "rgb(211,211,211)",
+                  borderRadius: "10px",
+                  top: "130px",
+                  position: "absolute",
+                  padding: "10px 20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress style={{ height: "50px", width: "50px" }} />
+              </div>
+            )}
           <form>
             <select onChange={(e) => setNewStatus(e.target.value)}>
               <option>Select Status</option>

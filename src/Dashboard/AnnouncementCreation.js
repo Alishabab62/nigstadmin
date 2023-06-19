@@ -157,13 +157,15 @@ function viewAnnouncementPDF(data){
                             </tr>
                             {
                                 viewAnn.map((data, index) => {
+                                    const url =`http://${data.url}`; 
+                                    console.log(url)
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{data.createdat}</td>
                                             <td>{data.title}</td>
                                             <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
-                                            <td>{data.url}</td>
+                                            <td><a href={url} rel='external' target='_blank'>URL</a></td>
                                             <td>{data.status ? <button>Hide</button> : <button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</button>}</td>
                                             <td>{data.pdf_path !==null ?  <AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/> : ""}</td>
                                            

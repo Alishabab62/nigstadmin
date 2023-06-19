@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
+import galleryupload from "./galleryuploads"
 import Logo from '../images/logo1.png'
 // import CreationFacultysAdmin from "./CreationFacultysAdmin";
 import AnnouncementCreation from "./AnnouncementCreation";
@@ -21,6 +22,7 @@ export default function NIGSTAdmin() {
   
   const [tender, setTender] = useState(false);
   const [announcement , setAnnouncement] = useState(false);
+  const[galleryupload,setgalleryupload] = useState(false)
   // const [facultyAdmin , setFacultyAdmin] = useState(false);
 
   function departmentFun() {
@@ -103,6 +105,17 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     // setFacultyAdmin(false)
   }
+  function ImageUploadForm(){
+    setgalleryupload(true)
+    setAnnouncement(false);
+    setTender(false);
+    setCourseAssignment(false);
+    setUsers(false);
+    // setCourseCategory(false);
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+
+  }
 
 
   function logout(){
@@ -156,6 +169,15 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={announcementFun}>
               Announcement
             </li>
+            
+            }
+            {
+              galleryupload ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={ImageUploadForm}>
+              Gallery
+            </li> : <li className="p-3 " onClick={ImageUploadForm}>
+              Gallery
+            </li>
+            
             }
             {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
@@ -184,6 +206,7 @@ export default function NIGSTAdmin() {
           {tender ? <Tender /> : ""}
           {announcement && <AnnouncementCreation/>}
           {/* {facultyAdmin ? <CreationFacultysAdmin/> : ""} */}
+          {galleryupload? <ImageUploadForm/>:""}
         </div>
       </div>
     </div>

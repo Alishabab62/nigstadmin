@@ -3,35 +3,33 @@ import React, { useState } from "react";
 import DepartmentCreation from "./DepartmentCreation";
 import CreationFacultyPosition from "./CreationFacultyPosition";
 import Button from "../components/Button";
-// import CourseCategoryCreation from "./CourseCategoryCreation";
 import NewUserVerification from "./NewUserVerification";
 import DepartmentCourseAssignment from "./DepartmentCourseAssignment";
 import Tender from "./Tender";
+import Galleryupload from "./galleryuploads"
 import Logo from '../images/logo1.png'
-// import CreationFacultysAdmin from "./CreationFacultysAdmin";
 import AnnouncementCreation from "./AnnouncementCreation";
 
 
 export default function NIGSTAdmin() {
   const [departmentCreation, setDepartmentCreation] = useState(true);
   const [facultyPositionCreation, setFacultyPositionCreation] = useState(false);
-  // const [courseCategory, setCourseCategory] = useState(false);
   const [users, setUsers] = useState(false);
   const [courseAssignment, setCourseAssignment] = useState(false);
-  
   const [tender, setTender] = useState(false);
   const [announcement , setAnnouncement] = useState(false);
-  // const [facultyAdmin , setFacultyAdmin] = useState(false);
+  const[galleryimage,setGalleryimage] = useState(false)
+  
 
   function departmentFun() {
     setDepartmentCreation(true);
     setFacultyPositionCreation(false);
-    // setCourseCategory(false);
     setUsers(false);
     setCourseAssignment(false);
     setTender(false);
     setAnnouncement(false);
-    // setFacultyAdmin(false)
+    setGalleryimage(false);
+   
   }
   function facultyPositionFun() {
     setFacultyPositionCreation(true);
@@ -41,28 +39,8 @@ export default function NIGSTAdmin() {
     setCourseAssignment(false);
     setTender(false);
     setAnnouncement(false);
-    // setFacultyAdmin(false);
+    setGalleryimage(false);
   }
-  // function courseCategoryFun() {
-  //   setCourseCategory(true);
-  //   setDepartmentCreation(false);
-  //   setFacultyPositionCreation(false);
-  //   setUsers(false);
-  //   setCourseAssignment(false);
-  //   setTender(false);
-  //   setFacultyAdmin(false);
-  // setAnnouncement(false);
-  // }
-  // function facultyAdminCreationFun() {
-  //   // setFacultyAdmin(true)
-  //   setDepartmentCreation(false);
-  //   setFacultyPositionCreation(false);
-  //   // setCourseCategory(false);
-  //   setUsers(false);
-  //   setCourseAssignment(false);
-    // setAnnouncement(false);
-    //   setTender(false);
-  // }
   function usersFun() {
     setUsers(true);
     // setCourseCategory(false);
@@ -71,6 +49,7 @@ export default function NIGSTAdmin() {
     setCourseAssignment(false);
     setTender(false);
     setAnnouncement(false);
+    setGalleryimage(false);
     // setFacultyAdmin(false)
   }
   function courseAssignmentFun() {
@@ -81,6 +60,7 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     setTender(false);
     setAnnouncement(false);
+    setGalleryimage(false);
     // setFacultyAdmin(false)
   }
   function handleTenderFun() {
@@ -92,6 +72,7 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     // setFacultyAdmin(false)
     setAnnouncement(false);
+    setGalleryimage(false);
   }
   function announcementFun(){
     setAnnouncement(true);
@@ -101,7 +82,20 @@ export default function NIGSTAdmin() {
     // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
+    setGalleryimage(false);
+    
     // setFacultyAdmin(false)
+  }
+  function ImageUploadFun(){
+    setGalleryimage(true);
+    setAnnouncement(false);
+    setTender(false);
+    setCourseAssignment(false);
+    setUsers(false);
+    // setCourseCategory(false);
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+
   }
 
 
@@ -156,6 +150,15 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={announcementFun}>
               Announcement
             </li>
+            
+            }
+            {
+              galleryimage ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={ImageUploadFun}>
+              Gallery
+            </li> : <li className="p-3 " onClick={ImageUploadFun}>
+              Gallery
+            </li>
+            
             }
             {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
@@ -184,6 +187,7 @@ export default function NIGSTAdmin() {
           {tender ? <Tender /> : ""}
           {announcement && <AnnouncementCreation/>}
           {/* {facultyAdmin ? <CreationFacultysAdmin/> : ""} */}
+          {galleryimage? <Galleryupload/>:""}
         </div>
       </div>
     </div>

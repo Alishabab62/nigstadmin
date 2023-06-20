@@ -137,10 +137,10 @@ function viewAnnouncementPDF(data){
     return (
         <>
             <div>
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                     <button onClick={viewUIFun}>View Announcement</button>
-                     <button onClick={viewFormFun}>Create Announcement</button>
-                    <button onClick={viewArchiveAnn}>View Archive Announcement</button>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+                     <button style={{ marginRight: '20px' }} onClick={viewUIFun}>View Announcement</button>
+                     <button style={{ marginRight: '20px' }} onClick={viewFormFun}>Create Announcement</button>
+                    <button style={{ marginRight: '20px' }} onClick={viewArchiveAnn}>View Archive Announcement</button>
                 </div>
                 {
                     viewAnnUI && <div className='user-details-wrapper'>

@@ -14,9 +14,7 @@ function Tender() {
   const [showCorrigendum, setShowCorrigendum] = useState(false);
   const [tenderValue , setTenderValue ] = useState();
   const [formSelect , setFormSelect] = useState(true);
-  const startDate = useRef();
-  const endDate = useRef();
-  const file = useRef();
+  const file = useRef(null);
   const corrigendumPdf = useRef();
   const [filter , setFilter] = useState(true);
   const [successAlert, setSuccessAlert] = useState(false);
@@ -30,12 +28,15 @@ function Tender() {
   const [tenderArchiveSuccess,setTenderArchiveSuccess] = useState(false);
   const [viewArchiveTender,setViewArchiveTender] = useState(false);
   const [viewArchive,setViewArchive] = useState([]);
-  const [noDataToShow, setNoDataToShow] = useState(false);
+  const [editButton,setEditButton] = useState(false)
   const [input , setInput] = useState({
     title:"",
     ref:"",
     description:"",
-    corrigendum:""
+    corrigendum:"",
+    starDate:"",
+    endDate:"",
+    pdfFile:""
   });
 
   const toggleTenders = () => {
@@ -64,14 +65,7 @@ function archiveFun(){
     setFilter(true)
     setShowTenders(false)
  }
-//  function closeCorregendumForm(){
-//   setViewArchiveTender(false)
-//   setShowCorrigendum(false);
-//   setFilter(false)
-//   setFormSelect(true)
-//   setFilter(true)
-//   setShowTenders(false)
-//  }
+
 function viewPDF(id) {
   const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/vpdf/${id}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
@@ -99,7 +93,6 @@ function viewArchiveTenderUI(){
   setViewArchive(res.data.data);
   }).catch((error)=>{
     if(error.response.data.message === "Nothing to show!"){
-      setNoDataToShow(true)
     }
   })
 }
@@ -111,7 +104,6 @@ function tenderViewFun(){
     setViewTender(res.data.tender.reverse());
   }).catch((error)=>{
     if(error.response.data.message === "Nothing to show."){
-      setNoDataToShow(true);
       setViewTender([]);
     }
   })
@@ -126,7 +118,7 @@ function handleInputs(e){
 
 function handleSubmit(e) {
   e.preventDefault();
-  if(startDate.current.value > endDate.current.value){
+  if(input.starDate > input.endDate){
     setDateCheck(true);
     setTimeout(() => {
       setDateCheck(false)
@@ -140,14 +132,14 @@ function handleSubmit(e) {
     }, 5000);
     return;
   }
-  if(file.current.files[0] !== undefined && input.title && input.description && startDate.current.value && endDate.current.value && input.ref ){
+  if(file.current.files[0] !== undefined && input.title && input.description && input.starDate && input.endDate && input.ref ){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/create";
     const formData = new FormData();
     formData.append("title", input.title);
     formData.append("tenderRefNo", input.ref);
     formData.append("description", input.description);
-    formData.append("startDate", startDate.current.value);
-    formData.append("endDate", endDate.current.value);
+    formData.append("startDate", input.starDate);
+    formData.append("endDate", input.endDate);
     formData.append("pdf", file.current.files[0]);
     axios.post(url, formData).then((res) => {
      tenderViewFun(); 
@@ -251,7 +243,63 @@ function archiveCorrigendumPDFView(id){
   });
 }
 
+function handleEdit(data){
+  console.log(data)
+  setEditButton(true);
+  setShowTenders(true)
+  setFilter(false)
+  setInput({
+    title:data.title,
+    ref:data.tender_ref_no,
+    description:data.description,
+    starDate:data.start_date,
+    endDate:data.end_date
+  })
+}
 
+  function handleEditForm(e){
+    e.preventDefault();
+  if(input.starDate > input.endDate){
+    setDateCheck(true);
+    setTimeout(() => {
+      setDateCheck(false)
+    }, 5000);
+    return;
+  }
+  if(input.ref.includes('/')){
+    setEnterValidAlert(true);
+    setTimeout(() => {
+      setEnterValidAlert(false);
+    }, 5000);
+    return;
+  }
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/edit";
+    const formData = new FormData();
+    formData.append("title", input.title);
+    formData.append("tenderRefNo", input.ref);
+    formData.append("description", input.description);
+    formData.append("startDate", input.starDate);
+    formData.append("endDate", input.endDate);
+    formData.append("pdf", file.current.files[0]);
+    axios.patch(url, formData).then((res) => {
+     tenderViewFun(); 
+      setSuccessAlert(true);
+      setInput({
+        title:"",
+        ref:"",
+        description:"",
+        corrigendum:"",
+        starDate:"",
+        endDate:"",
+        pdfFile:""
+      })
+      setTimeout(() => {
+        setSuccessAlert(false)
+      }, 5000);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   return (
     <div style={{display:"flex",flexDirection:"column"}}>
@@ -273,6 +321,7 @@ function archiveCorrigendumPDFView(id){
                 <th>End Date</th>
                 <th>Corregendom</th>
                 <th>File</th>
+                <th>Edit</th>
                 <th>Move to Archive</th>
             </tr>
             {
@@ -309,6 +358,9 @@ function archiveCorrigendumPDFView(id){
             : "" }
         </td>
                   <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
+                  <td  style={{cursor:"pointer"}}><i class="fa-solid fa-pen-to-square" onClick={()=>{
+                    handleEdit(data);
+                     }}></i></td>
                   <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"25px" , width:"25px"}} onClick={handleClickOpen}></button></td>
               </tr>
                 )
@@ -376,20 +428,20 @@ function archiveCorrigendumPDFView(id){
       
       {showTenders && (
         <div id='div1'>
-          {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Tender Create successfully</Alert> : ""}
+          {successAlert ? editButton ?  <Alert severity="success" style={{marginBottom:"10px"}}>Tender Update successfully</Alert> :  <Alert severity="success" style={{marginBottom:"10px"}}>Tender Created successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
           <button className='close-btn' onClick={closeTenderForm}>&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
-            <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title"/>
-            <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"}/>
-            <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"}></textarea>
-            <input type="text" onClick={(e)=> {e.target.type="date"}} id="start-date" name="starDate" required ref={startDate} placeholder={"Start Date:"}/>
-            <input type="text" onClick={(e)=> {e.target.type="date"}} id="end-date" name="endDate" required  ref={endDate} placeholder={"End Date:"}/>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={file} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <button onClick={handleSubmit} value={"Submit"} className='submitButton'>Submit</button>
+            <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>
+            <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"} value={input.ref}/>
+            <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"} value={input.description}></textarea>
+            <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="start-date" name="starDate" required  placeholder={"Start Date:"} value={input.starDate}/>
+            <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="end-date" name="endDate" required   placeholder={"End Date:"} value={input.endDate}/>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdfFile" accept=".pdf"  required ref={file}></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'>Submit</button>
           </form>
         </div>
       )}

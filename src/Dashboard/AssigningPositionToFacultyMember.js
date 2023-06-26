@@ -81,7 +81,6 @@ export default function AssigningPositionToFacultyMember() {
      
     });
 
-    // {"message":""}
     getAssignedPosition();
     // eslint-disable-next-line
   }, []);
@@ -103,9 +102,6 @@ export default function AssigningPositionToFacultyMember() {
     setFacId(e.target.options[e.target.selectedIndex].getAttribute("data"));
   }
 
-  function setPositionFun(e) {
-    setFacultyPosition(e.target.value);
-  }
   function viewForm() {
     setView(false);
     setCreateFrom(true);
@@ -182,7 +178,7 @@ export default function AssigningPositionToFacultyMember() {
                 })
               }
             </select>
-            <select onChange={(e) => setPositionFun(e)}>
+            <select onChange={(e) => setFacultyPosition(e.target.value)}>
               <option>Select Faculty Position</option>
               {
                 viewPosition.map((data, index) => {
@@ -190,7 +186,7 @@ export default function AssigningPositionToFacultyMember() {
                 })
               }
             </select>
-            <input type={"text"} placeholder={"Faculty Senirioty Id"} onChange={handleInputs} name="facultyId" />
+            <input type={"text"} placeholder={facultyPosition === "Head of Faculty" ? "Enter Faculty seniority id between 1 to 10" : facultyPosition === "Instructor" ? "Enter Faculty seniority id between 10 to 99" : facultyPosition === "Faculty" ? "Enter Faculty seniority id between 100 to 999" : ""} onChange={handleInputs} name="facultyId" />
             <button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef}>Submit</button>
           </form>
         </div>}
@@ -198,3 +194,4 @@ export default function AssigningPositionToFacultyMember() {
     </>
   )
 }
+// Instructor Faculty

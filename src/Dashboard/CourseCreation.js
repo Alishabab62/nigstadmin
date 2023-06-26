@@ -356,8 +356,8 @@ export default function CourseCreation() {
             }
           </select>
           <div style={{ display: "flex", alignItems: "center", background: "none", borderRadius: "5px", margin: "0px auto", width: "auto" }}>
-            <input type='radio' value={"free"} style={{ marginRight: "5px" }} onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
-            <input type='radio' value={"paid"} name='fee' onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
+            <input type='radio' value={"free"} style={{ marginRight: "5px" }} defaultChecked onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
+            <input type='radio' value={"paid"} name='fee'  onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
           </div>
           <select onChange={(e) => setCourseMode(e.target.value)}>
             <option>Select Mode of Course</option>

@@ -348,7 +348,7 @@ export default function CreationFacultyMember() {
           <div style={{ display: "flex", alignItems: "center" }}>
             <p style={{ marginRight: "1rem" }}>Login Access</p>
             <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>
-            <input type="radio" value="false" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
+            <input type="radio" value="false" name="admin verification" defaultChecked onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
           </div>
           <button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers} ref={buttonRef}>Submit</button>
           </form>

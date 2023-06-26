@@ -97,6 +97,12 @@ export default function CourseScheduling() {
         courseID: `${courseId.current.value}`
       }
       axios.post(url, data).then((res) => {
+        if(res.data.message === "Running date is not between commencement and completion dates."){
+          setErrorAlert(true);
+          setTimeout(() => {
+            setErrorAlert(false);
+          }, 5000);
+        }
         viewCourse();
         setCircularResponse(false);
         setSuccessAlert(true);
@@ -108,10 +114,7 @@ export default function CourseScheduling() {
       }).catch((error) => {
         console.log(error);
         setCircularResponse(false)
-        setErrorAlert(true);
-        setTimeout(() => {
-          setErrorAlert(false);
-        }, 5000);
+       
       })
     }
     else{

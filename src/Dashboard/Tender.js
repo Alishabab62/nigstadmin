@@ -228,7 +228,7 @@ function corrigendumPDFView(corrigendumID){
 }
 
 function archiveCorrigendumPDFView(id){
-  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corri_pdf/${id}`;
+  const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/ar_corri_pdf/${id}`;
   axios.get(url, { responseType: "blob" }).then((res) => {
     const objectUrl = URL.createObjectURL(res.data);
     const newWindow = window.open();
@@ -409,7 +409,7 @@ function handleEdit(data){
                   <td>{corrigendum.created_at}</td>
                   <td>{corrigendum.corrigendumID}</td>
                   <td>{corrigendum.corrigendum}</td>
-                  <td>{corrigendum.pdf !== null ? <AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={(e)=>archiveCorrigendumPDFView(data.tender_ref_no)}/> : ""}</td>
+                  <td>{corrigendum.pdf !== null ? <AiFillFilePdf style={{color:"red",fontSize:"30px",cursor:"pointer"}}  onClick={()=>archiveCorrigendumPDFView(corrigendum.corrigendumID)}/> : ""}</td>
                 </tr>
               ))}
             </tbody>

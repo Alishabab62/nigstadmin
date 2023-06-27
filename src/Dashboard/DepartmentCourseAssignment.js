@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import BouncyButton from "../components/Button";
-import { Alert, Switch} from '@mui/material';
+import { Alert, Button, Switch} from '@mui/material';
 import axios from 'axios';
 
 export default function DepartmentCourseAssignment() {
@@ -273,10 +273,10 @@ export default function DepartmentCourseAssignment() {
               </div> : ""
             }
             <input type="text" placeholder="Description" name="description" onChange={handleInputs} />
-            {firstStep &&   <button style={{width:"100%"}}  onClick={handleCourseCodeAndNo} value={"Submit"}>Submit</button>}
+            {firstStep &&   <Button style={{width:"100%"}}  onClick={handleCourseCodeAndNo} value={"Submit"}>Submit</Button>}
 
-            {secondStep && <button style={{width:"100%"}}  onClick={handleSecondStepCourseId} value={"Confirm"}>Confirm</button>}
-            {thirdStep  && <button style={{width:"100%"}}  onClick={handleFinalSubmit} value={"Submit"}>Submit</button>}
+            {secondStep && <Button style={{width:"100%"}}  onClick={handleSecondStepCourseId} value={"Confirm"}>Confirm</Button>}
+            {thirdStep  && <Button style={{width:"100%"}}  onClick={handleFinalSubmit} value={"Submit"}>Submit</Button>}
 
           </form>
       </div>

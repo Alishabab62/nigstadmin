@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React, { useState } from 'react';
 
 const ImageUploadForm = () => {
@@ -63,7 +64,7 @@ const ImageUploadForm = () => {
         />
       </div>
 
-      <button type="submit">Upload</button>
+      <Button type="submit">Upload</Button>
     </form>
     </div>
   );

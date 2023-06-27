@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -56,9 +57,9 @@ export default function VerificationPage() {
                 <span>NIGST Verification</span>
                 {verificationState.admin_verified ? <button style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "40px", width: "40px" }} ></button> : <button style={{ height: "40px", width: "40px", backgroundColor: "red", color: "red", borderRadius: "50%" }}></button>}
                 <span>Email Verification</span>
-                {verificationState.email_verified ? <button style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "40px", width: "40px" }} ></button> : <><button onClick={handleEmailVerification}>Resend Email</button></>}
+                {verificationState.email_verified ? <button style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "40px", width: "40px" }} ></button> : <><Button onClick={handleEmailVerification}>Resend Email</Button></>}
                 <span>Phone Verification</span>
-                {verificationState.mobile_verified ? <button style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "40px", width: "40px" }} ></button> : <> <button onClick={handleOTPVerification}>Resend OTP</button></>}
+                {verificationState.mobile_verified ? <button style={{ backgroundColor: "green", color: "green", borderRadius: "50%", height: "40px", width: "40px" }} ></button> : <> <Button onClick={handleOTPVerification}>Resend OTP</Button></>}
             </form>
         </div>
     )

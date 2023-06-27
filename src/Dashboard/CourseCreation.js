@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Inputs from '../components/Inputs'
 import axios from 'axios';
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Button, CircularProgress } from '@mui/material';
 
 
 export default function CourseCreation() {
@@ -206,7 +206,7 @@ export default function CourseCreation() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <button className='toggle_btn' onClick={changeView}>Create Course</button> : <button className='toggle_btn' onClick={changeView}>View Created Course</button>
+          viewFrame ? <Button className='toggle_btn' onClick={changeView}>Create Course</Button> : <Button className='toggle_btn' onClick={changeView}>View Created Course</Button>
         }
       </div>
       {
@@ -365,7 +365,7 @@ export default function CourseCreation() {
             <option>Online</option>
             <option>Hybrid</option>
           </select>
-          <button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef}>Submit</button>
+          <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef}>Submit</Button>
           </form>
         </div> : ""
       }

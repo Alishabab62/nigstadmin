@@ -113,7 +113,7 @@ export default function NewUserVerification() {
         <div>
           <span>To Date</span> <Inputs type={'date'} ref1={endDateRef} />
         </div>
-        <button onClick={filter}>Apply</button>
+        <Button onClick={filter}>Apply</Button>
       </div>
       <div>
         <input

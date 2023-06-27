@@ -306,9 +306,9 @@ function handleEdit(data){
       {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
       {
       formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
-        <button className='openform' onClick={toggleTenders}>Create New Tenders</button>
-        <button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}>Create New Corregendom</button>
-        <button className='openform' onClick={archiveFun}>View Archive Tender</button>
+        <Button className='openform' onClick={toggleTenders}>Create New Tenders</Button>
+        <Button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}>Create New Corregendom</Button>
+        <Button className='openform' onClick={archiveFun}>View Archive Tender</Button>
       </div> : ""
       }
       {(viewTender.length>=1 && filter) ? <div className='user-details-wrapper'>
@@ -361,7 +361,7 @@ function handleEdit(data){
                   <td  style={{cursor:"pointer"}}><i class="fa-solid fa-pen-to-square" onClick={()=>{
                     handleEdit(data);
                      }}></i></td>
-                  <td><button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"25px" , width:"25px"}} onClick={handleClickOpen}></button></td>
+                  <td><Button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"25px" , width:"25px"}} onClick={handleClickOpen}></Button></td>
               </tr>
                 )
               })
@@ -441,7 +441,7 @@ function handleEdit(data){
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="start-date" name="starDate" required  placeholder={"Start Date:"} value={input.starDate}/>
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="end-date" name="endDate" required   placeholder={"End Date:"} value={input.endDate}/>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdfFile" accept=".pdf"  required ref={file}></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'>Submit</button>
+            <Button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'>Submit</Button>
           </form>
         </div>
       )}
@@ -467,7 +467,7 @@ function handleEdit(data){
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed (Optional))</span></div>
-            <button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</button>
+            <Button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</Button>
           </form>
         </div>
       )}

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import Inputs from '../components/Inputs';
-import {  CircularProgress,Alert } from "@mui/material";
+import {  CircularProgress,Alert, Button } from "@mui/material";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -164,7 +164,7 @@ export default function Login() {
       <div style={{width:"100%" , display:"flex" , justifyContent:"space-between"}}>
       <Link to='/forgot' style={{textDecoration:"none"}}>Forgot Password</Link><label>(Only for Faculty Members)</label>
       </div>
-      <button value={"Login"} onClick={handleLogin} ref={buttonRef}>Login</button>
+      <Button value={"Login"} onClick={handleLogin} ref={buttonRef}>Login</Button>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { getAllISOCodes } from 'iso-country-currency';
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Button, CircularProgress } from '@mui/material';
 
 export default function CourseScheduling() {
 
@@ -230,7 +230,7 @@ function viewCourseFun(){
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
-          viewFrameButton ? <button className='toggle_btn' onClick={viewCourseFun}>Schedule Course</button> : <button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</button>
+          viewFrameButton ? <Button className='toggle_btn' onClick={viewCourseFun}>Schedule Course</Button> : <Button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</Button>
         }
       </div>
       {
@@ -366,7 +366,7 @@ function viewCourseFun(){
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
             <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
 
-            <button onClick={handleCourseScheduling} ref={buttonRef}>Submit</button>
+            <Button onClick={handleCourseScheduling} ref={buttonRef}>Submit</Button>
             </form>
           </div> : ""
       }
@@ -413,7 +413,7 @@ function viewCourseFun(){
             {(editData.course_status === "postponed" && newStatus === "created") ? <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input> : ""}
             {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input> : ""}
             {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input> : ""}
-            <button onClick={handleCourseEditForm}>Submit</button>
+            <Button onClick={handleCourseEditForm}>Submit</Button>
           </form> </div>
       }
     </div>

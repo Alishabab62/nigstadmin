@@ -139,9 +139,9 @@ function viewAnnouncementPDF(data){
         <>
             <div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                     <button onClick={viewUIFun} style={{height:"60px"}}>View Announcement</button>
-                     <button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}}>Create Announcement</button>
-                    <button onClick={viewArchiveAnn} style={{height:"60px"}}>View Archive Announcement</button>
+                     <Button onClick={viewUIFun} style={{height:"60px"}}>View Announcement</Button>
+                     <Button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}}>Create Announcement</Button>
+                    <Button onClick={viewArchiveAnn} style={{height:"60px"}}>View Archive Announcement</Button>
                 </div>
                 {
                     viewAnnUI && <div className='user-details-wrapper'>
@@ -166,7 +166,7 @@ function viewAnnouncementPDF(data){
                                             {data.url === "" ? <td>{data.title}</td> : <td><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.title}</a></td>}
                                             {data.url === "" ? <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td> : <td style={{minWidth:"50px",textAlign:"revert"}}><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.description}</a></td>}
                                            {data.url !== "" ? <td><a href={url} rel='external' target='_blank' style={{textDecoration:"underline"}}>URL</a></td> : <td></td>}
-                                            <td>{data.status ? "": <button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</button>}</td>
+                                            <td>{data.status ? "": <Button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</Button>}</td>
                                             <td>{data.pdf_path !==null ?  <AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/> : ""}</td>
                                             <td><Button onClick={()=>archiveAnnouncement(data.aid)} sx={{bgcolor:"#1b3058" ,color:'white'}}>Move Archive</Button></td>
                                         </tr>
@@ -198,7 +198,7 @@ function viewAnnouncementPDF(data){
                                             <td>{data.title}</td>
                                             <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
                                             <td>{data.url}</td>
-                                            <td>{data.status ? <button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button> : <button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></button>}</td>
+                                            <td>{data.status ? <Button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></Button> : <Button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></Button>}</td>
                                             <td><AiFillFilePdf style={{fontSize:"30px",color:"red"}}/></td>
                                         </tr>
                                     )
@@ -219,7 +219,7 @@ function viewAnnouncementPDF(data){
                             <div>
                                 <input type='file' ref={pdf}></input><span>Only PDF Allowed</span>
                             </div>
-                            <button onClick={createAnnouncement}>Submit</button>
+                            <Button onClick={createAnnouncement}>Submit</Button>
                         </form>
                     </div>
                 }

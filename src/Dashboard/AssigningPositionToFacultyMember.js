@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 
 
 export default function AssigningPositionToFacultyMember() {
@@ -114,8 +114,8 @@ export default function AssigningPositionToFacultyMember() {
     <>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          {createForm && <button onClick={viewDataFun}>View</button>}
-          {view && <button onClick={viewForm}>Create</button>}
+          {createForm && <Button onClick={viewDataFun}>View</Button>}
+          {view && <Button onClick={viewForm}>Create</Button>}
         </div>
         {
         (view && !noDataToShow) &&  <div className='user-details-wrapper'>
@@ -188,11 +188,10 @@ export default function AssigningPositionToFacultyMember() {
               }
             </select>
             <input type={"text"} placeholder={facultyPosition === "Head of Faculty" ? "Enter Faculty seniority id between 1 to 10" : facultyPosition === "Instructor" ? "Enter Faculty seniority id between 10 to 99" : facultyPosition === "Faculty" ? "Enter Faculty seniority id between 100 to 999" : ""} onChange={handleInputs} name="facultyId" />
-            <button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef}>Submit</button>
+            <Button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef}>Submit</Button>
           </form>
         </div>}
       </div>
     </>
   )
 }
-// Instructor Faculty

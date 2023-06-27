@@ -1,4 +1,4 @@
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react'
 
@@ -83,7 +83,7 @@ export default function ChangePassword() {
       {fieldsAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
       <input type="password" placeholder='Enter Password'  name="password" onChange={handleInputs} value={input.password}></input>
       <input type="password" placeholder='Confirm Password' name="CPassword" onChange={handleInputs} value={input.CPassword}></input>
-      <button onClick={changePassword}>Submit</button>
+      <Button onClick={changePassword}>Submit</Button>
     </div>
   )
 }

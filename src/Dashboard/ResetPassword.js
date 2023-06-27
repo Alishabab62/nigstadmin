@@ -1,4 +1,4 @@
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react'
 
@@ -84,7 +84,7 @@ export default function ResetPassword() {
       <input type="password" placeholder='Old Password'  name="password" onChange={handleInputs}></input>
       <input type="password" placeholder='New Password' name="CPassword" onChange={handleInputs}></input>
       <input type="text" placeholder='Confirm Password'  name="confirmPassword" onChange={handleInputs}></input>
-      <button onClick={handleResetPassword}>Submit</button>
+      <Button onClick={handleResetPassword}>Submit</Button>
     </div>
   )
 }

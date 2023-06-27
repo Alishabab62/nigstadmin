@@ -1,8 +1,7 @@
 import React, {  useEffect, useState } from "react";
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
 import axios from "axios";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 
 export default function CreationFacultyPosition() {
  
@@ -109,7 +108,7 @@ export default function CreationFacultyPosition() {
         name={"description"}
         fun={handleInputs}
       />
-      <Button value={"Submit"} fun={handleFacultyCreation} />
+      <Button value={"Submit"} onClick={handleFacultyCreation} >Submit</Button>
     </div>
     <div style={{width:"600px",maxWidth:"600" , overflowY:"scroll" , marginTop:"80px"}}>
     <table className="faculty-position-table">

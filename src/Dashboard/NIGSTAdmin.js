@@ -9,6 +9,7 @@ import Tender from "./Tender";
 import Galleryupload from "./galleryuploads"
 import Logo from '../images/logo1.png'
 import AnnouncementCreation from "./AnnouncementCreation";
+import SOIProject from "./SOIProject";
 
 
 export default function NIGSTAdmin() {
@@ -18,7 +19,8 @@ export default function NIGSTAdmin() {
   const [courseAssignment, setCourseAssignment] = useState(false);
   const [tender, setTender] = useState(false);
   const [announcement , setAnnouncement] = useState(false);
-  const[galleryimage,setGalleryimage] = useState(false)
+  const [galleryimage,setGalleryimage] = useState(false);
+  const [SOI,setSOIProject] = useState(false);
   
 
   function departmentFun() {
@@ -29,6 +31,7 @@ export default function NIGSTAdmin() {
     setTender(false);
     setAnnouncement(false);
     setGalleryimage(false);
+    setSOIProject(false);
    
   }
   function facultyPositionFun() {
@@ -40,6 +43,8 @@ export default function NIGSTAdmin() {
     setTender(false);
     setAnnouncement(false);
     setGalleryimage(false);
+    setSOIProject(false);
+
   }
   function usersFun() {
     setUsers(true);
@@ -51,6 +56,8 @@ export default function NIGSTAdmin() {
     setAnnouncement(false);
     setGalleryimage(false);
     // setFacultyAdmin(false)
+    setSOIProject(false);
+    
   }
   function courseAssignmentFun() {
     setCourseAssignment(true);
@@ -62,6 +69,8 @@ export default function NIGSTAdmin() {
     setAnnouncement(false);
     setGalleryimage(false);
     // setFacultyAdmin(false)
+    setSOIProject(false);
+
   }
   function handleTenderFun() {
     setTender(true);
@@ -73,6 +82,8 @@ export default function NIGSTAdmin() {
     // setFacultyAdmin(false)
     setAnnouncement(false);
     setGalleryimage(false);
+    setSOIProject(false);
+
   }
   function announcementFun(){
     setAnnouncement(true);
@@ -83,6 +94,7 @@ export default function NIGSTAdmin() {
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
     setGalleryimage(false);
+    setSOIProject(false);
     
     // setFacultyAdmin(false)
   }
@@ -95,9 +107,22 @@ export default function NIGSTAdmin() {
     // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
+    setSOIProject(false);
 
   }
 
+  function SOIFun(){
+    setSOIProject(true);
+    setGalleryimage(false);
+    setAnnouncement(false);
+    setTender(false);
+    setCourseAssignment(false);
+    setUsers(false);
+    // setCourseCategory(false);
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+
+  }
 
   function logout(){
 
@@ -160,6 +185,14 @@ export default function NIGSTAdmin() {
             </li>
             
             }
+            {
+              SOI ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={SOIFun}>
+                SOI Project
+            </li> : <li className="p-3 " onClick={SOIFun}>
+              SOI Project
+            </li>
+            
+            }
             {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
               Faculty Admin </li> : <li className="p-3 " onClick={facultyAdminCreationFun}>
@@ -188,6 +221,7 @@ export default function NIGSTAdmin() {
           {announcement && <AnnouncementCreation/>}
           {/* {facultyAdmin ? <CreationFacultysAdmin/> : ""} */}
           {galleryimage? <Galleryupload/>:""}
+          {SOI && <SOIProject/> }
         </div>
       </div>
     </div>

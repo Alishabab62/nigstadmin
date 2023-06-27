@@ -117,7 +117,8 @@ export default function AssigningPositionToFacultyMember() {
           {createForm && <button onClick={viewDataFun}>View</button>}
           {view && <button onClick={viewForm}>Create</button>}
         </div>
-        {(view && !noDataToShow) &&  <div className='user-details-wrapper'>
+        {
+        (view && !noDataToShow) &&  <div className='user-details-wrapper'>
           <table>
             <tr>
               <th>S.No</th>

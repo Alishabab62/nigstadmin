@@ -195,7 +195,7 @@ export default function CreationFacultyMember() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <button className='toggle_btn' onClick={viewData}>Create Faculty</button> : <button className='toggle_btn' onClick={viewData}>View Created Faculty</button>
+          viewFrame ? <Button className='toggle_btn' onClick={viewData}>Create Faculty</Button> : <Button className='toggle_btn' onClick={viewData}>View Created Faculty</Button>
         }
       </div>
 
@@ -242,7 +242,7 @@ export default function CreationFacultyMember() {
                           <td>{data.education}</td>
                           <td>
                             {data.admin_verified ? (
-                              <button
+                              <Button
                                 data={data.email}
                                 onClick={handleClickOpen}
                                 style={{
@@ -259,9 +259,9 @@ export default function CreationFacultyMember() {
                                   className="fas fa-check"
                                   style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
                                 ></i>
-                              </button>
+                              </Button>
                             ) : (
-                              <button
+                              <Button
                                 data={data.email}
                                 onClick={handleClickOpen}
                                 style={{
@@ -278,7 +278,7 @@ export default function CreationFacultyMember() {
                                   className="fas fa-times"
                                   style={{ margin: 0, padding: 0, fontSize: "18px", lineHeight: "30px" }}
                                 ></i>
-                              </button>
+                              </Button>
                             )}
                           </td>
                         </tr>
@@ -348,9 +348,9 @@ export default function CreationFacultyMember() {
           <div style={{ display: "flex", alignItems: "center" }}>
             <p style={{ marginRight: "1rem" }}>Login Access</p>
             <input type="radio" value="true" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label style={{ marginRight: "1rem" }}>Yes</label>
-            <input type="radio" value="false" name="admin verification" onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
+            <input type="radio" value="false" name="admin verification" defaultChecked onChange={(e) => (setLogin(e.target.value))} /> <label>No</label>
           </div>
-          <button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers} ref={buttonRef}>Submit</button>
+          <Button style={{ width: '50%', margin: '20px auto 0' }} onClick={handleCreationMembers} ref={buttonRef}>Submit</Button>
           </form>
         </div> : ""
       }

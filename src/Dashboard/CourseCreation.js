@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Inputs from '../components/Inputs'
 import axios from 'axios';
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Button, CircularProgress } from '@mui/material';
 
 
 export default function CourseCreation() {
@@ -206,7 +206,7 @@ export default function CourseCreation() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <button className='toggle_btn' onClick={changeView}>Create Course</button> : <button className='toggle_btn' onClick={changeView}>View Created Course</button>
+          viewFrame ? <Button className='toggle_btn' onClick={changeView}>Create Course</Button> : <Button className='toggle_btn' onClick={changeView}>View Created Course</Button>
         }
       </div>
       {
@@ -356,8 +356,8 @@ export default function CourseCreation() {
             }
           </select>
           <div style={{ display: "flex", alignItems: "center", background: "none", borderRadius: "5px", margin: "0px auto", width: "auto" }}>
-            <input type='radio' value={"free"} style={{ marginRight: "5px" }} onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
-            <input type='radio' value={"paid"} name='fee' onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
+            <input type='radio' value={"free"} style={{ marginRight: "5px" }} defaultChecked onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
+            <input type='radio' value={"paid"} name='fee'  onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
           </div>
           <select onChange={(e) => setCourseMode(e.target.value)}>
             <option>Select Mode of Course</option>
@@ -365,7 +365,7 @@ export default function CourseCreation() {
             <option>Online</option>
             <option>Hybrid</option>
           </select>
-          <button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef}>Submit</button>
+          <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef}>Submit</Button>
           </form>
         </div> : ""
       }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { Button } from '@mui/material';
+import React, { useState } from 'react';
 
 const ImageUploadForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -43,7 +44,6 @@ const ImageUploadForm = () => {
   const handleNewCategoryChange = (event) => {
     setNewCategory(event.target.value);
   };
-
   const handleCreateCategory = () => {
     setShowCreateCategory(true);
   };
@@ -161,10 +161,8 @@ const ImageUploadForm = () => {
           )}
         </div>
 
-        <div>
-          <button type="submit">Upload</button>
-        </div>
-      </form>
+      <Button type="submit">Upload</Button>
+    </form>
     </div>
   );
 };

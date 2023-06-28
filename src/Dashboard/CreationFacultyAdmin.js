@@ -1,8 +1,7 @@
 import React, {useState } from "react";
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 export default function CreationFacultyAdmin() {
  
@@ -112,7 +111,7 @@ export default function CreationFacultyAdmin() {
         name={"password"}
         fun={handleInputs}
       />
-      <Button value={"Submit"} fun={handleFacultyCreation} />
+      <Button value={"Submit"} onClick={handleFacultyCreation} >Submit</Button>
     </div>
   );
 }

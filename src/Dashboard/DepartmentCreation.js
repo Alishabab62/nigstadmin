@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Inputs from "../components/Inputs";
 import BouncyButton from "../components/Button";
 import axios from "axios";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 const countryCodes = require("country-codes-list");
 
 export default function DepartmentCreation() {
@@ -738,7 +738,7 @@ export default function DepartmentCreation() {
               value={inputs.contact}
             />
           </div>
-          <BouncyButton style={{ height: "100px" }} value={"Submit"} fun={handleDepartmentCreation} />
+          <Button  value={"Submit"} onClick={handleDepartmentCreation} >Submit</Button>
         </form>
       </div> : ""}
     </div>

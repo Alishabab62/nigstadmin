@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Inputs from "../components/Inputs";
 import BouncyButton from "../components/Button";
-import { Alert} from '@mui/material';
+import { Alert, Button, Switch} from '@mui/material';
 import axios from 'axios';
 
 export default function DepartmentCourseAssignment() {
@@ -172,6 +172,20 @@ export default function DepartmentCourseAssignment() {
       }, 5000);
     })
   }
+
+  function handleDeAssignCourse(data1){
+    const data={
+      organization:`${data1.organization_name}`,
+      schedulingID:`${data1.scheduling_id}`
+    }
+    const url ="http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/deassign";
+    axios.delete(url,{data}).then((res)=>{
+      departmentView();
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
+
   return (
     <>
       {filter ? <div className='filter-wrapper-department'>
@@ -186,6 +200,7 @@ export default function DepartmentCourseAssignment() {
             <th>S.No</th>
             <th>Organization Name</th>
             <th>Course Assigning Id</th>
+            <th>Course DeAssigning</th>
           </tr>
           {
             viewCourse.map((data, index) => {
@@ -194,6 +209,7 @@ export default function DepartmentCourseAssignment() {
                   <td>{index + 1}</td>
                   <td>{data.organization_name}</td>
                   <td>{data.course_id}</td>
+                  <td onClick={()=>handleDeAssignCourse(data)} style={{cursor:"pointer"}}><Switch  defaultChecked /></td>
                 </tr>
               )
             })
@@ -257,10 +273,10 @@ export default function DepartmentCourseAssignment() {
               </div> : ""
             }
             <input type="text" placeholder="Description" name="description" onChange={handleInputs} />
-            {firstStep &&   <button style={{width:"100%"}}  onClick={handleCourseCodeAndNo} value={"Submit"}>Submit</button>}
+            {firstStep &&   <Button style={{width:"100%"}}  onClick={handleCourseCodeAndNo} value={"Submit"}>Submit</Button>}
 
-            {secondStep && <button style={{width:"100%"}}  onClick={handleSecondStepCourseId} value={"Confirm"}>Confirm</button>}
-            {thirdStep  && <button style={{width:"100%"}}  onClick={handleFinalSubmit} value={"Submit"}>Submit</button>}
+            {secondStep && <Button style={{width:"100%"}}  onClick={handleSecondStepCourseId} value={"Confirm"}>Confirm</Button>}
+            {thirdStep  && <Button style={{width:"100%"}}  onClick={handleFinalSubmit} value={"Submit"}>Submit</Button>}
 
           </form>
       </div>

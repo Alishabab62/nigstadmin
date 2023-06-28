@@ -1,4 +1,4 @@
-import { Alert } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react'
 
@@ -61,7 +61,7 @@ export default function ForgotPassword() {
         {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
         {userNotFound ? <Alert severity="error" style={{marginBottom:"10px"}}>User Not Found</Alert> : ""}
       <input type='email' placeholder='Enter Email' name='email' onChange={handleInputs}></input>
-      <button onClick={handleForgotPassword}>Submit</button>
+      <Button onClick={handleForgotPassword}>Submit</Button>
     </div>
   )
 }

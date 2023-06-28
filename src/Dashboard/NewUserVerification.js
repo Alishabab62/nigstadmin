@@ -20,9 +20,9 @@ export default function NewUserVerification() {
     orgName: '',
   });
 
-  const handleClickOpen = (e) => {
+  const handleClickOpen = (email) => {
     setOpen(true);
-    setUserEmail(e.target.getAttribute('data'));
+    setUserEmail(email);
   };
 
   const handleClose = () => {
@@ -66,16 +66,6 @@ export default function NewUserVerification() {
       .then((res) => {
         console.log(res);
         filter();
-  
-        // Update the state of the Switch component
-        setData((prevData) => {
-          const newData = [...prevData];
-          const userIndex = newData.findIndex((user) => user.email === userEmail);
-          if (userIndex !== -1) {
-            newData[userIndex].admin_verified = true;
-          }
-          return newData;
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -123,7 +113,7 @@ export default function NewUserVerification() {
         <div>
           <span>To Date</span> <Inputs type={'date'} ref1={endDateRef} />
         </div>
-        <button onClick={filter}>Apply</button>
+        <Button onClick={filter}>Apply</Button>
       </div>
       <div>
         <input
@@ -172,11 +162,11 @@ export default function NewUserVerification() {
                     <td>
                       <Switch
                         checked={user.admin_verified}
-                        onChange={handleClickOpen}
+                        onChange={()=>handleClickOpen(user.email)}
                         data={user.email}
                         sx={{
                           '& .MuiSwitch-thumb': {
-                            backgroundColor: user.admin_verified ? 'green' : 'red',
+                            color: user.admin_verified ? 'green' : 'red',
                           },
                         }}
                       />

@@ -83,7 +83,7 @@ export default function ChangePassword() {
       {fieldsAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
       <input type="password" placeholder='Enter Password'  name="password" onChange={handleInputs} value={input.password}></input>
       <input type="password" placeholder='Confirm Password' name="CPassword" onChange={handleInputs} value={input.CPassword}></input>
-      <Button onClick={changePassword}>Submit</Button>
+      <Button onClick={changePassword} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
     </div>
   )
 }

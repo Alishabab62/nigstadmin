@@ -433,7 +433,7 @@ function handleEdit(data){
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
-          <button className='close-btn' onClick={closeTenderForm}>&times;</button>
+          <Button className='close-btn' onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
           <form action="/submit-form" method="post" encType="multipart/form-data">
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"} value={input.ref}/>
@@ -441,7 +441,7 @@ function handleEdit(data){
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="start-date" name="starDate" required  placeholder={"Start Date:"} value={input.starDate}/>
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="end-date" name="endDate" required   placeholder={"End Date:"} value={input.endDate}/>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdfFile" accept=".pdf"  required ref={file}></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
-            <Button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'>Submit</Button>
+            <Button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form>
         </div>
       )}
@@ -451,7 +451,7 @@ function handleEdit(data){
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Corregendom Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
-          <button className="close-btn" onClick={closeTenderForm}>&times;</button>
+          <Button className="close-btn" onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>
@@ -467,7 +467,7 @@ function handleEdit(data){
             <textarea id="corrigendum" name="corrigendum" required onChange={handleInputs}></textarea>
             <label for="pdf-file">Attach File (PDF):</label>
             <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdf-file" accept=".pdf" ref={corrigendumPdf} required></input><span style={{fontSize:"11px"}}>(Only PDF Allowed (Optional))</span></div>
-            <Button value={"Submit"} className='submitButton' onClick={handleCorrigendum}>Submit</Button>
+            <Button value={"Submit"} className='submitButton' onClick={handleCorrigendum}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form>
         </div>
       )}

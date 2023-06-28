@@ -10,6 +10,7 @@ export default function AnnouncementCreation() {
     const [successAlert, setSuccessAlert] = useState(false);
     const [failAlert, setFailAlert] = useState(false);
     const [viewAnn, setViewAnn] = useState([]);
+    const [deleteError,setDeleteAlert] = useState(false);
     const [viewArchiveAnnouncementUI,setViewArchiveAnnouncementUI] = useState([]);
     const [input, setInput] = useState({
         title: "",
@@ -81,7 +82,9 @@ export default function AnnouncementCreation() {
         axios.get(url).then((res) => {
             setViewAnn(res.data.data);
         }).catch((error) => {
-            console.log(error)
+            if(error.response.data.message === "No Announcement To Display!."){
+                setViewAnn([]);
+            }
         })
     }
 
@@ -116,7 +119,9 @@ function viewArchiveAnnouncement(){
         setViewArchiveAnnouncementUI(res.data);
         viewAnnouncement();
     }).catch((error)=>{
-        console.log(error)
+        if(error.response.data.message === "Nothing to show"){
+        setViewArchiveAnnouncementUI([]);
+        }   
     })
 }
 
@@ -135,16 +140,47 @@ function viewAnnouncementPDF(data){
   });
 }
 
+function viewArchiveAnnouncementPDF(data){
+    const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/view_archive/${data}`;
+    axios.get(url, { responseType: "blob" }).then((res) => {
+      const objectUrl = URL.createObjectURL(res.data);
+      const newWindow = window.open();
+      if (!newWindow) {
+        alert('Pop-up blocked. Please allow pop-ups for this website.');
+      } else {
+        newWindow.document.body.innerHTML = "<embed width='100%' height='100%' src='" + objectUrl + "' type='application/pdf'></embed>";
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  function handleDelete(id){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/announcement/delete";
+    axios.delete(url,{data:{aid:id}}).then((res)=>{
+      if(res.data.message === "Successfully Deleted."){
+        viewArchiveAnnouncement()
+        setDeleteAlert(true);
+        setTimeout(() => {
+          setDeleteAlert(false);
+        }, 5000);
+      }
+    }).catch((error)=>{
+      console.log(error.response.data.message)
+    })
+  }
+
     return (
         <>
+            {deleteError && <div style={{textAlign:"center",width:"20%",margin:"auto"}}><Alert severity='success' style={{marginTop:"20px"}}>Successfully Deleted!</Alert></div>}
             <div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-                     <Button onClick={viewUIFun} style={{height:"60px"}}>View Announcement</Button>
-                     <Button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}}>Create Announcement</Button>
-                    <Button onClick={viewArchiveAnn} style={{height:"60px"}}>View Archive Announcement</Button>
+                     <Button onClick={viewUIFun} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Announcement</Button>
+                     <Button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}}sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Announcement</Button>
+                    <Button onClick={viewArchiveAnn} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Announcement</Button>
                 </div>
                 {
-                    viewAnnUI && <div className='user-details-wrapper'>
+                    ( viewAnn.length !== 0 && viewAnnUI) && <div className='user-details-wrapper'>
                         <table>
                             <tr>
                                 <th>S.No</th>
@@ -154,6 +190,7 @@ function viewAnnouncementPDF(data){
                                 <th>URL</th>
                                 <th>Status</th>
                                 <th>PDF</th>
+                                
                                 <th>Archive Ann.</th>
                             </tr>
                             {
@@ -165,10 +202,11 @@ function viewAnnouncementPDF(data){
                                             <td>{data.createdat}</td>
                                             {data.url === "" ? <td>{data.title}</td> : <td><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.title}</a></td>}
                                             {data.url === "" ? <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td> : <td style={{minWidth:"50px",textAlign:"revert"}}><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.description}</a></td>}
-                                           {data.url !== "" ? <td><a href={url} rel='external' target='_blank' style={{textDecoration:"underline"}}>URL</a></td> : <td></td>}
-                                            <td>{data.status ? "": <Button onClick={()=>changeAnnouncementStatus(data.aid)}>Unhide</Button>}</td>
+                                            <td>{data.url}</td>
+                                            <td>{data.status ? "": <Button onClick={()=>changeAnnouncementStatus(data.aid)} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Unhide</Button>}</td>
                                             <td>{data.pdf_path !==null ?  <AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/> : ""}</td>
-                                            <td><Button onClick={()=>archiveAnnouncement(data.aid)} sx={{bgcolor:"#1b3058" ,color:'white'}}>Move Archive</Button></td>
+
+                                            <td><Button onClick={()=>archiveAnnouncement(data.aid)} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Move Archive</Button></td>
                                         </tr>
                                     )
                                 })
@@ -178,7 +216,7 @@ function viewAnnouncementPDF(data){
                 }
 
                 {
-                    viewArchive && <div className='user-details-wrapper'>
+                    ( viewArchiveAnnouncementUI.length !== 0 && viewArchive) && <div className='user-details-wrapper'>
                         <table>
                             <tr>
                                 <th>S.No</th>
@@ -186,20 +224,23 @@ function viewAnnouncementPDF(data){
                                 <th>Title</th>
                                 <th style={{maxWidth:"50px"}}>Description</th>
                                 <th>URL</th>
-                                <th>Status</th>
+                                <th>Delete</th>
+                                {/* <th>Status</th> */}
                                 <th>PDF</th>
                             </tr>
                             {
                                 viewArchiveAnnouncementUI.map((data, index) => {
+                                    const url =`http://${data.url}`; 
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{data.createdat}</td>
-                                            <td>{data.title}</td>
-                                            <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td>
+                                            {data.url === "" ? <td>{data.title}</td> : <td><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.title}</a></td>}
+                                            {data.url === "" ? <td style={{minWidth:"50px",textAlign:"revert"}}>{data.description}</td> : <td style={{minWidth:"50px",textAlign:"revert"}}><a href={url} target='_blank' style={{textDecoration:"underline"}}>{data.description}</a></td>}
                                             <td>{data.url}</td>
-                                            <td>{data.status ? <Button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}}></Button> : <Button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></Button>}</td>
-                                            <td><AiFillFilePdf style={{fontSize:"30px",color:"red"}}/></td>
+                                            {/* <td>{data.status ? <Button style={{backgroundColor:"green" , borderRadius:"50%" , height:"40px" , width:"40px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained"></Button> : <Button style={{backgroundColor:"red" , borderRadius:"50%" , height:"40px" , width:"40px"}}></Button>}</td> */}
+                                            <td onClick={()=>handleDelete(data.aid)}><i class="fa-sharp fa-solid fa-trash"></i></td>
+                                            <td>{data.pdf_path !== null ? <AiFillFilePdf style={{fontSize:"30px",color:"red"}} onClick={()=>viewArchiveAnnouncementPDF(data.aid)}/> : ""}</td>
                                         </tr>
                                     )
                                 })
@@ -207,6 +248,15 @@ function viewAnnouncementPDF(data){
                         </table>
                     </div>
                 }
+                {
+            ( viewArchiveAnnouncementUI.length === 0 && viewArchive) && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+              {
+            ( viewAnn.length === 0 && viewAnnUI) && 
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+
                 {
                     viewForm  && <div className='course-creation-wrapper'>
                         {successAlert && <Alert severity="success">Announcement Created Successfully</Alert>}
@@ -219,7 +269,7 @@ function viewAnnouncementPDF(data){
                             <div>
                                 <input type='file' ref={pdf}></input><span>Only PDF Allowed</span>
                             </div>
-                            <Button onClick={createAnnouncement}>Submit</Button>
+                            <Button onClick={createAnnouncement} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
                         </form>
                     </div>
                 }

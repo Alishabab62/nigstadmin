@@ -64,7 +64,7 @@ const ImageUploadForm = () => {
         />
       </div>
 
-      <Button type="submit">Upload</Button>
+      <Button type="submit"  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Upload</Button>
     </form>
     </div>
   );

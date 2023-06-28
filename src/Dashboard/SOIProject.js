@@ -6,16 +6,20 @@ export default function SOIProject() {
   const [responseCircular, setCircularResponse] = useState(false);
   const [emptyFieldAlert,setEmptyFieldAlert] = useState(false);
   const [errorAlert,setErrorAlert] = useState(false);
-  const [wrongAlert,setWrongAlert] = useState(false);
+  const [successAlert,setSuccessAlert] = useState(false);
+  const [deleteError,setDeleteAlert] = useState(false);
+  const [updateAlert,setUpdateAlert] = useState(false);
+  const [editFormButton,setEditFormButton] = useState(false);
   const [pName,setPName] = useState("");
   const [pDescription,setPDescription] = useState("");
   const [image,setImage] = useState(null);
   const [viewData,setViewData] = useState([]);
   const [viewForm,setViewForm] = useState(false);
+  const [id,setId] = useState("");
 
 
   useEffect(()=>{
-    viewProject()
+    viewProject();
   },[])
 
   function handleSubmit(){
@@ -32,23 +36,30 @@ export default function SOIProject() {
     const formData= new FormData();
     formData.append("Pname",pName);
     formData.append("Pdescription",pDescription);
-    formData.append("image",image)
+    formData.append("image",image);
     axios.post(url,formData).then((res)=>{
-        console.log(res)
+        if(res.data === "created successfully!"){
+          viewProject();
+          setPName("");
+          setPDescription("");
         setCircularResponse(false);
-        setEmptyFieldAlert(true);
+        setSuccessAlert(true);
         setTimeout(() => {
             setEmptyFieldAlert(false);
         }, 5000);
         return;
+        }
+        
     }).catch((error)=>{
-        console.log(error)
+        if(error.response.data.message === "Data Already Exist!"){
         setCircularResponse(false);
         setErrorAlert(true);
         setTimeout(() => {
             setErrorAlert(false);
         }, 5000);
         return;
+        }
+      
     })
   }
 
@@ -64,7 +75,10 @@ export default function SOIProject() {
 
 
   function handleViewForm(){
-    setViewForm(!viewForm)
+    setViewForm(!viewForm);
+    setEditFormButton(false);
+    setPName("");
+    setPDescription("");
   }
 
   function viewImage(url){
@@ -78,17 +92,59 @@ export default function SOIProject() {
   }
 
   function handleEdit(){
-
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
+   const data = {
+    Pname:`${pName}`,
+    Pdescription:`${pDescription}`,
+    Pid:`${id}`
+   }
+    axios.patch(url,data).then((res)=>{
+      viewProject();
+      setUpdateAlert(true);
+      setTimeout(() => {
+        setUpdateAlert(false)
+      }, 5000);
+      console.log(res)
+    }).catch((error)=>{
+      console.log(error)
+      // setErrorAlert(true);
+      //   setTimeout(() => {
+      //       setErrorAlert(false);
+      //   }, 5000);
+      //   return;
+    })
   }
 
-  function handleDelete(){
-    
+  function handleDelete(id){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/delete_project";
+    axios.delete(url,{data:{Pid:id}}).then((res)=>{
+      if(res.data.message === "Successfully Deleted!"){
+        viewProject()
+        setDeleteAlert(true);
+        setTimeout(() => {
+          setDeleteAlert(false);
+        }, 5000);
+      }
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  function handleEditForm(data){
+    setViewForm(!viewForm);
+    setEditFormButton(true);
+    setPName(data.name);
+    setPDescription(data.p_description);
+    setId(data.pid)
   }
   return (
     <>
+      {updateAlert && <div style={{textAlign:"center",width:"20%",margin:"auto"}}><Alert severity='success' style={{marginTop:"20px"}}>Update Successfully</Alert></div>}
+      {deleteError && <div style={{textAlign:"center",width:"20%",margin:"auto"}}><Alert severity='success' style={{marginTop:"20px"}}>Successfully Deleted!</Alert></div>}
+      {errorAlert && <div style={{textAlign:"center",width:"20%",margin:"auto"}}><Alert severity='error' style={{marginTop:"20px"}}>Something went wrong</Alert></div>}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          {!viewForm && <Button sx={{bgcolor:"#1b3058" ,color:'white'}} onClick={handleViewForm}>View</Button>}
-          {viewForm &&  <Button sx={{bgcolor:"#1b3058" ,color:'white'}} onClick={handleViewForm}>Create</Button>}
+          {!viewForm && <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleViewForm}>View</Button>}
+          {viewForm &&  <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleViewForm}>Create</Button>}
         </div>
       <div>
         {
@@ -108,10 +164,10 @@ export default function SOIProject() {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{data.name}</td>
-                    <td>NA</td>
+                    <td>{data.p_description}</td>
                     <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.url)}>Click to view</td>
-                    <td onClick={()=>handleEdit()}><i class="fa-solid fa-pen-to-square"></i></td>
-                    <td onClick={()=>handleDelete()}><i class="fa-sharp fa-solid fa-trash"></i></td>
+                    <td onClick={()=>handleEditForm(data)}><i class="fa-solid fa-pen-to-square"></i></td>
+                    <td onClick={()=>handleDelete(data.pid)}><i class="fa-sharp fa-solid fa-trash"></i></td>
                   </tr>
                 )
               })
@@ -142,13 +198,13 @@ export default function SOIProject() {
     ) }
         <h3>Creation SOI Project</h3>
         {emptyFieldAlert && <Alert severity='error' style={{marginBottom:"20px"}}>All fields required</Alert> }
-        {wrongAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Wrong Password</Alert> }
-        {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Something went wrong</Alert> }
+        {successAlert && <Alert severity='success' style={{marginBottom:"20px"}}>Created Successfully</Alert> }
+        {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Data Already Exist!</Alert> }
 
         <Input placeholder='Project Name' type='text' onChange={(e)=>setPName(e.target.value)} value={pName}/>
         <Input placeholder='Project Description' type='text' onChange={(e)=>setPDescription(e.target.value)} value={pDescription}/>
-        <Input placeholder='Choose Image' type='file' onChange={(e)=>setImage(e.target.files[0])}/>
-        <Button sx={{bgcolor:"#1b3058" ,color:'white'}} onClick={handleSubmit}>Submit</Button>
+        <div style={{display:"flex",justifyContent:"space-between" , alignItems:"center"}}><Input placeholder='Choose Image' type='file' onChange={(e)=>setImage(e.target.files[0])}/> <span>Only JPEG and PNG allowed</span></div>
+        {editFormButton ? <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleEdit}>Edit</Button> : <Button sx={{bgcolor:"#1b3058" ,color:'white'}} onClick={handleSubmit}>Submit</Button>}
 </div>}
       
 </>

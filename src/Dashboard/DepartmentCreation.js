@@ -509,10 +509,10 @@ export default function DepartmentCreation() {
           <option value="International Organization">International Organization</option>
         </select>
 
-        <BouncyButton value={"Apply"} fun={viewOrganization} />
-        <BouncyButton value={"Create Organization"} fun={handleCreationForm} />
+        <Button value={"Apply"} onClick={viewOrganization} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Apply</Button>
+        <Button value={"Create Organization"} onClick={handleCreationForm} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Organization</Button>
       </div> : ""}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <BouncyButton value={"View Organization"} fun={handleFilter} /> : ""}</div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }} className="filter-btn">{!filter ? <Button value={"View Organization"} onClick={handleFilter} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" >View Organization</Button> : ""}</div>
 
       {filter ? 
      <div> <div><input type="text" id="SearchInput" placeholder="Search Organization Name" value={searchData} onChange={handleInputChange1} /></div>
@@ -738,7 +738,7 @@ export default function DepartmentCreation() {
               value={inputs.contact}
             />
           </div>
-          <Button  value={"Submit"} onClick={handleDepartmentCreation} >Submit</Button>
+          <Button  value={"Submit"} onClick={handleDepartmentCreation} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
         </form>
       </div> : ""}
     </div>

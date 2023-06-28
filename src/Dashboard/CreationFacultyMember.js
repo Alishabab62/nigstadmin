@@ -195,7 +195,7 @@ export default function CreationFacultyMember() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <Button className='toggle_btn' onClick={viewData}>Create Faculty</Button> : <Button className='toggle_btn' onClick={viewData}>View Created Faculty</Button>
+          viewFrame ? <Button className='toggle_btn' onClick={viewData}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Faculty</Button> : <Button className='toggle_btn' onClick={viewData}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Created Faculty</Button>
         }
       </div>
 

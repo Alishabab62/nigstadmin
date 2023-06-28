@@ -206,7 +206,7 @@ export default function CourseCreation() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <Button className='toggle_btn' onClick={changeView}>Create Course</Button> : <Button className='toggle_btn' onClick={changeView}>View Created Course</Button>
+          viewFrame ? <Button className='toggle_btn' onClick={changeView} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Course</Button> : <Button className='toggle_btn' onClick={changeView} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Created Course</Button>
         }
       </div>
       {
@@ -365,7 +365,7 @@ export default function CourseCreation() {
             <option>Online</option>
             <option>Hybrid</option>
           </select>
-          <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef}>Submit</Button>
+          <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form>
         </div> : ""
       }

@@ -15,7 +15,6 @@
     "country-codes-list": "^1.6.10",
     "css-loader": "^6.8.1",
     "currency-list": "^1.0.8",
-    "eslint": "^8.42.0",
     "iconv-lite": "^0.6.3",
     "iso-country-currency": "^0.7.2",
     "openssl": "^2.0.0",
@@ -54,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^8.43.0",
     "tailwindcss": "^3.2.7"
   }
 }

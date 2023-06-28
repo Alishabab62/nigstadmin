@@ -164,7 +164,7 @@ export default function Login() {
       <div style={{width:"100%" , display:"flex" , justifyContent:"space-between"}}>
       <Link to='/forgot' style={{textDecoration:"none"}}>Forgot Password</Link><label>(Only for Faculty Members)</label>
       </div>
-      <Button value={"Login"} onClick={handleLogin} ref={buttonRef}>Login</Button>
+      <Button value={"Login"} onClick={handleLogin} ref={buttonRef}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Login</Button>
     </div>
   )
 }

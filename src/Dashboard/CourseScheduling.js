@@ -230,7 +230,7 @@ function viewCourseFun(){
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
 
-          viewFrameButton ? <Button className='toggle_btn' onClick={viewCourseFun}>Schedule Course</Button> : <Button className='toggle_btn' onClick={viewFormSchedule}>View Scheduled Course</Button>
+          viewFrameButton ? <Button className='toggle_btn' onClick={viewCourseFun}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Schedule Course</Button> : <Button className='toggle_btn' onClick={viewFormSchedule}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Scheduled Course</Button>
         }
       </div>
       {
@@ -366,7 +366,7 @@ function viewCourseFun(){
             <input type='text' onFocus={() => { runningDate.current.type = 'date' }} onBlur={() => { runningDate.current.type = 'text' }} placeholder='Running Date' ref={runningDate}></input>
             <input type='text' placeholder='Enter Course Capacity' name='courseCapacity' onChange={handleInputs}></input>
 
-            <Button onClick={handleCourseScheduling} ref={buttonRef}>Submit</Button>
+            <Button onClick={handleCourseScheduling} ref={buttonRef}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
             </form>
           </div> : ""
       }
@@ -413,7 +413,7 @@ function viewCourseFun(){
             {(editData.course_status === "postponed" && newStatus === "created") ? <input type='date' placeholder='newCommencementDate' onChange={(e) => setNewCommencementDate(e.target.value)}></input> : ""}
             {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newCompletionDate' onChange={(e) => setNewCompletionDate(e.target.value)}></input> : ""}
             {(editData.course_status === "postponed" && newStatus === "created") ?<input type='date' placeholder='newRunningDate' onChange={(e) => setNewRunningDate(e.target.value)}></input> : ""}
-            <Button onClick={handleCourseEditForm}>Submit</Button>
+            <Button onClick={handleCourseEditForm} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form> </div>
       }
     </div>

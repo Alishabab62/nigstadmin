@@ -111,7 +111,7 @@ export default function CreationFacultyAdmin() {
         name={"password"}
         fun={handleInputs}
       />
-      <Button value={"Submit"} onClick={handleFacultyCreation} >Submit</Button>
+      <Button value={"Submit"} onClick={handleFacultyCreation}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
     </div>
   );
 }

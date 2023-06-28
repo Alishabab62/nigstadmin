@@ -188,7 +188,7 @@ export default function AssigningPositionToFacultyMember() {
               }
             </select>
             <input type={"text"} placeholder={facultyPosition === "Head of Faculty" ? "Enter Faculty seniority id between 1 to 10" : facultyPosition === "Instructor" ? "Enter Faculty seniority id between 10 to 99" : facultyPosition === "Faculty" ? "Enter Faculty seniority id between 100 to 999" : ""} onChange={handleInputs} name="facultyId" />
-            <Button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef}>Submit</Button>
+            <Button value={"Submit"} onClick={handlePositionAssigning} ref={buttonRef} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form>
         </div>}
       </div>

@@ -108,7 +108,7 @@ export default function CreationFacultyPosition() {
         name={"description"}
         fun={handleInputs}
       />
-      <Button value={"Submit"} onClick={handleFacultyCreation} >Submit</Button>
+      <Button value={"Submit"} onClick={handleFacultyCreation}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" >Submit</Button>
     </div>
     <div style={{width:"600px",maxWidth:"600" , overflowY:"scroll" , marginTop:"80px"}}>
     <table className="faculty-position-table">

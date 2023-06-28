@@ -61,7 +61,7 @@ export default function ForgotPassword() {
         {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
         {userNotFound ? <Alert severity="error" style={{marginBottom:"10px"}}>User Not Found</Alert> : ""}
       <input type='email' placeholder='Enter Email' name='email' onChange={handleInputs}></input>
-      <Button onClick={handleForgotPassword}>Submit</Button>
+      <Button onClick={handleForgotPassword}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
     </div>
   )
 }

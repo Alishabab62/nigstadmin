@@ -1,8 +1,7 @@
 import React, {  useEffect, useState } from "react";
 import Inputs from "../components/Inputs";
-import Button from "../components/Button";
 import axios from "axios";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 import "../CSS/app.css"
 export default function CourseCategoryCreation() {
  
@@ -123,7 +122,7 @@ function courseCategoryFun(){
         name={"description"}
         fun={handleInputs}
       />
-      <Button value={"Submit"} fun={handleFacultyCreation} />
+      <Button value={"Submit"} onClick={handleFacultyCreation} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
     </div> 
     <div className='user-details-wrapper-category'>
         <table style={{marginTop:"80px", maxHeight:"450px" , overflowY:"scroll"}}>

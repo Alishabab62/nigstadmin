@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ImageUploadForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -44,13 +44,14 @@ const ImageUploadForm = () => {
   const handleNewCategoryChange = (event) => {
     setNewCategory(event.target.value);
   };
+
   const handleCreateCategory = () => {
     setShowCreateCategory(true);
   };
- 
+
   const handleNewCategorySubmit = (event) => {
     event.preventDefault();
-  
+
     if (newCategory.trim() !== '') {
       fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album_category', {
         method: 'POST',
@@ -72,18 +73,17 @@ const ImageUploadForm = () => {
     } else {
       setResponseMessage('Category name cannot be empty.');
     }
-  
+
     setShowCreateCategory(false);
   };
-  
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (selectedFile && selectedCategory) {
       const formData = new FormData();
       formData.append('image', selectedFile);
-      formData.append('category', selectedCategory);
+      formData.append('Cname', selectedCategory);
 
       fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
         method: 'POST',
@@ -92,11 +92,15 @@ const ImageUploadForm = () => {
         .then(response => response.json())
         .then(data => {
           console.log('Upload Response:', data);
-          // Handle the response as needed
+          if (data.success) {
+            setSuccessMessage('Image uploaded successfully.');
+          } else {
+            setResponseMessage(data.message || 'Error uploading image.');
+          }
         })
         .catch(error => {
           console.error('Error uploading image:', error);
-          // Handle the error as needed
+          setResponseMessage('Error uploading image.');
         });
     } else {
       console.error('Please select a file and category');
@@ -161,8 +165,8 @@ const ImageUploadForm = () => {
           )}
         </div>
 
-      <Button type="submit">Upload</Button>
-    </form>
+        <Button type="submit">Upload</Button>
+      </form>
     </div>
   );
 };

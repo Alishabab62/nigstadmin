@@ -73,16 +73,14 @@ export default function CourseScheduling() {
 
   function handleCourseScheduling(e) {
     e.preventDefault();
-    console.log(tempArray)
-    
-    if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/[0-9]/)){
-      setInvalidEntry(true);
-      setTimeout(() => {
-        setInvalidEntry(false);
-      }, 5000);
-      return;
-    }
     if(courseName && completionDate.current.value!=="" && commencementDate.current.value!=="" && input.courseCapacity && runningDate.current.value!==""  && courseId.current.value){
+      if((tempArray.course_type !=="free" ? !input.fee.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/) : "") && !input.courseCapacity.match(/[0-9]/)){
+        setInvalidEntry(true);
+        setTimeout(() => {
+          setInvalidEntry(false);
+        }, 5000);
+        return;
+      }
       setCircularResponse(true);
       buttonRef.current.disabled = true;
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/scheduler";

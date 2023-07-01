@@ -306,9 +306,9 @@ function handleEdit(data){
       {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
       {
       formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
-        <Button className='openform' onClick={toggleTenders}>Create New Tenders</Button>
-        <Button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}>Create New Corregendom</Button>
-        <Button className='openform' onClick={archiveFun}>View Archive Tender</Button>
+        <Button className='openform' onClick={toggleTenders}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Tenders</Button>
+        <Button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Corregendom</Button>
+        <Button className='openform' onClick={archiveFun}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Tender</Button>
       </div> : ""
       }
       {(viewTender.length>=1 && filter) ? <div className='user-details-wrapper'>

@@ -1,27 +1,14 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.css": "/static/css/main.af55f870.css",
-    "main.js": "/static/js/main.8c1d6766.js",
-    "static/media/logo1.png": "/static/media/logo1.351b2ecb061f809ac9b8.png",
-    "index.html": "/index.html",
-    "main.af55f870.css.map": "/static/css/main.af55f870.css.map",
-    "main.8c1d6766.js.map": "/static/js/main.8c1d6766.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.af55f870.css",
-    "static/js/main.8c1d6766.js"
-=======
     "main.css": "/static/css/main.8a1931eb.css",
-    "main.js": "/static/js/main.e0c2aab5.js",
+    "main.js": "/static/js/main.9fa42b2e.js",
     "static/media/logo1.png": "/static/media/logo1.351b2ecb061f809ac9b8.png",
     "index.html": "/index.html",
     "main.8a1931eb.css.map": "/static/css/main.8a1931eb.css.map",
-    "main.e0c2aab5.js.map": "/static/js/main.e0c2aab5.js.map"
+    "main.9fa42b2e.js.map": "/static/js/main.9fa42b2e.js.map"
   },
   "entrypoints": [
     "static/css/main.8a1931eb.css",
-    "static/js/main.e0c2aab5.js"
->>>>>>> 30c907beeb2e343523d6ae136cb127d0419880f2
+    "static/js/main.9fa42b2e.js"
   ]
 }

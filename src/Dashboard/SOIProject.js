@@ -1,6 +1,7 @@
 import { Alert, Button, CircularProgress, Input } from '@mui/material'
 import axios from 'axios';
-import React, { useEffect,  useState } from 'react'
+import React, { useEffect,  useState } from 'react';
+import {BsImageFill} from 'react-icons/bs';
 
 export default function SOIProject() {
   const [responseCircular, setCircularResponse] = useState(false);
@@ -39,6 +40,7 @@ export default function SOIProject() {
     formData.append("image",image);
     axios.post(url,formData).then((res)=>{
         if(res.data === "created successfully!"){
+        document.getElementById('form').reset()
           viewProject();
           setPName("");
           setPDescription("");
@@ -165,7 +167,7 @@ export default function SOIProject() {
                     <td>{index + 1}</td>
                     <td>{data.name}</td>
                     <td>{data.p_description}</td>
-                    <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.url)}>Click to view</td>
+                    <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.url)}><BsImageFill/></td>
                     <td onClick={()=>handleEditForm(data)}><i class="fa-solid fa-pen-to-square"></i></td>
                     <td onClick={()=>handleDelete(data.pid)}><i class="fa-sharp fa-solid fa-trash"></i></td>
                   </tr>
@@ -200,11 +202,12 @@ export default function SOIProject() {
         {emptyFieldAlert && <Alert severity='error' style={{marginBottom:"20px"}}>All fields required</Alert> }
         {successAlert && <Alert severity='success' style={{marginBottom:"20px"}}>Created Successfully</Alert> }
         {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Data Already Exist!</Alert> }
-
+        <form id='form' style={{display:"flex",flexDirection:"column"}}>
         <Input placeholder='Project Name' type='text' onChange={(e)=>setPName(e.target.value)} value={pName}/>
         <Input placeholder='Project Description' type='text' onChange={(e)=>setPDescription(e.target.value)} value={pDescription}/>
         <div style={{display:"flex",justifyContent:"space-between" , alignItems:"center"}}><Input placeholder='Choose Image' type='file' onChange={(e)=>setImage(e.target.files[0])}/> <span>Only JPEG and PNG allowed</span></div>
         {editFormButton ? <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleEdit}>Edit</Button> : <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleSubmit}>Submit</Button>}
+        </form>
 </div>}
       
 </>

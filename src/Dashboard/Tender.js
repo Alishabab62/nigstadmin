@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState , useRef, useEffect} from 'react';
 import { AiFillFilePdf } from 'react-icons/ai';
+import { BsFillArchiveFill } from 'react-icons/bs';
 import "../CSS/Tender.css"
 import { Alert } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -143,6 +144,7 @@ function handleSubmit(e) {
     formData.append("pdf", file.current.files[0]);
     axios.post(url, formData).then((res) => {
      tenderViewFun(); 
+     document.getElementById('form').reset();
       setSuccessAlert(true);
       setTimeout(() => {
         setSuccessAlert(false)
@@ -168,6 +170,7 @@ function handleCorrigendum(e){
   const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/tender/corrigendum"
   axios.post(url,formData).then((res)=>{
     setSuccessAlert(true);
+    document.getElementById('form').reset();
     setTimeout(() => {
       setSuccessAlert(false)
     }, 5000);
@@ -202,9 +205,9 @@ function handleArchive(e){
 }
 
 
-const handleClickOpen = (e) => {
+const handleClickOpen = (data) => {
   setOpen(true);
-  setTenderNo(e.target.getAttribute("data"))
+  setTenderNo(data)
 };
 
 const handleClose = () => {
@@ -284,6 +287,7 @@ function handleEdit(data){
     axios.patch(url, formData).then((res) => {
      tenderViewFun(); 
       setSuccessAlert(true);
+      document.getElementById('form').reset();
       setInput({
         title:"",
         ref:"",
@@ -307,7 +311,7 @@ function handleEdit(data){
       {
       formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
         <Button className='openform' onClick={toggleTenders}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Tenders</Button>
-        <Button style={{width:"300px"}} className='openform ' onClick={toggleCorrigendum}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Corregendom</Button>
+        <Button  className='openform ' onClick={toggleCorrigendum}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Corregendom</Button>
         <Button className='openform' onClick={archiveFun}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Tender</Button>
       </div> : ""
       }
@@ -358,10 +362,10 @@ function handleEdit(data){
             : "" }
         </td>
                   <td  style={{cursor:"pointer"}} ><AiFillFilePdf style={{color:"red",fontSize:"25px"}}   onClick={()=>viewPDF(data.tender_ref_no)}/></td>
-                  <td  style={{cursor:"pointer"}}><i class="fa-solid fa-pen-to-square" onClick={()=>{
+                  <td  style={{cursor:"pointer"}}><i class="fa-solid fa-pen-to-square" style={{fontSize:"25px"}} onClick={()=>{
                     handleEdit(data);
                      }}></i></td>
-                  <td><Button data={data.tender_ref_no} style={{backgroundColor:"green" , color:"green" , borderRadius:"50%" , height:"25px" , width:"25px"}} onClick={handleClickOpen}></Button></td>
+                  <td><BsFillArchiveFill onClick={()=>handleClickOpen(data.tender_ref_no)}  style={{fontSize:"25px"}}/></td>
               </tr>
                 )
               })
@@ -434,7 +438,7 @@ function handleEdit(data){
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
           <Button className='close-btn' onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
-          <form action="/submit-form" method="post" encType="multipart/form-data">
+          <form action="/submit-form" method="post" encType="multipart/form-data" id='form'>
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"} value={input.ref}/>
             <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"} value={input.description}></textarea>
@@ -451,8 +455,8 @@ function handleEdit(data){
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Corregendom Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
-          <Button className="close-btn" onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
-          <form action="/submit-corrigendum" method="post" encType="multipart/form-data">
+          <Button className="close-btn" onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white",position:"absolute"}} variant="contained">&times;</Button>
+          <form action="/submit-corrigendum" method="post" encType="multipart/form-data" id='form'>
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>
               <option>Select Tender Ref</option>

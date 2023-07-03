@@ -2,6 +2,7 @@ import { Alert, Button } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { AiFillFilePdf } from 'react-icons/ai';
+import { BsFillArchiveFill } from 'react-icons/bs';
 
 export default function AnnouncementCreation() {
     const [viewForm, setViewForm] = useState(true);
@@ -205,8 +206,7 @@ function viewArchiveAnnouncementPDF(data){
                                             <td>{data.url}</td>
                                             <td>{data.status ? "": <Button onClick={()=>changeAnnouncementStatus(data.aid)} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Unhide</Button>}</td>
                                             <td>{data.pdf_path !==null ?  <AiFillFilePdf onClick={()=>viewAnnouncementPDF(data.aid)} style={{fontSize:"30px",color:"red"}}/> : ""}</td>
-
-                                            <td><Button onClick={()=>archiveAnnouncement(data.aid)} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Move Archive</Button></td>
+                                            <td><BsFillArchiveFill onClick={()=>archiveAnnouncement(data.aid)} style={{fontSize:"30px"}}/></td>
                                         </tr>
                                     )
                                 })

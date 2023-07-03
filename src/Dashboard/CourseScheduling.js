@@ -95,6 +95,7 @@ export default function CourseScheduling() {
         courseID: `${courseId.current.value}`
       }
       axios.post(url, data).then((res) => {
+        setTempArray([]);
         if(res.data.message === "Running date is not between commencement and completion dates."){
           setErrorAlert(true);
           setTimeout(() => {

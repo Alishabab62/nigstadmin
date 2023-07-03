@@ -28,7 +28,7 @@ export default function DepartmentCourseAssignment() {
   const [inputs, setInputs] = useState({
     description: "",
   });
-
+const [error1,setError1] = useState(false);
   let courseCode = [
     {
       category: "basic",
@@ -98,14 +98,19 @@ export default function DepartmentCourseAssignment() {
   }
 
   useEffect(() => {
+    orgViewFun();
+    departmentView()
+  }, [])
+
+
+  function orgViewFun(){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/v";
     axios.get(url).then((res) => {
       setOrgView(res.data)
     }).catch((error) => {
       console.log(error)
     })
-    departmentView()
-  }, [])
+  }
 
   function departmentView() {
     const viewUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/dep/viewda";
@@ -138,11 +143,14 @@ export default function DepartmentCourseAssignment() {
     event.preventDefault();
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/send_batch_info/${firstStepData[0].courseid}`;
     axios.get(url).then((res) => {
-      console.log(res)
       setSecondStep(false);
       setThirdStep(true)
       setSecondStepData(res.data.course);
     }).catch((error) => {
+      setError1(true);
+      setTimeout(() => {
+        setError1(false);
+      }, 5000);
       console.log(error)
     })
   }
@@ -161,9 +169,10 @@ export default function DepartmentCourseAssignment() {
       completition: `${secondStepData[0].completiondate}`
     }
     axios.post(url, data).then((res) => {
-      console.log(res)
+      document.getElementById('form').reset();
+      orgViewFun();
     }).catch((error) => {
-      console.log(error)
+      document.getElementById('form').reset();
       if(error.response.data.message === "This course already assigned to KSPL"){
         setFailAlert(true)
       }
@@ -223,8 +232,9 @@ export default function DepartmentCourseAssignment() {
       {!filter && <div className='department-creation-wrapper'>
        {failAlert ? <Alert severity='error'>This course id already assigned</Alert> : ""}
        {failAlert1 ? <Alert severity='error'>No course found</Alert> : ""}
+       {error1 ? <Alert severity='error'>No Course Found or Course Not Scheduled for Assigning!</Alert> : ""}
         <h3>Department Course Assignment</h3>
-      <form>
+      <form id='form'>
             <select style={{width:"100%",marginBottom:"9px"}} onChange={(e) => setOrgName(e.target.value)}>
               <option>Select Organization </option>
               {orgView.map((data, index) => {

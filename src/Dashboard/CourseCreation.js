@@ -270,7 +270,7 @@ export default function CourseCreation() {
         
       {
         !viewFrame ? <div className='course-creation-wrapper'>
-          <h3>Course Creation</h3>
+          <h3 style={{fontWeight:"bold"}}>Course Creation</h3>
           {responseCircular && (
             <div
               style={{
@@ -322,8 +322,9 @@ export default function CourseCreation() {
               }
             </select>
           }
-
-          <Inputs type={"text"} placeholder={"Enter course title"} name={"title"} fun={handleInputs} />
+          <label style={{textAlign:"left"}}>Course Title:</label>
+          <Inputs type={"text"} placeholder={"Enter Course Title"} name={"title"} fun={handleInputs} />
+          <label style={{textAlign:"left"}}>Course Description:</label>
           <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs} />
           <div className='grid2-container'>
             <div>

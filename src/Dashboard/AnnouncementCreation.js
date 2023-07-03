@@ -176,7 +176,7 @@ function viewArchiveAnnouncementPDF(data){
             <div>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                      <Button onClick={viewUIFun} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Announcement</Button>
-                     <Button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}}sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Announcement</Button>
+                     <Button onClick={viewFormFun} style={{margin:"0px 15px",height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Announcement</Button>
                     <Button onClick={viewArchiveAnn} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Announcement</Button>
                 </div>
                 {

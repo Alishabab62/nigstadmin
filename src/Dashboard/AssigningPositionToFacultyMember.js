@@ -114,8 +114,8 @@ export default function AssigningPositionToFacultyMember() {
     <>
       <div>
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-          {createForm && <Button onClick={viewDataFun}>View</Button>}
-          {view && <Button onClick={viewForm}>Create</Button>}
+          {createForm && <Button onClick={viewDataFun} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View</Button>}
+          {view && <Button onClick={viewForm} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create</Button>}
         </div>
         {
         (view && !noDataToShow) &&  <div className='user-details-wrapper'>

@@ -241,7 +241,11 @@ const [error1,setError1] = useState(false);
                 return <option value={data.organization} key={index}>{data.organization}</option>
               })}
             </select>
-            <select style={{width:"100%"}}  onChange={(e) => setCategory(e.target.value)}>
+            <select style={{width:"100%"}}  onChange={(e) => {setCategory(e.target.value)
+               setFirstStepData([]) 
+               setSecondStep(false);
+               setFirstStep(true);
+               }}>
               <option value={"select"}>Select Course Category</option>
               <option value={"basic"}>Basic Course</option>
               <option value={"advance"}>Advance Course</option>

@@ -1,5 +1,7 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@mui/material';
+import{AiFillDelete} from 'react-icons/ai'
+import Switch from '@mui/material/Switch';
 
 
 const ImageUploadForm = () => {
@@ -11,7 +13,6 @@ const ImageUploadForm = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
-
 
   const handlePreview = (image) => {
     setPreviewImage(image);
@@ -31,8 +32,12 @@ const ImageUploadForm = () => {
   };
 
   const handleDelete = (image) => {
-    fetch(`http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album?id=${image}`, {
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album', {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ aid: image }),
     })
       .then(response => {
         if (response.ok) {
@@ -47,13 +52,19 @@ const ImageUploadForm = () => {
       });
   };
   
-  
-  const handleUpload = () => {
+
+  const handleUpload = (e) => {
+    e.preventDefault();
     fileInputRef.current.click();
-    if (selectedFile) {
+  };
+
+  const handleSubmitImage = (e) => {
+    e.preventDefault();
+    if (selectedFile && selectedAlbum) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
-  
+      formData.append('image', selectedFile);
+      formData.append('Cname', selectedAlbum.category_name);
+
       fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
         method: 'POST',
         body: formData,
@@ -67,11 +78,9 @@ const ImageUploadForm = () => {
           console.error('Error uploading image:', error);
         });
     } else {
-      console.error('No file selected.');
+      console.error('No file selected or category not selected.');
     }
   };
-  
-
 
   const handleNewCategorySubmit = (event) => {
     event.preventDefault();
@@ -121,7 +130,7 @@ const ImageUploadForm = () => {
 
   const fetchImagesForAlbum = (category) => {
     const requestBody = { category: category };
-  
+
     fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/album_view_category', {
       method: 'PATCH',
       headers: {
@@ -138,11 +147,6 @@ const ImageUploadForm = () => {
         console.error('Error fetching album images:', error);
       });
   };
-
- 
-  
-  
-
 
   return (
     <div>
@@ -163,7 +167,7 @@ const ImageUploadForm = () => {
               {responseMessage && <p>{responseMessage}</p>}
               <Button type="submit" sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">Create Album</Button>
             </div>
-          </form>
+          </form> 
         </div>
         <div style={{ width: "600px", maxWidth: "600px", maxHeight: "500px", overflowY: "scroll", margin: "auto", marginTop: "80px" }}>
           <table className="faculty-position-table" style={{ borderSpacing: 0 }}>
@@ -175,6 +179,7 @@ const ImageUploadForm = () => {
                 <th>S.No</th>
                 <th>Albums</th>
                 <th style={{ textAlign: "center" }}>Edit</th>
+                <th style={{ textAlign: "center" }}>Visibility</th>
                 <th style={{ textAlign: "center" }}>Delete</th>
               </tr>
             </thead>
@@ -185,7 +190,19 @@ const ImageUploadForm = () => {
                     <td>{index + 1}</td>
                     <td>{category.category_name}</td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
+
                       <i className="fa-solid fa-pen-to-square" onClick={() => handleEditCategory(category)}></i>
+                    </td>
+                    <td style={{ cursor: "pointer", textAlign: "center" }}>
+                      <Switch
+                        onChange={()=>{}}
+                        data={category.visibility}
+                        sx={{
+                          '& .MuiSwitch-thumb': {
+                            color: category.visibility ? 'green' : 'red',
+                          },
+                        }}
+                      />
                     </td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
                       <i className="fa-solid fa-trash"></i>
@@ -201,70 +218,59 @@ const ImageUploadForm = () => {
           </table>
         </div>
       </div>
-      <div>
+
       {selectedAlbum && (
+        <div>
+          <h3 style={{ textAlign: 'center', marginTop:"50px" }}>Album: {selectedAlbum.category_name}</h3>
+          <form onSubmit={handleSubmitImage}>
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                setSelectedFile(e.target.files[0]);
+                handlePreview(URL.createObjectURL(e.target.files[0]));
+              }}
+              ref={fileInputRef}
+            />
+            <Button type="button" sx={{ bgcolor: "#1b3058", color: "white" ,marginRight:"10px" }} variant="contained" onClick={handleUpload}>
+              Select Images
+            </Button>
+            <Button type="submit" sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">
+              Upload Images
+            </Button>
+          </form>
 
-  
-<div style={{ marginTop: "100px" }}>
-<h1 className='text-center text-xl my-3'>{selectedAlbum?.category_name} Images</h1>
-<div className='flex flex-wrap gap-2'>
-  {albumImages?.length > 0 ? (
-    albumImages.map((image) => (
-      <div key={image.id} className='relative'>
-        <img
-          src={image.fileName}
-          alt={image.aid}
-          className='rounded-md cursor-pointer'
-          style={{ width: "100px", height: "100px" }}
-          onClick={() => handlePreview(image)}
-        />
-       <i className='absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full fa-solid fa-trash'  onClick={() => handleDelete(image.id)}>
-              
-              </i>
-        
+          {previewImage && (
+            <div>
+              <img src={previewImage} alt="Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+              <Button onClick={handleClosePreview}>Close Preview</Button>
+            </div>
+          )}
+{albumImages && albumImages.length > 0 ? (
+  <div style={{ display: 'flex', overflowX: 'auto' }}>
+    {albumImages.map(image => (
+      <div key={image.aid} style={{ marginRight: '10px' }}>
+        <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>
+          <img
+            src={image.fileName}
+            alt={image.aid}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+          <div style={{ position: 'absolute', top: '0', right: '0' }}>
+          <AiFillDelete onClick={() => handleDelete(image.aid)} color='red'/>
+
+          </div>
+        </div>
       </div>
-    ))
-  ) : (
-    <p>No images to display</p>
-  )}
-  <div className='relative'>
-    <button
-      className='bg-blue-500 text-white rounded-md p-2'
-      style={{ width: "100px", height: "100px" }}
-      onClick={() => handleUpload()}
-    >
-      +
-    </button>
-    <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: "none" }}
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
+    ))}
   </div>
-</div>
-{previewImage && (
-  <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-75 flex justify-center items-center'>
-    <div className='relative'>
-      <img
-        src={previewImage.fileName}
-        alt={previewImage.aid}
-        className='rounded-md'
-        style={{ width: "600px", height: "400px" }}
-      />
-      <i className='absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full fa-solid fa-close'  onClick={handleClosePreview}>
-              
-              </i>
-        
-      
-    </div>
-  </div>
-)}
-</div>
-  
+) : (
+  <div>No images in this album.</div>
 )}
 
-      </div>
+
+        </div>
+      )}
     </div>
   );
 };

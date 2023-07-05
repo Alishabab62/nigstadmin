@@ -274,7 +274,7 @@ const ImageUploadForm = () => {
 
       {selectedAlbum && (
         <div>
-          <h3 style={{ textAlign: 'center', marginTop: "50px" }}>Album: {selectedAlbum.category_name}</h3>
+          <h1 style={{ textAlign: 'center', marginTop: "50px" }} className='text-xl font-bold'>Album: {selectedAlbum.category_name}</h1>
           <form onSubmit={handleSubmitImage}>
             <input
               type="file"

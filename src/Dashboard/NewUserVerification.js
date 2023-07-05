@@ -29,14 +29,6 @@ export default function NewUserVerification() {
     setOpen(false);
   };
 
-  function handleInputs(e) {
-    const { name, value } = e.target;
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [name]: value,
-    }));
-  }
-
   function filter() {
     const url = `http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/admin/filter?status=${verificationFilterValue}&email=${inputs.email}&organization=${inputs.orgName}&startDate=${startDateRef.current.value}&endDate=${endDateRef.current.value}`;
     axios
@@ -113,7 +105,7 @@ export default function NewUserVerification() {
         <div>
           <span>To Date</span> <Inputs type={'date'} ref1={endDateRef} />
         </div>
-        <Button onClick={filter}>Apply</Button>
+        <Button onClick={filter} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Apply</Button>
       </div>
       <div>
         <input

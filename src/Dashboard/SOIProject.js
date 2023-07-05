@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Input } from '@mui/material'
+import { Alert, Button, CircularProgress, Input, Switch } from '@mui/material'
 import axios from 'axios';
 import React, { useEffect,  useState } from 'react';
 import {BsImageFill} from 'react-icons/bs';
@@ -13,6 +13,7 @@ export default function SOIProject() {
   const [editFormButton,setEditFormButton] = useState(false);
   const [pName,setPName] = useState("");
   const [pDescription,setPDescription] = useState("");
+  const [pUrl,setPUrl] = useState("");
   const [image,setImage] = useState(null);
   const [viewData,setViewData] = useState([]);
   const [viewForm,setViewForm] = useState(false);
@@ -38,23 +39,25 @@ export default function SOIProject() {
     formData.append("Pname",pName);
     formData.append("Pdescription",pDescription);
     formData.append("image",image);
+    formData.append("Purl",pUrl)
     axios.post(url,formData).then((res)=>{
-        if(res.data === "created successfully!"){
+        if(res.data.message === "Project created successfully!"){
         document.getElementById('form').reset()
           viewProject();
           setPName("");
           setPDescription("");
+          setPUrl("")
         setCircularResponse(false);
         setSuccessAlert(true);
         setTimeout(() => {
-            setEmptyFieldAlert(false);
+          setSuccessAlert(false);
         }, 5000);
         return;
         }
         
     }).catch((error)=>{
+      setCircularResponse(false);
         if(error.response.data.message === "Data Already Exist!"){
-        setCircularResponse(false);
         setErrorAlert(true);
         setTimeout(() => {
             setErrorAlert(false);
@@ -95,7 +98,7 @@ export default function SOIProject() {
 
   function handleEdit(){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
-   const data = {
+    const data = {
     Pname:`${pName}`,
     Pdescription:`${pDescription}`,
     Pid:`${id}`
@@ -139,6 +142,28 @@ export default function SOIProject() {
     setPDescription(data.p_description);
     setId(data.pid)
   }
+  function handleStatus(id){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
+    const data = {
+      Pid:id,
+      visibility:true
+   }
+    axios.patch(url,data).then((res)=>{
+      viewProject();
+      setUpdateAlert(true);
+      setTimeout(() => {
+        setUpdateAlert(false)
+      }, 5000);
+      console.log(res)
+    }).catch((error)=>{
+      console.log(error)
+      // setErrorAlert(true);
+      //   setTimeout(() => {
+      //       setErrorAlert(false);
+      //   }, 5000);
+      //   return;
+    })
+  }
   return (
     <>
       {updateAlert && <div style={{textAlign:"center",width:"20%",margin:"auto"}}><Alert severity='success' style={{marginTop:"20px"}}>Update Successfully</Alert></div>}
@@ -157,6 +182,7 @@ export default function SOIProject() {
               <th>Project Name</th>
               <th>Project Description</th>
               <th>Project Image</th>
+              <th>Status</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -168,6 +194,18 @@ export default function SOIProject() {
                     <td>{data.name}</td>
                     <td>{data.p_description}</td>
                     <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.url)}><BsImageFill/></td>
+                    <td>
+                      <Switch
+                        checked={data.visibility}
+                        onChange={()=>handleStatus(data.pid)}
+                        data={true}
+                        sx={{
+                          '& .MuiSwitch-thumb': {
+                            color: data.visibility ? 'green' : 'red',
+                          },
+                        }}
+                      />
+                    </td>
                     <td onClick={()=>handleEditForm(data)}><i class="fa-solid fa-pen-to-square"></i></td>
                     <td onClick={()=>handleDelete(data.pid)}><i class="fa-sharp fa-solid fa-trash"></i></td>
                   </tr>
@@ -205,6 +243,7 @@ export default function SOIProject() {
         <form id='form' style={{display:"flex",flexDirection:"column"}}>
         <Input placeholder='Project Name' type='text' onChange={(e)=>setPName(e.target.value)} value={pName}/>
         <Input placeholder='Project Description' type='text' onChange={(e)=>setPDescription(e.target.value)} value={pDescription}/>
+        <Input placeholder='Enter URL' type='text' onChange={(e)=>setPUrl(e.target.value)} value={pUrl}/>
         <div style={{display:"flex",justifyContent:"space-between" , alignItems:"center"}}><Input placeholder='Choose Image' type='file' onChange={(e)=>setImage(e.target.files[0])}/> <span>Only JPEG and PNG allowed</span></div>
         {editFormButton ? <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleEdit}>Edit</Button> : <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleSubmit}>Submit</Button>}
         </form>

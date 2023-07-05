@@ -300,14 +300,14 @@ const ImageUploadForm = () => {
             </div>
           )}
           {albumImages && albumImages.length > 0 ? (
-            <div style={{ display: 'flex', overflowX: 'auto' }}>
+            <div style={{ display: 'flex', overflowX: 'auto', marginTop:"10px"  }}>
               {albumImages.map(image => (
                 <div key={image.aid} style={{ marginRight: '10px' }}>
                   <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>
                     <img
                       src={image.fileName}
                       alt={image.aid}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover'}}
                     />
                     <div style={{ position: 'absolute', top: '0', right: '0' }}>
                       <AiFillDelete onClick={() => handleDelete(image.aid)} color='red' />

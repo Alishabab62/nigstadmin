@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@mui/material';
-import{AiFillDelete} from 'react-icons/ai'
+import { AiFillDelete } from 'react-icons/ai'
 import Switch from '@mui/material/Switch';
 
 
@@ -51,7 +51,7 @@ const ImageUploadForm = () => {
         console.error('Error deleting image:', error);
       });
   };
-  
+
 
   const handleUpload = (e) => {
     e.preventDefault();
@@ -81,6 +81,34 @@ const ImageUploadForm = () => {
       console.error('No file selected or category not selected.');
     }
   };
+  const handleVisibility = (categoryId, visibility) => {
+    const requestBody = {
+      Cid: categoryId,
+      Cvisible: visibility,
+    };
+
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_album_category', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log(`Category with ID ${categoryId} visibility updated successfully.`);
+          // Perform any necessary state updates after successful visibility update
+          fetchCategories(); // Fetch updated categories
+        } else {
+          console.error(`Failed to update visibility for category with ID ${categoryId}.`);
+        }
+      })
+      .catch(error => {
+        console.error('Error updating category visibility:', error);
+      });
+  };
+
+
 
   const handleNewCategorySubmit = (event) => {
     event.preventDefault();
@@ -128,6 +156,29 @@ const ImageUploadForm = () => {
       });
   };
 
+  const handleCategoryDelete = (categoryName) => {
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/delete_album_category', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ cname: categoryName }),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log(`Category with name ${categoryName} deleted successfully.`);
+          // Perform any necessary state updates after successful deletion
+          fetchCategories(); // Fetch updated categories
+        } else {
+          console.error(`Failed to delete category with name ${categoryName}.`);
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting category:', error);
+      });
+  };
+
+
   const fetchImagesForAlbum = (category) => {
     const requestBody = { category: category };
 
@@ -167,7 +218,7 @@ const ImageUploadForm = () => {
               {responseMessage && <p>{responseMessage}</p>}
               <Button type="submit" sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">Create Album</Button>
             </div>
-          </form> 
+          </form>
         </div>
         <div style={{ width: "600px", maxWidth: "600px", maxHeight: "500px", overflowY: "scroll", margin: "auto", marginTop: "80px" }}>
           <table className="faculty-position-table" style={{ borderSpacing: 0 }}>
@@ -195,8 +246,8 @@ const ImageUploadForm = () => {
                     </td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
                       <Switch
-                        onChange={()=>{}}
-                        data={category.visibility}
+                        checked={category.visibility}
+                        onChange={(event) => handleVisibility(category.category_id, event.target.checked)}
                         sx={{
                           '& .MuiSwitch-thumb': {
                             color: category.visibility ? 'green' : 'red',
@@ -205,8 +256,9 @@ const ImageUploadForm = () => {
                       />
                     </td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
-                      <i className="fa-solid fa-trash"></i>
+                      <i className="fa-solid fa-trash" onClick={() => handleCategoryDelete(category.category_name)}></i>
                     </td>
+
                   </tr>
                 ))
               ) : (
@@ -221,7 +273,7 @@ const ImageUploadForm = () => {
 
       {selectedAlbum && (
         <div>
-          <h3 style={{ textAlign: 'center', marginTop:"50px" }}>Album: {selectedAlbum.category_name}</h3>
+          <h3 style={{ textAlign: 'center', marginTop: "50px" }}>Album: {selectedAlbum.category_name}</h3>
           <form onSubmit={handleSubmitImage}>
             <input
               type="file"
@@ -232,7 +284,7 @@ const ImageUploadForm = () => {
               }}
               ref={fileInputRef}
             />
-            <Button type="button" sx={{ bgcolor: "#1b3058", color: "white" ,marginRight:"10px" }} variant="contained" onClick={handleUpload}>
+            <Button type="button" sx={{ bgcolor: "#1b3058", color: "white", marginRight: "10px" }} variant="contained" onClick={handleUpload}>
               Select Images
             </Button>
             <Button type="submit" sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">
@@ -246,27 +298,27 @@ const ImageUploadForm = () => {
               <Button onClick={handleClosePreview}>Close Preview</Button>
             </div>
           )}
-{albumImages && albumImages.length > 0 ? (
-  <div style={{ display: 'flex', overflowX: 'auto' }}>
-    {albumImages.map(image => (
-      <div key={image.aid} style={{ marginRight: '10px' }}>
-        <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>
-          <img
-            src={image.fileName}
-            alt={image.aid}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-          <div style={{ position: 'absolute', top: '0', right: '0' }}>
-          <AiFillDelete onClick={() => handleDelete(image.aid)} color='red'/>
+          {albumImages && albumImages.length > 0 ? (
+            <div style={{ display: 'flex', overflowX: 'auto' }}>
+              {albumImages.map(image => (
+                <div key={image.aid} style={{ marginRight: '10px' }}>
+                  <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>
+                    <img
+                      src={image.fileName}
+                      alt={image.aid}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', top: '0', right: '0' }}>
+                      <AiFillDelete onClick={() => handleDelete(image.aid)} color='red' />
 
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-) : (
-  <div>No images in this album.</div>
-)}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>No images in this album.</div>
+          )}
 
 
         </div>

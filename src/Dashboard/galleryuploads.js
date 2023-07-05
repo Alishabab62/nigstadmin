@@ -126,6 +126,7 @@ const ImageUploadForm = () => {
           console.log('New Category Response:', data);
           setResponseMessage(data);
           setNewCategory('');
+          fetchCategories()
         })
         .catch(error => {
           console.error('Error creating category:', error);

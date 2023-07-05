@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { Button } from '@mui/material';
 
 
@@ -9,6 +9,9 @@ const ImageUploadForm = () => {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [albumImages, setAlbumImages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
 
   const handlePreview = (image) => {
     setPreviewImage(image);
@@ -27,16 +30,16 @@ const ImageUploadForm = () => {
     fetchImagesForAlbum(category.category_name);
   };
 
-  const handleDelete = (imageId) => {
-    fetch(`http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album?id=${imageId}`, {
+  const handleDelete = (image) => {
+    fetch(`http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album?id=${image}`, {
       method: 'DELETE',
     })
       .then(response => {
         if (response.ok) {
-          console.log(`Image with ID ${imageId} deleted successfully.`);
+          console.log(`Image with ID ${image} deleted successfully.`);
           // Perform any necessary state updates after successful deletion
         } else {
-          console.error(`Failed to delete image with ID ${imageId}.`);
+          console.error(`Failed to delete image with ID ${image}.`);
         }
       })
       .catch(error => {
@@ -45,24 +48,29 @@ const ImageUploadForm = () => {
   };
   
   
- const handleUpload = () => {
-  // Assuming you have the file object to be uploaded in a variable called 'file'
-  const formData = new FormData();
-  formData.append('file', Image);
-
-  fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Upload response:', data);
-      // Perform any necessary state updates or UI changes after successful upload
-    })
-    .catch(error => {
-      console.error('Error uploading image:', error);
-    });
-};
+  const handleUpload = () => {
+    fileInputRef.current.click();
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+  
+      fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Upload response:', data);
+          // Perform any necessary state updates or UI changes after successful upload
+        })
+        .catch(error => {
+          console.error('Error uploading image:', error);
+        });
+    } else {
+      console.error('No file selected.');
+    }
+  };
+  
 
 
   const handleNewCategorySubmit = (event) => {
@@ -198,7 +206,7 @@ const ImageUploadForm = () => {
 
   
 <div style={{ marginTop: "100px" }}>
-<h3 className='text-center my-3'>{selectedAlbum?.category_name} Images</h3>
+<h1 className='text-center text-xl my-3'>{selectedAlbum?.category_name} Images</h1>
 <div className='flex flex-wrap gap-2'>
   {albumImages?.length > 0 ? (
     albumImages.map((image) => (
@@ -223,10 +231,16 @@ const ImageUploadForm = () => {
     <button
       className='bg-blue-500 text-white rounded-md p-2'
       style={{ width: "100px", height: "100px" }}
-      onClick={handleUpload}
+      onClick={() => handleUpload()}
     >
       +
     </button>
+    <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              />
   </div>
 </div>
 {previewImage && (

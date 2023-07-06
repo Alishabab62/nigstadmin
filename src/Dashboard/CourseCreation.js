@@ -113,7 +113,7 @@ export default function CourseCreation() {
     axios.get(url).then((res) => {
       setViewData(res.data.course);
     }).catch((error) => {
-      if(error.response.data.message==="Course Not Found."){
+      if (error.response.data.message === "Course Not Found.") {
         setNoDataToShow(true);
       }
     })
@@ -121,10 +121,13 @@ export default function CourseCreation() {
 
   function handleCourseCreation(e) {
     e.preventDefault();
-    if(category && input.title && code && number && faculty   && courseMode && input.des){
-      buttonRef.current.disabled = true; 
+    if (category && input.title && code && number && faculty && courseMode && input.des) {
+      buttonRef.current.disabled = true;
       setCircularResponse(true);
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/course/creation";
+      const cName = input.title.split(" ");
+      const temp = cName.map(words => words.charAt(0).toUpperCase() + words.slice(1));
+      input.title = temp.join(" ");
       const data = {
         courseCategory: `${category}`,
         title: `${input.title}`,
@@ -152,7 +155,7 @@ export default function CourseCreation() {
       }).catch((error) => {
         setCircularResponse(false);
         buttonRef.current.disabled = false;
-        if(error.response.data.message){
+        if (error.response.data.message) {
           setCourseAlreadyAlert(true);
           setTimeout(() => {
             setCourseAlreadyAlert(false);
@@ -165,7 +168,7 @@ export default function CourseCreation() {
         }, 5000);
       })
     }
-    else{
+    else {
       setEmptyFieldAlert(true);
       setTimeout(() => {
         setEmptyFieldAlert(false)
@@ -206,7 +209,7 @@ export default function CourseCreation() {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         {
-          viewFrame ? <Button className='toggle_btn' onClick={changeView} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create Course</Button> : <Button className='toggle_btn' onClick={changeView} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Created Course</Button>
+          viewFrame ? <Button className='toggle_btn' onClick={changeView} sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">Create Course</Button> : <Button className='toggle_btn' onClick={changeView} sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">View Created Course</Button>
         }
       </div>
       {
@@ -264,13 +267,13 @@ export default function CourseCreation() {
           </div> : ""
       }
       {
-         ( noDataToShow && viewFrame) &&
-          <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
-        }
-        
+        (noDataToShow && viewFrame) &&
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
+
       {
         !viewFrame ? <div className='course-creation-wrapper'>
-          <h3 style={{fontWeight:"bold"}}>Course Creation</h3>
+          <h3 style={{ fontWeight: "bold" }}>Course Creation</h3>
           {responseCircular && (
             <div
               style={{
@@ -294,79 +297,79 @@ export default function CourseCreation() {
           {emptyFieldAlert && <Alert severity='error'>All Fields Required</Alert>}
           {errorAlert && <Alert severity='error'>Something went wrong</Alert>}
           {courseAlreadyAlert && <Alert severity='error'>Course already exists</Alert>}
-          <form id='form' style={{display:"flex",flexDirection:"column"}}>
-          <select onChange={(e) => setCategory(e.target.value)}>
-            <option value={"select"}>Select Course Category</option>
-            <option value={"basic"}>Basic Course</option>
-            <option value={"advance"}>Advance Course</option>
-            <option value={"short"}>Short Term Course</option>
-            <option value={"refresher"}>Refresher Course</option>
-          </select>
-          {
-            category === "" ? "" : <select onChange={(e) => setCode(e.target.value)}>
-              <option>Course Code</option>
-              {
-                courseCodeView.map((data) => {
-                  return <option value={data} key={data}>{data}</option>
-                })
-              }
+          <form id='form' style={{ display: "flex", flexDirection: "column" }}>
+            <select onChange={(e) => setCategory(e.target.value)}>
+              <option value={"select"}>Select Course Category</option>
+              <option value={"basic"}>Basic Course</option>
+              <option value={"advance"}>Advance Course</option>
+              <option value={"short"}>Short Term Course</option>
+              <option value={"refresher"}>Refresher Course</option>
             </select>
-          }
-          {
-            category === "" ? "" : <select onChange={(e) => setNumber(e.target.value)}>
-              <option>Course Number</option>
-              {
-                courseNumberView.map((data) => {
-                  return <option key={data} value={data}>{data}</option>
-                })
-              }
-            </select>
-          }
-          <label style={{textAlign:"left"}}>Course Title:</label>
-          <Inputs type={"text"} placeholder={"Enter Course Title"} name={"title"} fun={handleInputs} />
-          <label style={{textAlign:"left"}}>Course Description:</label>
-          <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs} />
-          <div className='grid2-container'>
-            <div>
-              <span>Select Weeks</span>
-            <select onChange={(e) => setCourseDurWeeks(e.target.value)}>
-              {
-                weeks.map((data) => {
-                  return <option key={data} value={data}>{data}</option>
-                })
-              }
-            </select>
-              </div>
-            <div>
-              <span>Select Days</span>
-            <select onChange={(e) => setCourseDurDays(e.target.value)}>
-              {
-                days.map((data) => {
-                  return <option key={data} value={data}>{data}</option>
-                })
-              }
-            </select>
-            </div>
-          </div>
-          <select onChange={(e) => setFacultyId(e.target.value)}>
-            <option>Select Course Officer</option>
             {
-              faculty.map((data, index) => {
-                return <option key={index} value={data.facultyid}>{data.firstname} {data.middlename} {data.lastname}</option>
-              })
+              category === "" ? "" : <select onChange={(e) => setCode(e.target.value)}>
+                <option>Course Code</option>
+                {
+                  courseCodeView.map((data) => {
+                    return <option value={data} key={data}>{data}</option>
+                  })
+                }
+              </select>
             }
-          </select>
-          <div style={{ display: "flex", alignItems: "center", background: "none", borderRadius: "5px", margin: "0px auto", width: "auto" }}>
-            <input type='radio' value={"free"} style={{ marginRight: "5px" }} defaultChecked onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
-            <input type='radio' value={"paid"} name='fee'  onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
-          </div>
-          <select onChange={(e) => setCourseMode(e.target.value)}>
-            <option>Select Mode of Course</option>
-            <option>Classroom</option>
-            <option>Online</option>
-            <option>Hybrid</option>
-          </select>
-          <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
+            {
+              category === "" ? "" : <select onChange={(e) => setNumber(e.target.value)}>
+                <option>Course Number</option>
+                {
+                  courseNumberView.map((data) => {
+                    return <option key={data} value={data}>{data}</option>
+                  })
+                }
+              </select>
+            }
+            <label style={{ textAlign: "left" }}>Course Title:</label>
+            <Inputs type={"text"} placeholder={"Enter Course Title"} name={"title"} fun={handleInputs} />
+            <label style={{ textAlign: "left" }}>Course Description:</label>
+            <Inputs type={"text"} placeholder={"Course Description"} name={"des"} fun={handleInputs} />
+            <div className='grid2-container'>
+              <div>
+                <span>Select Weeks</span>
+                <select onChange={(e) => setCourseDurWeeks(e.target.value)}>
+                  {
+                    weeks.map((data) => {
+                      return <option key={data} value={data}>{data}</option>
+                    })
+                  }
+                </select>
+              </div>
+              <div>
+                <span>Select Days</span>
+                <select onChange={(e) => setCourseDurDays(e.target.value)}>
+                  {
+                    days.map((data) => {
+                      return <option key={data} value={data}>{data}</option>
+                    })
+                  }
+                </select>
+              </div>
+            </div>
+            <select onChange={(e) => setFacultyId(e.target.value)}>
+              <option>Select Course Officer</option>
+              {
+                faculty.map((data, index) => {
+                  return <option key={index} value={data.facultyid}>{data.firstname} {data.middlename} {data.lastname}</option>
+                })
+              }
+            </select>
+            <div style={{ display: "flex", alignItems: "center", background: "none", borderRadius: "5px", margin: "0px auto", width: "auto" }}>
+              <input type='radio' value={"free"} style={{ marginRight: "5px" }} defaultChecked onChange={(e) => setCourseFee(e.target.value)} name='fee'></input><span style={{ marginRight: "10px" }}>Free</span>
+              <input type='radio' value={"paid"} name='fee' onChange={(e) => setCourseFee(e.target.value)}></input><span style={{ marginRight: "50px", marginLeft: "5px" }}  >Paid</span>
+            </div>
+            <select onChange={(e) => setCourseMode(e.target.value)}>
+              <option>Select Mode of Course</option>
+              <option>Classroom</option>
+              <option>Online</option>
+              <option>Hybrid</option>
+            </select>
+            <Button value={"Submit"} onClick={handleCourseCreation} ref={buttonRef} sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">Submit</Button>
           </form>
         </div> : ""
       }

@@ -76,9 +76,9 @@ export default function CreationFacultyMember() {
       buttonRef.current.disabled = true;
       const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/sauth/create";
       const data = {
-        first_name: `${input.f_name}`,
-        middle_name: `${input.m_name}`,
-        last_name: `${input.l_name}`,
+        first_name: `${input.f_name.charAt(0).toUpperCase() + input.f_name.slice(1)}`,
+        middle_name: `${input.m_name.charAt(0).toUpperCase() + input.m_name.slice(1)}`,
+        last_name: `${input.l_name.charAt(0).toUpperCase() + input.l_name.slice(1)}`,
         dob: `${dobRef.current.value}`,
         phone: `${input.phone}`,
         email: `${input.email}`,

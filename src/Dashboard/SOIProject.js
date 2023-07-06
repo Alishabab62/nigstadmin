@@ -193,7 +193,7 @@ export default function SOIProject() {
                     <td>{index + 1}</td>
                     <td>{data.name}</td>
                     <td>{data.p_description}</td>
-                    <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.url)}><BsImageFill/></td>
+                    <td style={{cursor:"pointer"}} onClick={()=>viewImage(data.Purl)}><BsImageFill/></td>
                     <td>
                       <Switch
                         checked={data.visibility}

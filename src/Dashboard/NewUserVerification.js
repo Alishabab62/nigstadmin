@@ -72,7 +72,7 @@ export default function NewUserVerification() {
     const input = event.target.value.toLowerCase();
     const rows = document.querySelectorAll('#Organization tr');
     rows.forEach((row) => {
-      const cells = row.querySelectorAll('td');
+      const cells = row.querySelectorAll('td name');
       let shouldHide = true;
       cells.forEach((cell) => {
         if (cell.textContent.toLowerCase().includes(input)) {

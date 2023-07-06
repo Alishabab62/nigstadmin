@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@mui/material';
+import { AiFillDelete } from 'react-icons/ai'
+import Switch from '@mui/material/Switch';
 
 
 const ImageUploadForm = () => {
@@ -9,6 +11,8 @@ const ImageUploadForm = () => {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [albumImages, setAlbumImages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handlePreview = (image) => {
     setPreviewImage(image);
@@ -27,42 +31,83 @@ const ImageUploadForm = () => {
     fetchImagesForAlbum(category.category_name);
   };
 
-  const handleDelete = (imageId) => {
-    fetch(`http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album?id=${imageId}`, {
+  const handleDelete = (image) => {
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/delete_album', {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ aid: image }),
     })
       .then(response => {
         if (response.ok) {
-          console.log(`Image with ID ${imageId} deleted successfully.`);
+          console.log(`Image with ID ${image} deleted successfully.`);
           // Perform any necessary state updates after successful deletion
         } else {
-          console.error(`Failed to delete image with ID ${imageId}.`);
+          console.error(`Failed to delete image with ID ${image}.`);
         }
       })
       .catch(error => {
         console.error('Error deleting image:', error);
       });
   };
-  
-  
- const handleUpload = () => {
-  // Assuming you have the file object to be uploaded in a variable called 'file'
-  const formData = new FormData();
-  formData.append('file', Image);
 
-  fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
-    method: 'POST',
-    body: formData,
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Upload response:', data);
-      // Perform any necessary state updates or UI changes after successful upload
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+    fileInputRef.current.click();
+  };
+
+  const handleSubmitImage = (e) => {
+    e.preventDefault();
+    if (selectedFile && selectedAlbum) {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      formData.append('Cname', selectedAlbum.category_name);
+
+      fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/create_album', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Upload response:', data);
+          // Perform any necessary state updates or UI changes after successful upload
+        })
+        .catch(error => {
+          console.error('Error uploading image:', error);
+        });
+    } else {
+      console.error('No file selected or category not selected.');
+    }
+  };
+  const handleVisibility = (categoryId, visibility) => {
+    const requestBody = {
+      Cid: categoryId,
+      Cvisible: visibility,
+    };
+
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_album_category', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
     })
-    .catch(error => {
-      console.error('Error uploading image:', error);
-    });
-};
+      .then(response => {
+        if (response.ok) {
+          console.log(`Category with ID ${categoryId} visibility updated successfully.`);
+          // Perform any necessary state updates after successful visibility update
+          fetchCategories(); // Fetch updated categories
+        } else {
+          console.error(`Failed to update visibility for category with ID ${categoryId}.`);
+        }
+      })
+      .catch(error => {
+        console.error('Error updating category visibility:', error);
+      });
+  };
+
 
 
   const handleNewCategorySubmit = (event) => {
@@ -81,6 +126,7 @@ const ImageUploadForm = () => {
           console.log('New Category Response:', data);
           setResponseMessage(data);
           setNewCategory('');
+          fetchCategories()
         })
         .catch(error => {
           console.error('Error creating category:', error);
@@ -111,9 +157,32 @@ const ImageUploadForm = () => {
       });
   };
 
+  const handleCategoryDelete = (categoryName) => {
+    fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/delete_album_category', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ cname: categoryName }),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log(`Category with name ${categoryName} deleted successfully.`);
+          // Perform any necessary state updates after successful deletion
+          fetchCategories(); // Fetch updated categories
+        } else {
+          console.error(`Failed to delete category with name ${categoryName}.`);
+        }
+      })
+      .catch(error => {
+        console.error('Error deleting category:', error);
+      });
+  };
+
+
   const fetchImagesForAlbum = (category) => {
     const requestBody = { category: category };
-  
+
     fetch('http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/gallery/album_view_category', {
       method: 'PATCH',
       headers: {
@@ -130,11 +199,6 @@ const ImageUploadForm = () => {
         console.error('Error fetching album images:', error);
       });
   };
-
- 
-  
-  
-
 
   return (
     <div>
@@ -167,6 +231,7 @@ const ImageUploadForm = () => {
                 <th>S.No</th>
                 <th>Albums</th>
                 <th style={{ textAlign: "center" }}>Edit</th>
+                <th style={{ textAlign: "center" }}>Visibility</th>
                 <th style={{ textAlign: "center" }}>Delete</th>
               </tr>
             </thead>
@@ -177,11 +242,24 @@ const ImageUploadForm = () => {
                     <td>{index + 1}</td>
                     <td>{category.category_name}</td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
+
                       <i className="fa-solid fa-pen-to-square" onClick={() => handleEditCategory(category)}></i>
                     </td>
                     <td style={{ cursor: "pointer", textAlign: "center" }}>
-                      <i className="fa-solid fa-trash"></i>
+                      <Switch
+                        checked={category.visibility}
+                        onChange={(event) => handleVisibility(category.category_id, event.target.checked)}
+                        sx={{
+                          '& .MuiSwitch-thumb': {
+                            color: category.visibility ? 'green' : 'red',
+                          },
+                        }}
+                      />
                     </td>
+                    <td style={{ cursor: "pointer", textAlign: "center" }}>
+                      <i className="fa-solid fa-trash" onClick={() => handleCategoryDelete(category.category_name)}></i>
+                    </td>
+
                   </tr>
                 ))
               ) : (
@@ -193,64 +271,59 @@ const ImageUploadForm = () => {
           </table>
         </div>
       </div>
-      <div>
+
       {selectedAlbum && (
+        <div>
+          <h1 style={{ textAlign: 'center', marginTop: "50px" }} className='text-xl font-bold'>Album: {selectedAlbum.category_name}</h1>
+          <form onSubmit={handleSubmitImage}>
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                setSelectedFile(e.target.files[0]);
+                handlePreview(URL.createObjectURL(e.target.files[0]));
+              }}
+              ref={fileInputRef}
+            />
+            <Button type="button" sx={{ bgcolor: "#1b3058", color: "white", marginRight: "10px" }} variant="contained" onClick={handleUpload}>
+              Select Images
+            </Button>
+            <Button type="submit" sx={{ bgcolor: "#1b3058", color: "white" }} variant="contained">
+              Upload Images
+            </Button>
+          </form>
 
-  
-<div style={{ marginTop: "100px" }}>
-<h3 className='text-center my-3'>{selectedAlbum?.category_name} Images</h3>
-<div className='flex flex-wrap gap-2'>
-  {albumImages?.length > 0 ? (
-    albumImages.map((image) => (
-      <div key={image.id} className='relative'>
-        <img
-          src={image.fileName}
-          alt={image.aid}
-          className='rounded-md cursor-pointer'
-          style={{ width: "100px", height: "100px" }}
-          onClick={() => handlePreview(image)}
-        />
-       <i className='absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full fa-solid fa-trash'  onClick={() => handleDelete(image.id)}>
-              
-              </i>
-        
-      </div>
-    ))
-  ) : (
-    <p>No images to display</p>
-  )}
-  <div className='relative'>
-    <button
-      className='bg-blue-500 text-white rounded-md p-2'
-      style={{ width: "100px", height: "100px" }}
-      onClick={handleUpload}
-    >
-      +
-    </button>
-  </div>
-</div>
-{previewImage && (
-  <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-75 flex justify-center items-center'>
-    <div className='relative'>
-      <img
-        src={previewImage.fileName}
-        alt={previewImage.aid}
-        className='rounded-md'
-        style={{ width: "600px", height: "400px" }}
-      />
-      <i className='absolute top-0 right-0 p-1 bg-red-500 text-white rounded-full fa-solid fa-close'  onClick={handleClosePreview}>
-              
-              </i>
-        
-      
-    </div>
-  </div>
-)}
-</div>
-  
-)}
+          {previewImage && (
+            <div>
+              <img src={previewImage} alt="Preview" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+              <Button onClick={handleClosePreview}>Close Preview</Button>
+            </div>
+          )}
+          {albumImages && albumImages.length > 0 ? (
+            <div style={{ display: 'flex', overflowX: 'auto', marginTop:"10px"  }}>
+              {albumImages.map(image => (
+                <div key={image.aid} style={{ marginRight: '10px' }}>
+                  <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>
+                    <img
+                      src={image.fileName}
+                      alt={image.aid}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover'}}
+                    />
+                    <div style={{ position: 'absolute', top: '0', right: '0' }}>
+                      <AiFillDelete onClick={() => handleDelete(image.aid)} color='red' />
 
-      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>No images in this album.</div>
+          )}
+
+
+        </div>
+      )}
     </div>
   );
 };

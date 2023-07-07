@@ -145,11 +145,33 @@ export default function SOIProject() {
     setId(data.pid);
     setPUrl(data.url)
   }
-  function handleStatus(id){
+  function handleStatusTrue(id){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
     const data = {
       Pid:id,
       visibility:true
+   }
+    axios.patch(url,data).then((res)=>{
+      viewProject();
+      setUpdateAlert(true);
+      setTimeout(() => {
+        setUpdateAlert(false)
+      }, 5000);
+      console.log(res)
+    }).catch((error)=>{
+      console.log(error)
+      // setErrorAlert(true);
+      //   setTimeout(() => {
+      //       setErrorAlert(false);
+      //   }, 5000);
+      //   return;
+    })
+  }
+  function handleStatusFalse(id){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
+    const data = {
+      Pid:id,
+      visibility:false
    }
     axios.patch(url,data).then((res)=>{
       viewProject();
@@ -200,7 +222,7 @@ export default function SOIProject() {
                     <td>
                       <Switch
                         checked={data.visibility}
-                        onChange={()=>handleStatus(data.pid)}
+                        onChange={data.visibility ? ()=>handleStatusFalse(data.pid) : ()=>handleStatusTrue(data.pid) }
                         data={true}
                         sx={{
                           '& .MuiSwitch-thumb': {

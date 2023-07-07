@@ -11,6 +11,7 @@ import Logo from '../images/logo1.png'
 import AnnouncementCreation from "./AnnouncementCreation";
 import SOIProject from "./SOIProject";
 import CreateBanner from "./CreateBanner";
+import Marquee from "./Marquee";
 
 
 export default function NIGSTAdmin() {
@@ -23,6 +24,7 @@ export default function NIGSTAdmin() {
   const [galleryimage,setGalleryimage] = useState(false);
   const [SOI,setSOIProject] = useState(false);
   const [CBanner,setCBanner] = useState(false);
+  const [marquee,setMarquee] = useState(false);
   
 
   function departmentFun() {
@@ -34,7 +36,9 @@ export default function NIGSTAdmin() {
     setAnnouncement(false);
     setGalleryimage(false);
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
   function facultyPositionFun() {
     setFacultyPositionCreation(true);
@@ -46,7 +50,9 @@ export default function NIGSTAdmin() {
     setAnnouncement(false);
     setGalleryimage(false);
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
   function usersFun() {
     setUsers(true);
@@ -59,7 +65,9 @@ export default function NIGSTAdmin() {
     setGalleryimage(false);
     // setFacultyAdmin(false)
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
   function courseAssignmentFun() {
     setCourseAssignment(true);
@@ -72,7 +80,9 @@ export default function NIGSTAdmin() {
     setGalleryimage(false);
     // setFacultyAdmin(false)
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
   function handleTenderFun() {
     setTender(true);
@@ -85,7 +95,9 @@ export default function NIGSTAdmin() {
     setAnnouncement(false);
     setGalleryimage(false);
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
   function announcementFun(){
     setAnnouncement(true);
@@ -98,7 +110,9 @@ export default function NIGSTAdmin() {
     setGalleryimage(false);
     setSOIProject(false);
     setCBanner(false)
-    // setFacultyAdmin(false)
+    // setFacultyAdmin(false);
+    setMarquee(false)
+    
   }
   function ImageUploadFun(){
     setGalleryimage(true);
@@ -110,7 +124,9 @@ export default function NIGSTAdmin() {
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
     setSOIProject(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
 
   function SOIFun(){
@@ -123,11 +139,28 @@ export default function NIGSTAdmin() {
     // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
-    setCBanner(false)
+    setCBanner(false);
+    setMarquee(false)
+
   }
 
   function CreateBannerFun(){
     setCBanner(true)
+    setSOIProject(false);
+    setGalleryimage(false);
+    setAnnouncement(false);
+    setTender(false);
+    setCourseAssignment(false);
+    setUsers(false);
+    // setCourseCategory(false);
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+    setMarquee(false)
+  }
+
+  function marqueeFun(){
+    setMarquee(true)
+    setCBanner(false)
     setSOIProject(false);
     setGalleryimage(false);
     setAnnouncement(false);
@@ -214,7 +247,13 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={CreateBannerFun}>
               Banner
             </li>
-            
+            }
+              {
+              marquee ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={marqueeFun}>
+                Marquee
+            </li> : <li className="p-3 " onClick={marqueeFun}>
+              Marquee
+            </li>
             }
             {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
@@ -246,6 +285,7 @@ export default function NIGSTAdmin() {
           {galleryimage? <Galleryupload/>:""}
           {SOI && <SOIProject/> }
           {CBanner && <CreateBanner/>}
+          {marquee && <Marquee/>}
         </div>
       </div>
     </div>

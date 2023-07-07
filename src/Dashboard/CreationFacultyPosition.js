@@ -113,7 +113,7 @@ export default function CreationFacultyPosition() {
     <div style={{width:"600px",maxWidth:"600" , overflowY:"scroll" , marginTop:"80px"}}>
     <table className="faculty-position-table">
     <tr>
-                    <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>FACULTIE POSITIONS</th>
+                    <th colSpan="13" style={{ textAlign: "center", backgroundColor: "#ffcb00" }}>FACULTIES POSITIONS</th>
                   </tr>
       <tr style={{ backgroundColor: "#ffcb00" }}>
         <th>S.No</th>

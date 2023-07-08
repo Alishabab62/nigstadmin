@@ -70,17 +70,26 @@ export default function NewUserVerification() {
   const handleInputChange1 = (event) => {
     setSearchData(event.target.value);
     const input = event.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#Organization tbody tr');
+    const rows = document.querySelectorAll("#Name tr");
+  
     rows.forEach((row) => {
-      const nameCell = row.querySelector('td:nth-child(3)'); // Name column
-      const shouldHide = !nameCell.textContent.toLowerCase().includes(input);
+      const cells = row.querySelectorAll("td");
+      let shouldHide = true;
+  
+      cells.forEach((cell) => {
+        if (cell.textContent.toLowerCase().includes(input)) {
+          shouldHide = false;
+        }
+      });
+  
       if (shouldHide) {
-        row.classList.add('hidden');
+        row.classList.add("hidden");
       } else {
-        row.classList.remove('hidden');
+        row.classList.remove("hidden");
       }
     });
   };
+  
   
 
   return (
@@ -134,7 +143,7 @@ export default function NewUserVerification() {
                 <th>NIGST Verification</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id='Name' >
               {data.map((user, index) => {
                 return (
                   <tr key={index}>

@@ -309,10 +309,10 @@ function handleEdit(data){
     <div style={{display:"flex",flexDirection:"column"}}>
       {tenderArchiveSuccess && <Alert severity='success' style={{position:"absolute",left:"50%" , top:"130px"}}>Tender Archive successfully</Alert>}
       {
-      formSelect ?   <div className='creation' style={{marginTop:"50px"}}>
-        <Button className='openform' onClick={toggleTenders}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Tenders</Button>
-        <Button  className='openform ' onClick={toggleCorrigendum}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Corregendom</Button>
-        <Button className='openform' onClick={archiveFun}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Tender</Button>
+      formSelect ?   <div className='creation' style={{marginTop:"12px"}}>
+        <Button  onClick={toggleTenders} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Tenders</Button>
+        <Button  onClick={toggleCorrigendum} style={{margin:"0px 15px",height:"60px"}}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Create New Corregendom</Button>
+        <Button onClick={archiveFun} style={{height:"60px"}} sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">View Archive Tender</Button>
       </div> : ""
       }
       {(viewTender.length>=1 && filter) ? <div className='user-details-wrapper'>
@@ -437,14 +437,14 @@ function handleEdit(data){
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
           {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
-          <Button className='close-btn' onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
+          <button className='close-btn' onClick={closeTenderForm}  style={{bgcolor:"#1b3058",color:"white",width:"auto"}} variant="contained">&times;</button>
           <form action="/submit-form" method="post" encType="multipart/form-data" id='form'>
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"} value={input.ref}/>
             <textarea id="description" name="description" required onChange={handleInputs} placeholder={"Tender Description:"} value={input.description}></textarea>
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="start-date" name="starDate" required  placeholder={"Start Date:"} value={input.starDate}/>
             <input type="text" onClick={(e)=> {e.target.type="date"}} onChange={handleInputs} id="end-date" name="endDate" required   placeholder={"End Date:"} value={input.endDate}/>
-            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdfFile" accept=".pdf"  required ref={file}></input><span style={{fontSize:"11px"}}>(Only PDF Allowed)</span></div>
+            <div style={{display:"flex" , justifyContent:"flex-start"}}><input type="file" id="pdf-file" name="pdfFile" accept=".pdf"  required ref={file}></input><span style={{fontSize:"10px"}}>(Only PDF Allowed)</span></div>
             <Button onClick={ editButton ? handleEditForm : handleSubmit} value={"Submit"} className='submitButton'  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">Submit</Button>
           </form>
         </div>
@@ -455,7 +455,7 @@ function handleEdit(data){
           {successAlert ? <Alert severity="success" style={{marginBottom:"10px"}}>Corregendom Create successfully</Alert> : ""}
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
-          <Button className="close-btn" onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white",position:"absolute"}} variant="contained">&times;</Button>
+          <button className="close-btn" onClick={closeTenderForm}  style={{bgcolor:"#1b3058",color:"white",position:"absolute",width:"auto"}} variant="contained">&times;</button>
           <form action="/submit-corrigendum" method="post" encType="multipart/form-data" id='form'>
             <label htmlFor="ref-dropdown">Select Title Ref. No.:</label>
             <select id="ref-dropdown" name="ref-dropdown" required onChange={(e)=> setTenderValue(e.target.value)}>

@@ -123,16 +123,16 @@ const ImageUploadForm = () => {
           body: JSON.stringify({ Cname: newCategory }),
         });
         const data = await response.text();
-        console.log('New Category Response:', data);
+        console.log('New Album Response:', data);
         setResponseMessage({ text: data, responseType: 'success' });
         setNewCategory('');
         fetchCategories();
       } catch (error) {
-        console.error('Error creating category:', error);
-        setResponseMessage({ text: 'Error creating category.', responseType: 'error' });
+        console.error('Error creating Album:', error);
+        setResponseMessage({ text: 'Error creating Album.', responseType: 'error' });
       }
     } else {
-      setResponseMessage({ text: 'Category name cannot be empty.', responseType: 'error' });
+      setResponseMessage({ text: 'Album name cannot be empty.', responseType: 'error' });
     }
   };
 
@@ -223,7 +223,7 @@ const ImageUploadForm = () => {
             </div>
           </form>
         </div>
-        <div style={{ width: '600px', maxWidth: '600px', maxHeight: '500px', overflowY: 'scroll', margin: 'auto', marginTop: '80px' }}>
+        <div style={{ width: '600px', maxWidth: '600px', maxHeight: '600px', margin: 'auto', marginTop: '80px' }}>
           <table className='faculty-position-table' style={{ borderSpacing: 0 }}>
             <thead>
               <tr>
@@ -267,7 +267,7 @@ const ImageUploadForm = () => {
               ) : (
                 <tr>
                   <td colSpan='4' style={{ textAlign: 'center' }}>
-                    No categories to display
+                    No Albums to display
                   </td>
                 </tr>
               )}
@@ -314,7 +314,7 @@ const ImageUploadForm = () => {
             </div>
           )}
           {albumImages && albumImages.length > 0 ? (
-            <div style={{ display: 'flex', overflowX: 'auto', margin: '10px' }}>
+            <div style={{ display: 'flex', overflowX: 'auto', margin: '10px',width:"1200px" }}>
               {albumImages.map((image) => (
                 <div key={image.aid} style={{ marginRight: '10px' }}>
                   <div style={{ position: 'relative', width: '120px', height: '120px', overflow: 'hidden' }}>

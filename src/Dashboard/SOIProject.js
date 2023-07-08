@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect,  useState } from 'react';
 import {BsImageFill} from 'react-icons/bs';
 
+
 export default function SOIProject() {
   const [responseCircular, setCircularResponse] = useState(false);
   const [emptyFieldAlert,setEmptyFieldAlert] = useState(false);
@@ -19,7 +20,7 @@ export default function SOIProject() {
   const [viewForm,setViewForm] = useState(false);
   const [id,setId] = useState("");
 
-
+ 
   useEffect(()=>{
     viewProject();
   },[])
@@ -203,13 +204,13 @@ export default function SOIProject() {
         (viewForm && viewData.length > 0 ) &&  <div className='user-details-wrapper'>
           <table>
             <tr>
-              <th>S.No</th>
-              <th>Project Name</th>
-              <th>Project Description</th>
-              <th>Project Image</th>
-              <th>Status</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>S.No</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Project Name</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Project Description</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Project Image</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Status</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Edit</th>
+              <th style={{ backgroundColor: "#ffcb00" }}>Delete</th>
             </tr>
             {
               viewData.map((data, index) => {
@@ -270,9 +271,9 @@ export default function SOIProject() {
         {successAlert && <Alert severity='success' style={{marginBottom:"20px"}}>Created Successfully</Alert> }
         {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Data Already Exist!</Alert> }
         <form id='form' style={{display:"flex",flexDirection:"column"}}>
-        <Input placeholder='Project Name' type='text' onChange={(e)=>setPName(e.target.value)} value={pName}/>
-        <Input placeholder='Project Description' type='text' onChange={(e)=>setPDescription(e.target.value)} value={pDescription}/>
-        <Input placeholder='Enter URL' type='text' onChange={(e)=>setPUrl(e.target.value)} value={pUrl}/>
+        <input placeholder='Project Name' type='text' onChange={(e)=>setPName(e.target.value)} value={pName}  />
+        <input placeholder='Project Description' type='text' onChange={(e)=>setPDescription(e.target.value)} value={pDescription}/>
+        <input placeholder='Enter URL' type='text' onChange={(e)=>setPUrl(e.target.value)} value={pUrl}/>
         <div style={{display:"flex",justifyContent:"space-between" , alignItems:"center"}}><Input placeholder='Choose Image' type='file' onChange={(e)=>setImage(e.target.files[0])}/> <span>Only JPEG and PNG allowed</span></div>
         {editFormButton ? <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleEdit}>Edit</Button> : <Button  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleSubmit}>Submit</Button>}
         </form>

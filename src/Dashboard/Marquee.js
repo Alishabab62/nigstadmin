@@ -10,7 +10,7 @@ export default function Marquee() {
     const [responseCircular, setCircularResponse] = useState(false);
     const [details, setDetails] = useState("");
     const [url, setURL] = useState("");
-    //   const [editFormButton,setEditFormButton] = useState(false);
+    const [editFormButton,setEditFormButton] = useState(false);
     const [emptyFieldAlert, setEmptyFieldAlert] = useState(false);
     const [errorAlert, setErrorAlert] = useState(false);
     const [successAlert, setSuccessAlert] = useState(false);
@@ -21,7 +21,8 @@ export default function Marquee() {
     const [showColorPicker2, setShowColorPicker2] = useState(false);
     const [color, setColor] = useState('#ffffff');
     const [textColor, setTextColor] = useState('#ffffff');
-
+    const [id,setID] = useState("");
+    const [deleteErrorAlert,setDeleteErrorAlert] = useState(false);
     function handleSubmit() {
         setCircularResponse(true);
         if (!details) {
@@ -60,20 +61,81 @@ export default function Marquee() {
 
     //   }
 
-    function handleEditForm() {
+    function handleEditForm(data) {
+        setEditFormButton(true);
+        setColor(data.backgroundcolor);
+        setTextColor(data.textcolor);
+        setDetails(data.text);
+        setURL(data.url);
+        setID(data.marqueeid)
+    }
 
+    function handleEdit(){
+        setCircularResponse(true)
+        const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_marquee";
+        const data = {
+            detail: `${details}`,
+            url: `${url}`,
+            color: `${color}`,
+            textColor: `${textColor}`,
+            mid:`${id}`
+        };
+        axios.patch(mUrl, data).then((res) => {
+            document.getElementById('form').reset();
+            viewMarquee();
+            setCircularResponse(false);
+            setUpdateAlert(true);
+            setTimeout(() => {
+                setUpdateAlert(false)
+            }, 5000);
+        }).catch((error) => {
+            setCircularResponse(false);
+            setErrorAlert(true);
+            setTimeout(() => {
+                setErrorAlert(false);
+            }, 5000);
+            console.log(error);
+        })
     }
 
     function handleDelete() {
-
+        setDeleteErrorAlert(true);
     }
-    function handleStatus() {
-
+    function handleStatusTrue() {
+        const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
+        const data={
+            mid:`${id}`,
+            visibility:true
+        };
+        axios.patch(mUrl,data).then((res)=>{
+            viewMarquee();
+            setUpdateAlert(true);
+            setTimeout(() => {
+                setUpdateAlert(false)
+            }, 5000);
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+    function handleStatusFalse(id){
+        const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
+        const data={
+            mid:`${id}`,
+            visibility:false
+        };
+        axios.patch(mUrl,data).then((res)=>{
+            viewMarquee();
+            setUpdateAlert(true);
+            setTimeout(() => {
+                setUpdateAlert(false)
+            }, 5000);
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
     function viewMarquee() {
         const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/view_amarquee";
         axios.get(url).then((res) => {
-            console.log(res)
             setViewData(res.data.data)
         }).catch((error) => {
             console.log(error)
@@ -87,7 +149,7 @@ export default function Marquee() {
         <>
             {updateAlert && <div style={{ textAlign: "center", width: "20%", margin: "auto" }}><Alert severity='success' style={{ marginTop: "20px" }}>Update Successfully</Alert></div>}
             {deleteError && <div style={{ textAlign: "center", width: "20%", margin: "auto" }}><Alert severity='success' style={{ marginTop: "20px" }}>Successfully Deleted!</Alert></div>}
-            {errorAlert && <div style={{ textAlign: "center", width: "20%", margin: "auto" }}><Alert severity='error' style={{ marginTop: "20px" }}>Something went wrong</Alert></div>}
+            {deleteErrorAlert && <div style={{ textAlign: "center", width: "20%", margin: "auto" }}><Alert severity='error' style={{ marginTop: "20px" }}>Something went wrong</Alert></div>}
             <div className="login-wrapper ">
                 {responseCircular && (
                     <div
@@ -115,7 +177,7 @@ export default function Marquee() {
                 {errorAlert && <Alert severity='error' style={{ marginBottom: "20px" }}>Data Already Exist!</Alert>}
                 <form id="form" style={{ display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: "15px" }}>
-                        <Input
+                        <input
                             placeholder="Marquee Detail"
                             type="text"
                             onChange={(e) => setDetails(e.target.value)}
@@ -140,7 +202,7 @@ export default function Marquee() {
                         )}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Input
+                        <input
                             placeholder="Marquee URL"
                             type="text"
                             onChange={(e) => setURL(e.target.value)}
@@ -163,14 +225,24 @@ export default function Marquee() {
                                 onClick={() => setShowColorPicker1(true)}
                             />
                         )}
-                        <Button
+                        {
+                            editFormButton ? <Button
                             sx={{ bgcolor: '#1b3058', color: 'white' }}
+                            variant="contained"
+                            onClick={handleEdit}
+                            style={{ width: '20%' }}
+                        >
+                            Edit
+                        </Button> : 
+                        <Button
+                        sx={{ bgcolor: '#1b3058', color: 'white' }}
                             variant="contained"
                             onClick={handleSubmit}
                             style={{ width: '20%' }}
                         >
                             Create
                         </Button>
+                    }
                     </div>
                     <div style={{ fontStyle: "italic", color: "lightgreen", marginTop: "7px" }}>Note:Maximum up to 10 Marquee text can be created</div>
                 </form>
@@ -195,10 +267,13 @@ export default function Marquee() {
                                     <td>{index + 1}</td>
                                     <td>{data.text}</td>
                                     <td>{data.url}</td>
+                                    <td onClick={() => handleEditForm(data)}>
+                                        <i className="fa-solid fa-pen-to-square"></i>
+                                    </td>
                                     <td>
                                         <Switch
                                             checked={data.status}
-                                            onChange={() => handleStatus(data.marqueeid)}
+                                            onChange={data.status ? () => handleStatusFalse(data.marqueeid) : () => handleStatusTrue(data.marqueeid)}
                                             data={true}
                                             sx={{
                                                 "& .MuiSwitch-thumb": {
@@ -206,14 +281,11 @@ export default function Marquee() {
                                                 },
                                             }}
                                         />
-                                    </td>
-                                    <td onClick={() => handleEditForm(data)}>
-                                        <i className="fa-solid fa-pen-to-square"></i>
-                                    </td>
+                                    </td>                                   
                                     <td>
                                         <Switch
                                             checked={data.status}
-                                            onChange={() => handleStatus(data.marqueeid)}
+                                            onChange={data.status ? () => handleStatusFalse(data.marqueeid) : () => handleStatusTrue(data.marqueeid)}
                                             data={true}
                                             sx={{
                                                 "& .MuiSwitch-thumb": {

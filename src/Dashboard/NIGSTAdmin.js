@@ -146,7 +146,7 @@ export default function NIGSTAdmin() {
   }
   return (
     <div className="flex justify-between main-page-header">
-      <div className="side-bar border-r-2 side-bar-wrapper">
+      <div className="side-bar sticky top-0 border-r-2 side-bar-wrapper">
         <div className=" text-center mb-8">
           <h3 className="text-lg   text-white font-bold ">
             Welcome NIGST Admin
@@ -164,11 +164,7 @@ export default function NIGSTAdmin() {
             </li> : <li className="p-3 " onClick={facultyPositionFun}>
               Creation of Faculty Positions{" "}
             </li>}
-            {/* {courseCategory ? <li style={{background:"#ffcb00"}} onClick={courseCategoryFun}>
-              Course Category Creation
-            </li> :  <li className="p-3 " onClick={courseCategoryFun}>
-              Course Category Creation
-            </li>} */}
+           
             {courseAssignment ? <li style={{ background: "#1b3058", color: "#ffcb00" }} onClick={courseAssignmentFun}>
               Organization-Course Assignment
             </li> : <li className="p-3 " onClick={courseAssignmentFun}>

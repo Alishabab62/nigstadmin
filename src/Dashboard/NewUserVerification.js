@@ -70,15 +70,10 @@ export default function NewUserVerification() {
   const handleInputChange1 = (event) => {
     setSearchData(event.target.value);
     const input = event.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#Organization tr');
+    const rows = document.querySelectorAll('#Organization tbody tr');
     rows.forEach((row) => {
-      const cells = row.querySelectorAll('td name');
-      let shouldHide = true;
-      cells.forEach((cell) => {
-        if (cell.textContent.toLowerCase().includes(input)) {
-          shouldHide = false;
-        }
-      });
+      const nameCell = row.querySelector('td:nth-child(3)'); // Name column
+      const shouldHide = !nameCell.textContent.toLowerCase().includes(input);
       if (shouldHide) {
         row.classList.add('hidden');
       } else {
@@ -86,6 +81,7 @@ export default function NewUserVerification() {
       }
     });
   };
+  
 
   return (
     <div className="user-verification w-full">

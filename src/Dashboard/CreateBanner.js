@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Input } from '@mui/material'
+import { Alert, Button, CircularProgress} from '@mui/material'
 import axios from 'axios';
 import React, { useState } from 'react'
 
@@ -59,10 +59,10 @@ export default function CreateBanner() {
         {successAlert && <Alert severity='success' style={{marginBottom:"20px"}}>Created Successfully</Alert> }
         {errorAlert && <Alert severity='error' style={{marginBottom:"20px"}}>Error Not Defined</Alert> }
         <form id='form' style={{display:"flex",flexDirection:"column"}}>
-        <Input placeholder='Enter URL' type='text' onChange={(e)=>setURL(e.target.value)}/>
-        <Input placeholder='Enter alt text' type='text' onChange={(e)=>setAlt(e.target.value)}/>
-        <Input type='file' onChange={(e)=>setImage(e.target.files[0])}/>
-        <Button variant='contained' onClick={handleSubmit}>Submit</Button>
+        <input placeholder='Enter URL' type='text' onChange={(e)=>setURL(e.target.value)}/>
+        <input placeholder='Enter alt text' type='text' onChange={(e)=>setAlt(e.target.value)}/>
+        <input type='file' onChange={(e)=>setImage(e.target.files[0])}/>
+        <Button sx={{bgcolor:"#1b3058",color:"white"}} variant="contained" onClick={handleSubmit}>Submit</Button>
         </form>
     </div>
     </>

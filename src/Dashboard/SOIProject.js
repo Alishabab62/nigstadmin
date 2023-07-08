@@ -26,7 +26,7 @@ export default function SOIProject() {
 
   function handleSubmit(){
     setCircularResponse(true);
-    if(!pName || !pDescription || !image){
+    if(!pName || !image){
         setCircularResponse(false);
         setEmptyFieldAlert(true);
         setTimeout(() => {
@@ -101,7 +101,9 @@ export default function SOIProject() {
     const data = {
     Pname:`${pName}`,
     Pdescription:`${pDescription}`,
-    Pid:`${id}`
+    Pid:`${id}`,
+    Purl:`${pUrl}`
+
    }
     axios.patch(url,data).then((res)=>{
       viewProject();
@@ -140,13 +142,36 @@ export default function SOIProject() {
     setEditFormButton(true);
     setPName(data.name);
     setPDescription(data.p_description);
-    setId(data.pid)
+    setId(data.pid);
+    setPUrl(data.url)
   }
-  function handleStatus(id){
+  function handleStatusTrue(id){
     const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
     const data = {
       Pid:id,
       visibility:true
+   }
+    axios.patch(url,data).then((res)=>{
+      viewProject();
+      setUpdateAlert(true);
+      setTimeout(() => {
+        setUpdateAlert(false)
+      }, 5000);
+      console.log(res)
+    }).catch((error)=>{
+      console.log(error)
+      // setErrorAlert(true);
+      //   setTimeout(() => {
+      //       setErrorAlert(false);
+      //   }, 5000);
+      //   return;
+    })
+  }
+  function handleStatusFalse(id){
+    const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/update_project";
+    const data = {
+      Pid:id,
+      visibility:false
    }
     axios.patch(url,data).then((res)=>{
       viewProject();
@@ -175,7 +200,7 @@ export default function SOIProject() {
         </div>
       <div>
         {
-        (viewForm ) &&  <div className='user-details-wrapper'>
+        (viewForm && viewData.length > 0 ) &&  <div className='user-details-wrapper'>
           <table>
             <tr>
               <th>S.No</th>
@@ -197,7 +222,7 @@ export default function SOIProject() {
                     <td>
                       <Switch
                         checked={data.visibility}
-                        onChange={()=>handleStatus(data.pid)}
+                        onChange={data.visibility ? ()=>handleStatusFalse(data.pid) : ()=>handleStatusTrue(data.pid) }
                         data={true}
                         sx={{
                           '& .MuiSwitch-thumb': {
@@ -215,6 +240,10 @@ export default function SOIProject() {
 
           </table>
         </div>}
+        {
+        (viewData.length <= 0 && viewForm) &&
+        <div style={{ width: "100%", textAlign: "center", fontSize: "30px", marginTop: "200px" }}>No data to show</div>
+      }
         </div>
     {!viewForm && <div className="login-wrapper ">
     {responseCircular && (

@@ -442,14 +442,9 @@ function handleEdit(data){
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
-<<<<<<< HEAD
           {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>/ is not allowed</Alert> : ""}
           {tenderNumberAlreadyExists && <Alert severity='error' style={{marginBottom:"10px"}}>Tender reference number already exists</Alert>}
           <Button className='close-btn' onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
-=======
-          {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
-          <button className='close-btn' onClick={closeTenderForm}  style={{bgcolor:"#1b3058",color:"white",width:"auto"}} variant="contained">&times;</button>
->>>>>>> 3b3021dca5b68ed9bd314772129debb785da53db
           <form action="/submit-form" method="post" encType="multipart/form-data" id='form'>
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>
             <input type="text" id="ref" name="ref" required onChange={handleInputs} placeholder={"Tender No.:"} value={input.ref}/>

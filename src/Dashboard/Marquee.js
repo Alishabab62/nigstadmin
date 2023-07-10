@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Input, Switch } from '@mui/material'
+import { Alert, Button, CircularProgress,  Switch } from '@mui/material'
 import axios from 'axios';
 import React, { useState } from 'react'
 import { IoColorPalette } from 'react-icons/io5';
@@ -24,6 +24,7 @@ export default function Marquee() {
     const [id,setID] = useState("");
     const [deleteErrorAlert,setDeleteErrorAlert] = useState(false);
     function handleSubmit() {
+        console.log(textColor,color)
         setCircularResponse(true);
         if (!details) {
             setCircularResponse(false);
@@ -42,6 +43,8 @@ export default function Marquee() {
         };
         axios.post(mUrl, data).then((res) => {
             document.getElementById('form').reset();
+            setDetails("");
+            setURL("");
             viewMarquee();
             setCircularResponse(false);
             setSuccessAlert(true);
@@ -57,9 +60,6 @@ export default function Marquee() {
             console.log(error);
         })
     }
-    //   function handleEdit(){
-
-    //   }
 
     function handleEditForm(data) {
         setEditFormButton(true);
@@ -82,6 +82,9 @@ export default function Marquee() {
         };
         axios.patch(mUrl, data).then((res) => {
             document.getElementById('form').reset();
+            setDetails("");
+            setURL("");
+            setEditFormButton(false);
             viewMarquee();
             setCircularResponse(false);
             setUpdateAlert(true);
@@ -98,8 +101,20 @@ export default function Marquee() {
         })
     }
 
-    function handleDelete() {
-        setDeleteErrorAlert(true);
+    function handleDelete(id) {
+        const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/delete_marquee";
+        axios.delete(url,{data:{mid:id}}).then((res)=>{
+            viewMarquee();
+            setDeleteAlert(true);
+            setTimeout(() => {
+                setDeleteAlert(false)
+            }, 5000);
+        }).catch((error)=>{
+            setDeleteErrorAlert(true);
+            setTimeout(() => {
+                setDeleteErrorAlert(false)
+            }, 5000);
+        })
     }
     function handleStatusTrue() {
         const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
@@ -192,7 +207,11 @@ export default function Marquee() {
                         />
                         {showColorPicker1 ? (
                             <div style={{ position: 'absolute', zIndex: "1", right: "5px", top: "10px" }}>
-                                <RgbStringColorPicker color={color} onChange={(e) => setColor(color)} onMouseLeave={() => setShowColorPicker1(false)} />
+                                <RgbStringColorPicker
+                                    color={color}
+                                    onChange={(newColor) => setColor(newColor)}
+                                    onMouseLeave={() => setShowColorPicker1(false)}
+                                    />
                             </div>
                         ) : (
                             <IoColorPalette
@@ -217,12 +236,16 @@ export default function Marquee() {
                         />
                         {showColorPicker2 ? (
                             <div style={{ position: 'absolute', zIndex: "1", right: "5px", top: "10px" }}>
-                                <RgbStringColorPicker color={textColor} onChange={(e) => setTextColor(color)} onMouseLeave={() => setShowColorPicker2(false)} />
+                               <RgbStringColorPicker
+                                    color={textColor}
+                                    onChange={(newColor) => {setTextColor(newColor)}}
+                                    onMouseLeave={() => setShowColorPicker2(false)}
+                                    />
                             </div>
                         ) : (
                             <IoColorPalette
                                 style={{ fontSize: '30px', color: 'red', cursor: 'pointer' }}
-                                onClick={() => setShowColorPicker1(true)}
+                                onClick={() => setShowColorPicker2(true)}
                             />
                         )}
                         {
@@ -294,7 +317,7 @@ export default function Marquee() {
                                             }}
                                         />
                                     </td>
-                                    <td onClick={() => handleDelete(data.pid)}>
+                                    <td onClick={() => handleDelete(data.marqueeid)}>
                                         <i className="fa-sharp fa-solid fa-trash"></i>
                                     </td>
                                 </tr>
@@ -305,8 +328,6 @@ export default function Marquee() {
             </div>
             <div style={{margin:"15px 0px 0px 28px"}}>
                <h3 style={{fontStyle: "italic", color: "lightgreen",}}>Note : Only one marquee text can be selected at once.</h3>
-               <h3 style={{fontStyle: "italic", color: "lightgreen",}}>Note : Visibility button for others will appear only against the text selected for home visibility</h3>
-               <h3 style={{fontStyle: "italic", color: "lightgreen",}}>Note : Editing will open the selected in the Create Marquee form only</h3>
             </div>
         </>
     )

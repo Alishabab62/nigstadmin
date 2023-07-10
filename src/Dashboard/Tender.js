@@ -29,7 +29,8 @@ function Tender() {
   const [tenderArchiveSuccess,setTenderArchiveSuccess] = useState(false);
   const [viewArchiveTender,setViewArchiveTender] = useState(false);
   const [viewArchive,setViewArchive] = useState([]);
-  const [editButton,setEditButton] = useState(false)
+  const [editButton,setEditButton] = useState(false);
+  const [tenderNumberAlreadyExists,setTenderNumberAlreadyExists] = useState(false);
   const [input , setInput] = useState({
     title:"",
     ref:"",
@@ -150,7 +151,12 @@ function handleSubmit(e) {
         setSuccessAlert(false)
       }, 5000);
     }).catch((error) => {
-      console.log(error);
+      if(error.response.data.message === "Tender reference number already exists."){
+        setTenderNumberAlreadyExists(true);
+        setTimeout(()=>{
+          setTenderNumberAlreadyExists(false)
+        },5000)
+      }
     });
   }
   else{
@@ -436,7 +442,8 @@ function handleEdit(data){
           {failAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Something Went Wrong Please try again later</Alert> : ""}
           {emptyFieldAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>All fields required</Alert> : ""}
           {dateCheck ? <Alert severity="error" style={{marginBottom:"10px"}}>Start Date can't be greater</Alert> : ""}
-          {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>Enter Valid String</Alert> : ""}
+          {enterValidAlert ? <Alert severity="error" style={{marginBottom:"10px"}}>/ is not allowed</Alert> : ""}
+          {tenderNumberAlreadyExists && <Alert severity='error' style={{marginBottom:"10px"}}>Tender reference number already exists</Alert>}
           <Button className='close-btn' onClick={closeTenderForm}  sx={{bgcolor:"#1b3058",color:"white"}} variant="contained">&times;</Button>
           <form action="/submit-form" method="post" encType="multipart/form-data" id='form'>
             <input type="text" id="title" name="title" required onChange={handleInputs} placeholder="Tender Title" value={input.title}/>

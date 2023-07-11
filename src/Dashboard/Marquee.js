@@ -116,7 +116,7 @@ export default function Marquee() {
             }, 5000);
         })
     }
-    function handleStatusTrue() {
+    function handleStatusTrue(id) {
         const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
         const data={
             mid:`${id}`,

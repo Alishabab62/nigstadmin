@@ -12,6 +12,7 @@ import AnnouncementCreation from "./AnnouncementCreation";
 import SOIProject from "./SOIProject";
 import CreateBanner from "./CreateBanner";
 import Marquee from "./Marquee";
+import Contact from "./ContactUs";
 
 
 export default function NIGSTAdmin() {
@@ -25,7 +26,7 @@ export default function NIGSTAdmin() {
   const [SOI,setSOIProject] = useState(false);
   const [CBanner,setCBanner] = useState(false);
   const [marquee,setMarquee] = useState(false);
-  
+  const [contact,setContact] = useState(false);
 
   function departmentFun() {
     setDepartmentCreation(true);
@@ -38,6 +39,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
   function facultyPositionFun() {
@@ -52,6 +54,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
   function usersFun() {
@@ -67,6 +70,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
   function courseAssignmentFun() {
@@ -82,6 +86,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
   function handleTenderFun() {
@@ -97,6 +102,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
   function announcementFun(){
@@ -112,6 +118,7 @@ export default function NIGSTAdmin() {
     setCBanner(false)
     // setFacultyAdmin(false);
     setMarquee(false)
+    setContact(false);
     
   }
   function ImageUploadFun(){
@@ -126,6 +133,7 @@ export default function NIGSTAdmin() {
     setSOIProject(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
 
@@ -141,6 +149,7 @@ export default function NIGSTAdmin() {
     setFacultyPositionCreation(false);
     setCBanner(false);
     setMarquee(false)
+    setContact(false);
 
   }
 
@@ -155,7 +164,9 @@ export default function NIGSTAdmin() {
     // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
-    setMarquee(false)
+    setMarquee(false);
+    setContact(false);
+
   }
 
   function marqueeFun(){
@@ -170,8 +181,23 @@ export default function NIGSTAdmin() {
     // setCourseCategory(false);
     setDepartmentCreation(false);
     setFacultyPositionCreation(false);
+    setContact(false);
   }
 
+  function contactFun(){
+    setContact(true);
+    setMarquee(false)
+    setCBanner(false)
+    setSOIProject(false);
+    setGalleryimage(false);
+    setAnnouncement(false);
+    setTender(false);
+    setCourseAssignment(false);
+    setUsers(false);
+    // setCourseCategory(false);
+    setDepartmentCreation(false);
+    setFacultyPositionCreation(false);
+  }
   function logout(){
 
     window.location.hash = "/";
@@ -251,6 +277,13 @@ export default function NIGSTAdmin() {
               Marquee
             </li>
             }
+            {
+              contact ? <li style={{ background: "#1b3058", color: "#ffcb00" }}  onClick={contactFun}>
+                Contact
+            </li> : <li className="p-3 " onClick={contactFun}>
+            Contact
+            </li>
+            }
             {/* {
               facultyAdmin ? <li style={{background:"#ffcb00"}} onClick={facultyAdminCreationFun}>
               Faculty Admin </li> : <li className="p-3 " onClick={facultyAdminCreationFun}>
@@ -282,6 +315,7 @@ export default function NIGSTAdmin() {
           {SOI && <SOIProject/> }
           {CBanner && <CreateBanner/>}
           {marquee && <Marquee/>}
+          {contact && <Contact/>}
         </div>
       </div>
     </div>

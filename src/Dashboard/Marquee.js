@@ -120,7 +120,8 @@ export default function Marquee() {
         const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
         const data={
             mid:`${id}`,
-            visibility:true
+            homeVisibility:"true",
+            otherVisibility:"false"
         };
         axios.patch(mUrl,data).then((res)=>{
             viewMarquee();
@@ -136,7 +137,42 @@ export default function Marquee() {
         const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
         const data={
             mid:`${id}`,
-            visibility:false
+            homeVisibility:"false",
+            otherVisibility:"false"
+        };
+        axios.patch(mUrl,data).then((res)=>{
+            viewMarquee();
+            setUpdateAlert(true);
+            setTimeout(() => {
+                setUpdateAlert(false)
+            }, 5000);
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+    function handleStatusTrueOther(id) {
+        const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
+        const data={
+            mid:`${id}`,
+            otherVisibility:"true",
+            homeVisibility:"true"
+        };
+        axios.patch(mUrl,data).then((res)=>{
+            viewMarquee();
+            setUpdateAlert(true);
+            setTimeout(() => {
+                setUpdateAlert(false)
+            }, 5000);
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+    function handleStatusFalseOther(id){
+        const mUrl = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/edit_mvisiblity";
+        const data={
+            mid:`${id}`,
+            otherVisibility:"false",
+            homeVisibility:"true"
         };
         axios.patch(mUrl,data).then((res)=>{
             viewMarquee();
@@ -276,6 +312,7 @@ export default function Marquee() {
                         <thead>
                             <tr>
                                 <th style={{ backgroundColor: "#ffcb00" }}>S.No</th>
+                                <th style={{ backgroundColor: "#ffcb00" }}>Date</th>
                                 <th style={{ backgroundColor: "#ffcb00" }}>Marquee Text</th>
                                 <th style={{ backgroundColor: "#ffcb00" }}>Marquee URL</th>
                                 <th style={{ backgroundColor: "#ffcb00" }}>Edit</th>
@@ -288,34 +325,35 @@ export default function Marquee() {
                             {viewData.map((data, index) => (
                                 <tr key={index}>
                                     <td>{index + 1}</td>
-                                    <td>{data.text}</td>
+                                    <td>{data.creationdate}</td>
+                                    <td style={{color:data.textcolor,backgroundColor:data.backgroundcolor}}>{data.text}</td>
                                     <td>{data.url}</td>
                                     <td onClick={() => handleEditForm(data)}>
                                         <i className="fa-solid fa-pen-to-square"></i>
                                     </td>
                                     <td>
                                         <Switch
-                                            checked={data.status}
-                                            onChange={data.status ? () => handleStatusFalse(data.marqueeid) : () => handleStatusTrue(data.marqueeid)}
+                                            checked={data.homevisi}
+                                            onChange={data.homevisi ? () => handleStatusFalse(data.marqueeid) : () => handleStatusTrue(data.marqueeid)}
                                             data={true}
                                             sx={{
                                                 "& .MuiSwitch-thumb": {
-                                                    color: data.status ? "green" : "red",
+                                                    color: data.homevisi ? "green" : "red",
                                                 },
                                             }}
                                         />
                                     </td>                                   
                                     <td>
-                                        <Switch
-                                            checked={data.status}
-                                            onChange={data.status ? () => handleStatusFalse(data.marqueeid) : () => handleStatusTrue(data.marqueeid)}
+                                       {data.homevisi && <Switch
+                                            checked={data.othervisi}
+                                            onChange={data.othervisi ? () => handleStatusFalseOther(data.marqueeid) : () => handleStatusTrueOther(data.marqueeid)}
                                             data={true}
                                             sx={{
                                                 "& .MuiSwitch-thumb": {
-                                                    color: data.status ? "green" : "red",
+                                                    color: data.othervisi ? "green" : "red",
                                                 },
                                             }}
-                                        />
+                                        />}
                                     </td>
                                     <td onClick={() => handleDelete(data.marqueeid)}>
                                         <i className="fa-sharp fa-solid fa-trash"></i>
@@ -326,6 +364,11 @@ export default function Marquee() {
                     </table>
                 </div>
             </div>
+            {
+        viewData.length <=0  && 
+        <div style={{width:"100%",textAlign:"center" , fontSize:"30px",marginTop:"200px"}}>No data to show</div>
+      
+      }
             <div style={{margin:"15px 0px 0px 28px"}}>
                <h3 style={{fontStyle: "italic", color: "lightgreen",}}>Note : Only one marquee text can be selected at once.</h3>
             </div>

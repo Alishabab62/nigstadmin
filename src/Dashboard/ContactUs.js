@@ -91,14 +91,15 @@ export default function Contact() {
     }
 
     function handleDelete(id) {
-        const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/viewweb/delete_marquee";
-        axios.delete(url,{data:{mid:id}}).then((res)=>{
+        const url = "http://ec2-13-233-110-121.ap-south-1.compute.amazonaws.com/contact/delete_office";
+        axios.delete(url,{data:{oid:id}}).then((res)=>{
             viewMarquee();
             setDeleteAlert(true);
             setTimeout(() => {
                 setDeleteAlert(false)
             }, 5000);
         }).catch((error)=>{
+           
             setDeleteErrorAlert(true);
             setTimeout(() => {
                 setDeleteErrorAlert(false)
@@ -142,7 +143,9 @@ export default function Contact() {
         axios.get(url).then((res) => {
             setViewData(res.data.office)
         }).catch((error) => {
-            console.log(error)
+            if(error.response.data.message === ""){
+                setViewData([]);
+            }
         })
     }
     useEffect(() => {
@@ -234,7 +237,7 @@ export default function Contact() {
                     <div style={{ fontStyle: "italic", color: "lightgreen", marginTop: "2px",textAlign:"right" }}>Note:Maximum up to 10 Subject can be created</div>
                 </form>
             </div>
-            <div>
+           { viewData.length >0 && <div>
                 <div className="user-details-wrapper" style={{ maxHeight: "180px", overflowY: "scroll" }}>
                     <table >
                         <thead>
@@ -276,10 +279,15 @@ export default function Contact() {
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div style={{margin:"15px 0px 0px 28px"}}>
+            </div>}
+            {
+        viewData.length <=0  && 
+        <div style={{width:"100%",textAlign:"center" , fontSize:"30px",marginTop:"200px"}}>No data to show</div>
+      
+      }
+            {viewData.length >0 && <div style={{margin:"15px 0px 0px 28px"}}>
                <h3 style={{fontStyle: "italic", color: "lightgreen",}}>Note : Only one marquee text can be selected at once.</h3>
-            </div>
+            </div>}
         </>
     )
 }
